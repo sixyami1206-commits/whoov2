@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WHOO JAPAN [High Speed Edition]</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .phone-container {
+      width: 100%;
+      max-width: 480px;
+      background: #ffffff;
+      min-height: 100vh;
+      box-shadow: 0 0 20px rgba(0,0,0,0.05);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #ffffff;
+      padding: 12px 15px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      color: #1d4ed8;
+      letter-spacing: 1px;
+    }
+
+    .login-status-area {
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .login-btn {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e0;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+      color: #4a5568;
+    }
+
+    .user-logged-in {
+      color: #10b981;
+      background: #e6f4ea;
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+
+    .search-box {
+      display: flex;
+      background: #f1f5f9;
+      border: 2px solid #3b82f6;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .search-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 10px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .search-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 0 20px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .ad-container {
+      background: #fff5f5;
+      border-bottom: 1px solid #fee2e2;
+      padding: 12px;
+      position: relative;
+    }
+    .ad-badge {
+      position: absolute;
+      right: 35px;
+      top: 5px;
+      font-size: 10px;
+      color: #94a3b8;
+    }
+    .ad-close {
+      position: absolute;
+      right: 12px;
+      top: 2px;
+      font-size: 16px;
+      color: #94a3b8;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .ad-content {
+      display: flex;
+      gap: 12px;
+      text-decoration: none;
+      color: #333;
+      margin-top: 10px;
+    }
+    .ad-image {
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    .ad-text-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .ad-title {
+      font-size: 15px;
+      font-weight: bold;
+      color: #dc2626;
+      margin-bottom: 6px;
+    }
+    .ad-desc {
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.4;
+    }
+
+    .weather-panel {
+      display: flex;
+      background: #ffffff;
+      padding: 10px 15px;
+      border-bottom: 1px solid #e2e8f0;
+      align-items: center;
+    }
+    .weather-loc {
+      font-size: 12px;
+      color: #1d4ed8;
+      font-weight: bold;
+      border-right: 1px solid #e2e8f0;
+      padding-right: 10px;
+      margin-right: 10px;
+    }
+    .weather-detail {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    .weather-icon { font-size: 20px; }
+    .weather-rain { color: #3b82f6; }
+
+    .nav-icons-container {
+      display: flex;
+      justify-content: space-around;
+      padding: 15px 10px;
+      background: #ffffff;
+      border-bottom: 8px solid #f0f4f8;
+    }
+    .nav-icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #333;
+      font-size: 11px;
+      font-weight: bold;
+      width: 70px;
+      text-align: center;
+      gap: 6px;
+    }
+    .icon-circle {
+      width: 45px;
+      height: 45px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .ic-poikatsu { background: #fef3c7; }
+    .ic-weather { background: #e0f2fe; }
+    .ic-delivery { background: #fee2e2; }
+    .ic-tracking { background: #e0faf2; }
+    .ic-tetris { background: #f3e8ff; }
+
+    .news-section {
+      background: #ffffff;
+      flex: 1;
+    }
+    .news-tabs {
+      display: flex;
+      border-bottom: 1px solid #e2e8f0;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .news-tab {
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #64748b;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+    }
+    .news-tab.active {
+      color: #ef4444;
+    }
+    .news-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: #ef4444;
+    }
+    .news-list {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    .news-item {
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .news-link {
+      display: block;
+      padding: 14px 15px;
+      text-decoration: none;
+      color: #1e293b;
+      font-size: 15px;
+      font-weight: bold;
+      line-height: 1.4;
+    }
+    .news-link:hover {
+      background: #f8fafc;
+    }
+    .news-loading {
+      text-align: center;
+      padding: 40px;
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-card {
+      background: white;
+      width: 90%;
+      max-width: 380px;
+      border-radius: 16px;
+      padding: 25px;
+      box-sizing: border-box;
+      text-align: center;
+      position: relative;
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 15px; right: 15px;
+      background: none; border: none; font-size: 20px; color: #94a3b8; cursor: pointer;
+    }
+    .modal-tab-group {
+      display: flex;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .modal-tab {
+      flex: 1; padding: 8px 0; border: none; background: none; font-weight: bold; font-size: 14px; color: #64748b; cursor: pointer; border-radius: 6px;
+    }
+    .modal-tab.active {
+      background: white; color: #1d4ed8; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .input-field {
+      width: 100%; padding: 12px; margin-bottom: 12px; border: 2px solid #cbd5e0; border-radius: 8px; box-sizing: border-box; font-size: 14px; outline: none;
+    }
+    .input-field:focus { border-color: #3b82f6; }
+    .action-btn {
+      width: 100%; background: #3b82f6; color: white; border: none; padding: 12px; font-size: 15px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 5px;
+    }
+    .info-text { font-size: 12px; color: #64748b; margin-top: 10px; line-height: 1.4; }
+
+    footer {
+      text-align: center; padding: 20px 0; font-size: 11px; color: #94a3b8; background: #ffffff; border-top: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-container">
+
+    <header>
+      <div class="header-top">
+        <div class="logo">WHOO</div>
+        <div id="auth-status-container" class="login-status-area">
+          <button class="login-btn" onclick="openAuthModal('login')">ログイン / 新規登録</button>
+        </div>
+      </div>
+      <div class="search-box">
+        <input type="text" class="search-input" id="search-query" placeholder="キーワードを入力">
+        <button class="search-btn" onclick="triggerSearch()">検索</button>
+      </div>
+    </header>
+
+    <div class="ad-container" id="top-ad-banner">
+      <span class="ad-badge">広告 ℹ️</span>
+      <button class="ad-close" onclick="document.getElementById('top-ad-banner').style.display='none'">×</button>
+      <a href="https://sites.google.com/view/ehfvbtgbiwww/home" class="ad-content" target="_blank">
+        <div class="ad-image">
+          <div style="font-size:11px;">ホットペッパーグルメ</div>
+          <div style="font-size:16px; margin:4px 0;">🎉最大🎉</div>
+          <div style="font-size:11px; color:#fffb00;">10,000円還元</div>
+        </div>
+        <div class="ad-text-box">
+          <div class="ad-title">こんなお店も予約できる！</div>
+          <div class="ad-desc">歴40年の大将が握る極上の一貫を堪能！ネット予約で限定ポイントがガッツリ貯まる！</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="weather-panel">
+      <div class="weather-loc">神奈川県 横浜市<br><span style="font-size:10px; color:#64748b; font-weight:normal;">変更する</span></div>
+      <div class="weather-detail">
+        <span>今日</span>
+        <span class="weather-icon">☁️</span>
+        <span>24 / <span style="color:#3b82f6;">17</span></span>
+        <span class="weather-rain">☔ 80%</span>
+      </div>
+    </div>
+
+    <div class="nav-icons-container">
+      <a href="https://sites.google.com/view/kennsixya/home" class="nav-icon-item" target="_blank">
+        <div class="icon-circle ic-poikatsu">💰</div>
+        <span>ポイ活・懸賞</span>
+      </a>
+      <a href="https://sites.google.com/view/tennkicomjp/home" class="nav-icon-item" target="_blank">
+        <div class="icon-circle ic-weather">🌤️</div>
+        <span>天気予報</span>
+      </a>
+      <a href="https://sites.google.com/view/ehfvbtgbiwww/home" class="nav-icon-item" target="_blank">
+        <div class="icon-circle ic-delivery">🍔</div>
+        <span>デリバリー</span>
+      </a>
+      <a href="https://sites.google.com/view/fufucfhhfhfbfh/home" class="nav-icon-item" target="_blank">
+        <div class="icon-circle ic-tracking">📦</div>
+        <span>配達追跡</span>
+      </a>
+      <a href="https://shamir1255.github.io/rabbit/?hl=ja-JP" class="nav-icon-item">
+        <div class="icon-circle ic-tetris">🎮</div>
+        <span>テトリス</span>
+      </a>
+    </div>
+
+    <div class="news-section">
+      <div class="news-tabs">
+        <button class="news-tab active" onclick="switchNewsTab('すべて', this)">すべて</button>
+        <button class="news-tab" onclick="switchNewsTab('ニュース', this)">ニュース</button>
+        <button class="news-tab" onclick="switchNewsTab('おトク', this)">おトク</button>
+        <button class="news-tab" onclick="switchNewsTab('芸能', this)">芸能</button>
+        <button class="news-tab" onclick="switchNewsTab('スポーツ', this)">スポーツ</button>
+      </div>
+      <div id="news-content-target">
+        </div>
+    </div>
+
+    <footer>
+      © WHOO JAPAN ポータルシステム
+    </footer>
+
+  </div>
+
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeAuthModal()">×</button>
+      <div class="modal-tab-group">
+        <button class="modal-tab active" id="tab-login-mode" onclick="setAuthMode('login')">ログイン</button>
+        <button class="modal-tab" id="tab-signup-mode" onclick="setAuthMode('signup')">新規登録</button>
+      </div>
+      <h3 id="modal-title-text" style="margin-top:0; color:#1e293b;">ログイン</h3>
+      <div id="login-inputs">
+        <input type="text" id="login-id" class="input-field" placeholder="ユーザーID (例: DRT555)">
+        <input type="password" id="login-pass" class="input-field" placeholder="パスワード">
+        <button class="action-btn" onclick="handleLoginSubmit()">ログインする</button>
+      </div>
+      <div id="signup-inputs" style="display: none;">
+        <input type="email" id="signup-email" class="input-field" placeholder="メールアドレスを入力">
+        <button class="action-btn" style="background:#10b981;" onclick="handleSignupSubmit()">アカウントを無料発行</button>
+        <p class="info-text">※登録が完了すると、自動発行された特別アカウント情報がフォームへ同期されます。</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const allowedAccounts = [
+      { id: "DRT555", pass: "5277" },
+      { id: "DRT384", pass: "5213" },
+      { id: "DRT459", pass: "5123" }
+    ];
+
+    // 🚀 超高速化のためのインラインキャッシュニュースデータ
+    const cachedNewsData = [
+      { category: "ニュース", title: "WHOO JAPAN 次世代高速エンジンを導入開始", url: "#" },
+      { category: "ニュース", title: "今週の全国的な天気傾向と最新の雨雲情報", url: "https://sites.google.com/view/tennkicomjp/home" },
+      { category: "おトク", title: "【大還元】ネット限定で今だけ最大10,000円ポイントバック実施中！", url: "https://sites.google.com/view/ehfvbtgbiwww/home" },
+      { category: "おトク", title: "初心者向け懸賞・ポイ活の始め方マニュアル公開", url: "https://sites.google.com/view/kennsixya/home" },
+      { category: "芸能", title: "人気アイドルグループが突如ゲリラライブを敢行！会場は騒然", url: "#" },
+      { category: "スポーツ", title: "逆転に次ぐ逆転！劇的なサヨナラ勝ちで首位死守", url: "#" }
+    ];
+
+    let currentAuthMode = 'login';
+
+    window.onload = function() {
+      const savedUser = localStorage.getItem('whoo_logged_user');
+      if (savedUser) {
+        renderLoggedInState(savedUser);
+      }
+      // 通信を待たずに即時描画
+      renderNewsList('すべて');
+    };
+
+    function openAuthModal(mode) {
+      document.getElementById('auth-modal').style.display = 'flex';
+      setAuthMode(mode);
+    }
+    function closeAuthModal() {
+      document.getElementById('auth-modal').style.display = 'none';
+    }
+
+    function setAuthMode(mode) {
+      currentAuthMode = mode;
+      const tLogin = document.getElementById('tab-login-mode');
+      const tSignup = document.getElementById('tab-signup-mode');
+      const iLogin = document.getElementById('login-inputs');
+      const iSignup = document.getElementById('signup-inputs');
+      const title = document.getElementById('modal-title-text');
+
+      if (mode === 'login') {
+        tLogin.classList.add('active'); tSignup.classList.remove('active');
+        iLogin.style.display = 'block'; iSignup.style.display = 'none';
+        title.innerText = "ログイン";
+      } else {
+        tLogin.classList.remove('active'); tSignup.classList.add('active');
+        iLogin.style.display = 'none'; iSignup.style.display = 'block';
+        title.innerText = "新規アカウント作成";
+      }
+    }
+
+    function handleLoginSubmit() {
+      const inputId = document.getElementById('login-id').value.trim();
+      const inputPass = document.getElementById('login-pass').value.trim();
+      const userMatch = allowedAccounts.find(acc => acc.id === inputId && acc.pass === inputPass);
+
+      if (userMatch) {
+        localStorage.setItem('whoo_logged_user', userMatch.id);
+        renderLoggedInState(userMatch.id);
+        closeAuthModal();
+        alert(`ログイン成功しました！\nようこそ、${userMatch.id}さん！`);
+      } else {
+        alert("❌ ユーザーID、またはパスワードが正しくありません。");
+      }
+    }
+
+    function handleSignupSubmit() {
+      const email = document.getElementById('signup-email').value.trim();
+      if (!email || !email.includes('@')) {
+        alert("有効なメールアドレスを入力してください！");
+        return;
+      }
+      const randomIndex = Math.floor(Math.random() * allowedAccounts.length);
+      const assignedAccount = allowedAccounts[randomIndex];
+      
+      alert(`🎉 アカウント発行成功！\n\n【情報】\nユーザーID: ${assignedAccount.id}\nパスワード: ${assignedAccount.pass}\n\nフォームへ自動セットしました。そのままログインボタンを押してください！`);
+      
+      document.getElementById('login-id').value = assignedAccount.id;
+      document.getElementById('login-pass').value = assignedAccount.pass;
+      setAuthMode('login');
+    }
+
+    function renderLoggedInState(userId) {
+      const container = document.getElementById('auth-status-container');
+      container.innerHTML = `<span class="user-logged-in">👤 ${userId}さん</span>`;
+    }
+
+    function triggerSearch() {
+      const query = document.getElementById('search-query').value.trim();
+      if(query) {
+        alert(`「${query}」の高速検索処理を実行しました（デモ）`);
+      } else {
+        alert("キーワードを入力してください！");
+      }
+    }
+
+    // 🚀 ローカルデータから超高速でニュースリストを作成・描画する処理
+    function renderNewsList(categoryFilter) {
+      const container = document.getElementById('news-content-target');
+      container.innerHTML = "";
+
+      const filtered = cachedNewsData.filter(item => {
+        if (categoryFilter === 'すべて') return true;
+        return item.category === categoryFilter;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class='news-loading'>「${categoryFilter}」のニュースは現在ありません。</div>`;
+        return;
+      }
+
+      // DOM構築の最適化（フラグメントを使用）
+      const fragment = document.createDocumentFragment();
+      const ul = document.createElement('ul');
+      ul.className = "news-list";
+
+      filtered.forEach(item => {
+        const li = document.createElement('li');
+        li.className = "news-item";
+        
+        const a = document.createElement('a');
+        a.className = "news-link";
+        a.innerText = `[${item.category}] ${item.title}`;
+        
+        if(item.url && item.url.startsWith('http')) {
+          a.href = item.url;
+          a.target = "_blank";
+        } else {
+          a.href = "#";
+          a.onclick = function(e) { 
+            e.preventDefault(); 
+            alert("詳細コンテンツの読み込みに成功しました。"); 
+          };
+        }
+        
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+
+      fragment.appendChild(ul);
+      container.appendChild(fragment);
+    }
+
+    function switchNewsTab(category, btnElement) {
+      document.querySelectorAll('.news-tab').forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+      renderNewsList(category);
+    }
+  </script>
+</body>
+</html>
