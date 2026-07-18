@@ -3,255 +3,309 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AliExpress Hyper-Track Simulator v3.5</title>
+<title>AliExpress Global Tracking & Store Simulator</title>
 <style>
-:root{--ali-orange:#FF4747;--ali-red:#E62E04;--bg-gray:#F2F2F2;--text-dark:#191919;--coin-gold:#FFC107}
-*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px}
-body{background:var(--bg-gray);color:var(--text-dark);max-width:400px;margin:0 auto;min-height:100vh;position:relative;border-left:1px solid #ddd;border-right:1px solid #ddd}
-header{background:#FFF;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #E5E5E5;position:sticky;top:0;z-index:90}
-.logo{font-size:16px;font-weight:bold;color:var(--text-dark);font-style:italic}
+:root{--ali-orange:#FF4747;--ali-red:#E62E04;--ali-black:#191919;--bg-gray:#F4F4F4;--coin-gold:#FFB300;--cainiao-blue:#0052CC}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:11px}
+body{background:var(--bg-gray);color:var(--ali-black);max-width:420px;margin:0 auto;min-height:100vh;position:relative;border-left:1px solid #E0E0E0;border-right:1px solid #E0E0E0;box-shadow:0 0 20px rgba(0,0,0,0.05)}
+
+/* ヘッダー */
+header{background:#FFF;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #EAEAEA;position:sticky;top:0;z-index:90}
+.logo{font-size:18px;font-weight:900;color:var(--ali-black);font-style:italic;letter-spacing:-0.5px}
 .logo span{color:var(--ali-red)}
+.header-right{display:flex;align-items:center;gap:12px}
+.user-tier{background:linear-gradient(135deg,#424242,#111);color:#FFD700;font-weight:bold;font-size:8px;padding:2px 6px;border-radius:10px;text-transform:uppercase;letter-spacing:0.5px}
 .noti-icon{position:relative;cursor:pointer;font-size:16px}
-.noti-badge{position:absolute;top:-4px;right:-4px;background:var(--ali-red);color:#FFF;font-size:8px;border-radius:10px;padding:1px 4px;font-weight:bold}
-.bonus-bar{background:linear-gradient(90deg,#FFF3E0,#FFE0B2);padding:6px 12px;display:flex;justify-content:space-between;align-items:center;font-weight:bold}
-.coin-btn{background:var(--coin-gold);color:#333;border:none;border-radius:10px;padding:2px 8px;cursor:pointer;font-size:10px;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
-.warehouse-tabs{display:flex;background:#FFF;border-bottom:1px solid #DDD}
-.wh-tab{flex:1;text-align:center;padding:10px;font-weight:bold;cursor:pointer;color:#666;border-bottom:2px solid transparent}
-.wh-tab.active{color:var(--ali-red);border-bottom-color:var(--ali-red);background:#FFF5F5}
-.container{padding:8px;padding-bottom:90px}
+.noti-badge{position:absolute;top:-5px;right:-6px;background:var(--ali-red);color:#FFF;font-size:8px;border-radius:10px;padding:1px 4px;font-weight:bold;transform:scale(0.9)}
+
+/* コイン・販促バー */
+.bonus-bar{background:linear-gradient(90deg,#FFF9E6,#FFF0C2);padding:6px 12px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #FFE082}
+.coin-info{display:flex;align-items:center;gap:4px;font-weight:bold;color:#795548}
+.coin-btn{background:linear-gradient(180deg,#FFCA28,#FFB300);color:#333;border:none;border-radius:12px;padding:3px 10px;cursor:pointer;font-weight:bold;font-size:10px;box-shadow:0 1px 2px rgba(0,0,0,0.1)}
+
+/* 倉庫タブ */
+.warehouse-tabs{display:flex;background:#FFF;box-shadow:0 2px 4px rgba(0,0,0,0.02)}
+.wh-tab{flex:1;text-align:center;padding:12px;font-weight:bold;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:all 0.2s;font-size:12px}
+.wh-tab.active{color:var(--ali-red);border-bottom-color:var(--ali-red);background:linear-gradient(to bottom, #FFF, #FFF5F5);font-weight:900}
+
+/* 店頭デザイン */
+.store-banner{background:linear-gradient(135deg,#0D47A1,#1565C0);color:#FFF;padding:10px;margin-bottom:8px;border-radius:6px;display:flex;flex-direction:column;gap:2px}
+.store-title{font-size:13px;font-weight:bold;display:flex;align-items:center;gap:6px}
+.store-badge{background:#FFF;color:#1565C0;font-size:8px;padding:1px 4px;border-radius:2px;font-weight:bold}
+
+.container{padding:8px;padding-bottom:100px}
 .tab-content{display:none}
 .tab-content.active{display:block}
-.coupon-banner{background:linear-gradient(90deg,#FFEBEE,#FFCDD2);border-radius:8px;padding:8px;margin-bottom:8px;border:1px solid #EF9A9A;display:flex;justify-content:space-between;align-items:center}
-.p-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.p-card{background:#FFF;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05);display:flex;flex-direction:column;justify-content:space-between;position:relative;padding:6px}
-.p-card img-placeholder{background:#F9F9F9;height:85px;display:flex;justify-content:center;align-items:center;color:#999;font-size:32px;position:relative}
-.badge-3item{position:absolute;top:4px;left:4px;background:#E1BEE7;color:#4A148C;font-size:8px;font-weight:bold;padding:1px 3px;border-radius:3px;z-index:5}
-.p-info{padding:4px 0 0 0;display:flex;flex-direction:column;gap:2px}
-.sale-badge{background:var(--ali-red);color:#FFF;font-size:9px;font-weight:bold;padding:1px 4px;border-radius:3px;align-self:flex-start}
-.opt-select{width:100%;padding:3px;font-size:9px;margin:2px 0;background:#F9F9F9;border:1px solid #DDD;border-radius:3px;outline:none}
-.price-box{margin-top:2px}
+
+/* クーポン */
+.coupon-banner{background:linear-gradient(90deg,#FFEBEE,#FFCDD2);border-radius:8px;padding:10px;margin-bottom:8px;border:1px solid #EF9A9A;display:flex;justify-content:space-between;align-items:center}
+
+/* 商品カード */
+.p-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.p-card{background:#FFF;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.04);display:flex;flex-direction:column;justify-content:space-between;position:relative;padding:8px;border:1px solid #EAEAEA}
+.p-card img-placeholder{background:#F7F8FA;height:120px;border-radius:4px;display:flex;justify-content:center;align-items:center;color:#444;font-size:42px;position:relative}
+.badge-3item{position:absolute;top:6px;left:6px;background:#9C27B0;color:#FFF;font-size:8px;font-weight:bold;padding:2px 5px;border-radius:3px;z-index:5;box-shadow:0 1px 2px rgba(0,0,0,0.1)}
+.p-info{padding:6px 0 0 0;display:flex;flex-direction:column;gap:3px}
+.sale-badge{background:var(--ali-red);color:#FFF;font-size:9px;font-weight:bold;padding:1px 5px;border-radius:2px;align-self:flex-start;margin-bottom:2px}
+.opt-select{width:100%;padding:4px;font-size:10px;margin:2px 0;background:#F6F6F6;border:1px solid #E0E0E0;border-radius:4px;outline:none;color:#333}
+.price-box{margin-top:2px;display:flex;align-items:baseline;gap:4px}
 .original-price{text-decoration:line-through;color:#999;font-size:9px}
-.sale-price{color:var(--ali-red);font-weight:bold;font-size:12px}
-.btn-buy{background:linear-gradient(90deg,#FF7300,#FF4747);color:#FFF;border:none;border-radius:15px;padding:5px;cursor:pointer;font-weight:bold;font-size:10px;margin-top:2px;text-align:center;width:100%}
-.panel{background:#FFF;border-radius:8px;padding:10px;margin-top:8px;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
-.f-group{display:flex;flex-direction:column;gap:3px;margin-bottom:6px}
-.f-group label{font-weight:bold;color:#555;font-size:10px}
-.f-group select, .f-group input{padding:6px;background:#F5F5F5;border:1px solid #DDD;border-radius:4px;outline:none}
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:400px;background:#FFF;border-top:1px solid #E5E5E5;display:flex;justify-content:space-around;align-items:center;padding:6px 0;z-index:90}
-.nav-btn{background:none;border:none;color:#666;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;flex:1}
-.nav-btn.active{color:var(--ali-red)}
-.track-card{background:#FFF;border-radius:8px;padding:10px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,0.05);border-left:4px solid #DDD}
-.track-card.active{border-left-color:#4CAF50}
-.track-header{display:flex;justify-content:space-between;font-weight:bold;margin-bottom:4px;border-bottom:1px solid #EEE;padding-bottom:4px}
-.carrier-badge{background:#E3F2FD;color:#0D47A1;padding:1px 4px;border-radius:2px;font-size:9px}
-.progress-container{display:flex;justify-content:space-between;margin:8px 0;position:relative}
-.progress-line{position:absolute;top:5px;left:5%;right:5%;height:2px;background:#EEE;z-index:1}
-.progress-line-fill{position:absolute;top:5px;left:5%;height:2px;background:#4CAF50;z-index:2;transition:width 0.3s}
-.progress-dot{width:12px;height:12px;border-radius:50%;background:#FFF;border:2px solid #DDD;z-index:3;display:flex;justify-content:center;align-items:center;position:relative}
+.sale-price{color:var(--ali-red);font-weight:900;font-size:14px}
+.btn-buy{background:linear-gradient(90deg,#FF8800,#FF3300);color:#FFF;border:none;border-radius:18px;padding:6px;cursor:pointer;font-weight:bold;font-size:11px;margin-top:4px;text-align:center;width:100%;box-shadow:0 2px 4px rgba(230,46,4,0.2)}
+
+/* フォーム・カート */
+.panel{background:#FFF;border-radius:8px;padding:12px;margin-top:8px;box-shadow:0 1px 4px rgba(0,0,0,0.04);border:1px solid #EAEAEA}
+.f-group{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
+.f-group label{font-weight:bold;color:#666;font-size:10px}
+.f-group select, .f-group input{padding:8px;background:#F9F9F9;border:1px solid #DDD;border-radius:6px;outline:none;font-size:11px}
+
+/* 追跡カード */
+.track-card{background:#FFF;border-radius:10px;padding:12px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,0.04);border:1px solid #EAEAEA;position:relative}
+.track-card.active{border-top:3px solid #2E7D32}
+.track-header{display:flex;justify-content:space-between;font-weight:bold;margin-bottom:6px;border-bottom:1px solid #F0F0F0;padding-bottom:6px}
+.carrier-badge{background:#E8F0FE;color:var(--cainiao-blue);padding:2px 6px;border-radius:4px;font-size:9px;font-weight:bold;letter-spacing:0.5px}
+.progress-container{display:flex;justify-content:space-between;margin:12px 4px 22px 4px;position:relative}
+.progress-line{position:absolute;top:5px;left:2%;right:2%;height:3px;background:#ECEFF1;z-index:1}
+.progress-line-fill{position:absolute;top:5px;left:2%;height:3px;background:#4CAF50;z-index:2;transition:width 0.4s ease}
+.progress-dot{width:13px;height:13px;border-radius:50%;background:#FFF;border:3px solid #CFD8DC;z-index:3;display:flex;justify-content:center;align-items:center;position:relative}
 .progress-dot.active{border-color:#4CAF50;background:#4CAF50}
-.progress-dot span{position:absolute;top:14px;font-size:7px;color:#999;white-space:nowrap;transform:translateX(-30%)}
-.progress-dot.active span{color:#4CAF50;font-weight:bold}
-.log-box{background:#F9F9F9;border:1px solid #E5E5E5;border-radius:4px;padding:6px;font-size:9px;color:#444;max-height:100px;overflow-y:auto;margin-top:8px}
-.log-line{margin-bottom:4px;border-bottom:1px dashed #EEE;padding-bottom:2px;line-height:1.3}
-.log-time{color:#999;margin-right:4px}
-.action-bar{display:flex;gap:4px;margin-top:6px}
-.action-btn{flex:1;background:#F5F5F5;border:1px solid #CCC;border-radius:4px;padding:4px;text-align:center;cursor:pointer;font-weight:bold;font-size:9px}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:200;justify-content:center;align-items:center}
-.chat-box{background:#FFF;width:320px;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;height:420px;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
-.chat-head{background:var(--ali-red);color:#FFF;padding:10px;font-weight:bold;display:flex;justify-content:space-between;align-items:center}
-.chat-msgs{flex:1;padding:10px;overflow-y:auto;background:#F2F2F2;display:flex;flex-direction:column;gap:8px}
-.msg{padding:6px 10px;border-radius:8px;max-width:85%;line-height:1.3;font-size:10px}
-.msg.seller{background:#FFF;align-self:flex-start;border-bottom-left-radius:0}
-.msg.user{background:#DCF8C6;align-self:flex-end;border-bottom-right-radius:0}
-.chat-menu{background:#FFF;border-top:1px solid #DDD;padding:6px;display:grid;grid-template-columns:1fr 1fr;gap:4px}
-.menu-btn{background:#FFF;border:1px solid var(--ali-red);color:var(--ali-red);padding:6px;border-radius:4px;cursor:pointer;font-weight:bold;text-align:center;font-size:9px}
-.menu-btn:disabled{border-color:#CCC;color:#999;cursor:not-allowed;background:#F5F5F5}
-#noti-panel{display:none;position:fixed;top:45px;right:10px;width:280px;max-height:300px;background:#FFF;border:1px solid #DDD;border-radius:8px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,0.15);overflow:hidden}
-.noti-header{background:#F5F5F5;padding:8px 10px;display:flex;justify-content:space-between;border-bottom:1px solid #EEE;font-weight:bold}
-.noti-list{max-height:250px;overflow-y:auto;padding:6px}
-.noti-item{padding:6px;border-bottom:1px solid #EEE;font-size:9px;line-height:1.2}
+.progress-dot span{position:absolute;top:16px;font-size:8px;color:#90A4AE;white-space:nowrap;left:50%;transform:translateX(-50%)}
+.progress-dot.active span{color:#2E7D32;font-weight:bold}
+
+/* ログボックス */
+.log-box{background:#F7F9FA;border:1px solid #EDF1F2;border-radius:6px;padding:8px;font-size:10px;color:#37474F;max-height:140px;overflow-y:auto;margin-top:10px}
+.log-line{margin-bottom:6px;border-bottom:1px dashed #E0E0E0;padding-bottom:4px;line-height:1.4;display:flex;align-items:flex-start}
+.log-time{color:#78909C;margin-right:8px;white-space:nowrap;font-family:monospace}
+
+.action-bar{display:flex;gap:6px;margin-top:8px}
+.action-btn{flex:1;background:#FFF;border:1px solid #CCC;border-radius:6px;padding:6px;text-align:center;cursor:pointer;font-weight:bold;font-size:10px;}
+
+/* ナビゲーション */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:#FFF;border-top:1px solid #EAEAEA;display:flex;justify-content:space-around;align-items:center;padding:8px 0;z-index:90}
+.nav-btn{background:none;border:none;color:#757575;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;flex:1;font-weight:bold}
+.nav-btn.active{color:var(--ali-red)}
+
+/* モーダル */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:200;justify-content:center;align-items:center}
+.chat-box{background:#FFF;width:340px;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;height:450px;}
+.chat-head{background:linear-gradient(90deg,var(--ali-red),#FF5252);color:#FFF;padding:12px;font-weight:bold;display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.chat-msgs{flex:1;padding:12px;overflow-y:auto;background:#F5F5F5;display:flex;flex-direction:column;gap:10px}
+.msg{padding:8px 12px;border-radius:10px;max-width:85%;line-height:1.4;font-size:11px}
+.msg.seller{background:#FFF;align-self:flex-start;border-bottom-left-radius:0;border-left:3px solid var(--ali-red)}
+.msg.user{background:#E3F2FD;align-self:flex-end;border-bottom-right-radius:0;border-right:3px solid #1E88E5}
+.chat-menu{background:#FFF;border-top:1px solid #EEE;padding:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.menu-btn{background:#FFF;border:1px solid var(--ali-red);color:var(--ali-red);padding:6px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:10px}
+
+#noti-panel{display:none;position:fixed;top:50px;right:10px;width:300px;max-height:320px;background:#FFF;border:1px solid #E0E0E0;border-radius:10px;z-index:100;overflow:hidden}
+.noti-header{background:#FAFAFA;padding:10px;display:flex;justify-content:space-between;border-bottom:1px solid #EEE;font-weight:bold}
+.noti-list{max-height:270px;overflow-y:auto;padding:8px}
+.noti-item{padding:8px;border-bottom:1px solid #F5F5F5;font-size:10px}
+
 #success-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:110;justify-content:center;align-items:center}
-.success-box{background:#FFF;border-radius:12px;width:280px;padding:20px;text-align:center}
-.loading-screen{text-align:center;padding:50px 20px;color:#999;font-weight:bold;font-size:12px}
+.success-box{background:#FFF;border-radius:16px;width:300px;padding:24px;text-align:center}
+.loading-screen{text-align:center;padding:60px 20px;color:#757575;font-weight:bold;font-size:12px}
 </style>
 </head>
 <body>
 
 <div id="success-modal">
 <div class="success-box">
-<div style="font-size:32px;color:#4CAF50;margin-bottom:8px">✓</div>
-<h3 style="font-size:13px;font-weight:bold;margin-bottom:4px">支払い手続き成功</h3>
-<button class="btn-buy" style="width:100%" onclick="closeSuccess()">追跡管理ダッシュボードへ</button>
+<div style="font-size:40px;color:#4CAF50;margin-bottom:10px">✨</div>
+<h3 style="font-size:15px;font-weight:900;margin-bottom:6px;color:#2E7D32">支払い完了・出荷オーダー承認</h3>
+<p style="color:#666;font-size:10px;margin-bottom:12px" id="success-tn-info">スプシから追跡コードを抽出しています...</p>
+<button class="btn-buy" style="width:100%" onclick="closeSuccess()">追跡管理センターへ移動</button>
 </div>
 </div>
 
 <header>
 <div class="logo">Ali<span>Express</span></div>
 <div class="header-right">
-<span style="color:#FF7300;font-weight:bold;font-size:10px">💎 Diamond</span>
+<span class="user-tier">💎 Diamond Member</span>
 <div class="noti-icon" onclick="toggleNoti()">🔔<span id="noti-badge" class="noti-badge" style="display:none">0</span></div>
 </div>
 </header>
 
 <div class="bonus-bar">
-<div style="display:flex;align-items:center;gap:4px">🪙 マイコイン: <span id="coin-txt" style="color:var(--ali-red)">120</span>枚 (<span id="coin-disc">12</span>円引)</div>
-<button class="coin-btn" id="chk-btn" onclick="checkIn()">＋毎日チェックイン</button>
+<div class="coin-info">🪙 コイン残高: <span id="coin-txt" style="color:var(--ali-red)">120</span>枚 (<span id="coin-disc">12</span>円引)</div>
+<button class="coin-btn" id="chk-btn" onclick="checkIn()">毎日チェックイン</button>
 </div>
 
 <div class="warehouse-tabs">
-<div id="tab-china" class="wh-tab active" onclick="switchWarehouse('CHINA')">🇨🇳 China倉庫 (海外直送)</div>
-<div id="tab-japan" class="wh-tab" onclick="switchWarehouse('JAPAN')">🇯🇵 国内倉庫 (JAPAN PREMIUM)</div>
+<div id="tab-china" class="wh-tab active" onclick="switchWarehouse('CHINA')">🇨🇳 海外直送 (Cainiao)</div>
+<div id="tab-japan" class="wh-tab" onclick="switchWarehouse('JAPAN')">🇯🇵 国内倉庫 (製品心安ストア)</div>
 </div>
 
 <div id="noti-panel">
-<div class="noti-header"><span>物流ステータス通知</span><span onclick="clearNoti()" style="cursor:pointer;color:#999">消去</span></div>
+<div class="noti-header"><span>ロジスティクス更新通知</span><span onclick="clearNoti()" style="cursor:pointer;color:#999">クリア</span></div>
 <div id="noti-list" class="noti-list"></div>
 </div>
 
 <div class="container">
 <div id="c-shop" class="tab-content active">
+<div id="store-banner-area"></div>
+
 <div class="coupon-banner" id="coupon-box">
 <div>
-<h4 style="color:#C62828;font-weight:bold">🧧 国際配送特別クーポン</h4>
-<p style="color:#666;font-size:8px">全決済からさらに200円オフが適用されます</p>
+<h4 style="color:#D32F2F;font-weight:bold;font-size:12px">🧧 新春限定・送料無料化クーポン</h4>
+<p style="color:#555;font-size:9px">カートの最終合計決済から即座に200円を差し引きます</p>
 </div>
-<button class="coin-btn" style="background:var(--ali-red);color:#FFF" onclick="claimCoupon()">獲得</button>
+<button class="coin-btn" style="background:var(--ali-red);color:#FFF" onclick="claimCoupon()">取得</button>
 </div>
 
-<!-- スプシ読み込みインジケータ -->
-<div id="live-loading" class="loading-screen">🔄 あなたの商品棚（スプレッドシート）と通信中...</div>
-
-<!-- 商品グリッド -->
+<div id="live-loading" class="loading-screen">🔄 あなたのスプレッドシートから最新の商品棚をリアルタイム抽出中...</div>
 <div id="p-grid" class="p-grid" style="display:none;"></div>
 
 <div class="panel">
-<h4 style="font-weight:bold;margin-bottom:4px">📦 配送・決済オプション設定</h4>
-<div style="background:#FFF8E1;border:1px solid #FFE082;padding:4px;border-radius:4px;margin-bottom:6px;color:#B71C1C;font-weight:bold;display:none" id="promo-3item">
-🎉 【3点まとめ買い特典】国際配送料が完全無料化されました！
+<h4 style="font-weight:bold;margin-bottom:6px;font-size:12px;border-left:3px solid var(--ali-orange);padding-left:6px">🛒 チェックアウトカウンター</h4>
+<div style="background:#FFF9C4;border:1px solid #FFF59D;padding:6px;border-radius:6px;margin-bottom:8px;color:#5D4037;font-weight:bold;display:none" id="promo-3item">
+🎉 【3点まとめ買い適用】国際配送料金は免除（0円）となりました！
 </div>
-<div id="cart-list" style="margin:4px 0;color:#666;line-height:1.4">カートは空です。</div>
-<div style="border-top:1px solid #EEE;padding-top:4px;display:flex;flex-direction:column;font-size:10px;color:#666">
-<div style="display:flex;justify-content:between"><span>コイン割引:</span><span id="lbl-coin">-12円</span></div>
-<div style="display:flex;justify-content:between"><span>クーポン割引:</span><span id="lbl-coup">-0円</span></div>
-<div style="display:flex;justify-content:between"><span>選択配送プラン運賃:</span><span id="lbl-ship">0円</span></div>
+<div id="cart-list" style="margin:6px 0;color:#555;line-height:1.5;min-height:20px">カートは空です。</div>
+<div style="border-top:1px solid #EEE;padding-top:6px;display:flex;flex-direction:column;font-size:10px;color:#757575;gap:2px">
+<div style="display:flex;justify-content:between"><span>コイン自動適用:</span><span id="lbl-coin">-12円</span></div>
+<div style="display:flex;justify-content:between"><span>特別クーポン割引:</span><span id="lbl-coup">-0円</span></div>
+<div style="display:flex;justify-content:between"><span>アライアンス選択運賃:</span><span id="lbl-ship">0円</span></div>
 </div>
-<div style="border-top:1px dashed #DDD;padding-top:4px;margin-top:4px;display:flex;justify-content:between;font-weight:bold">
-<span>最終チェックアウト総額:</span><span id="total" style="color:var(--ali-red);font-size:13px">0円</span>
+<div style="border-top:1px dashed #CFD8DC;padding-top:6px;margin-top:6px;display:flex;justify-content:between;font-weight:900">
+<span style="font-size:12px">注文合計金額:</span><span id="total" style="color:var(--ali-red);font-size:15px">0円</span>
 </div>
-<form onsubmit="order(event)" style="display:flex;flex-direction:column;gap:5px;margin-top:6px">
+<form onsubmit="order(event)" style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
 <div class="f-group">
-<label>仕向国（長距離ほどフライト所要セカンドが増加）</label>
+<label>お届け先（国/リージョン）</label>
 <select id="country-select" onchange="updateCart()">
-<option value="JP" data-time="0">日本 (ベース時間)</option>
-<option value="US" data-time="50">アメリカ合衆国 (+50秒 / エラー率中)</option>
-<option value="GB" data-time="40">イギリス (+40秒)</option>
-<option value="BR" data-time="70">ブラジル (+70秒)</option>
+<option value="JP" data-time="0">日本 (最速ローカルルート)</option>
+<option value="US" data-time="45">アメリカ合衆国 (+45秒 / 税関高密度検査)</option>
+<option value="GB" data-time="35">イギリス (+35秒)</option>
+<option value="BR" data-time="65">ブラジル (+65秒 / 保留リスク高)</option>
 </select>
 </div>
 <div class="f-group">
-<label>物流アライアンス・配送種別</label>
+<label>配送アライアンスの選択</label>
 <select id="shipping-method" onchange="updateCart()">
-<option value="NORMAL">China通常伝達 (無料 / 約4分)</option>
-<option value="FAST">迅速China伝達 (100円 / 最優先ソート)</option>
+<option value="NORMAL">Cainiao スーパーエコノミー (無料 / 目安4分)</option>
+<option value="FAST">Cainiao セーバー／スピード配送 (100円 / 優先ソート)</option>
 </select>
 </div>
-<input type="text" id="name" required placeholder="受取人フルネーム" style="padding:6px;margin-bottom:4px">
-<input type="text" id="addr" required placeholder="配送先住所" style="padding:6px">
-<button type="submit" class="btn-buy" style="padding:8px">安全な決済を完了し出荷指示へ</button>
+<input type="text" id="name" required placeholder="受取人氏名（ローマ字推奨）" style="padding:8px">
+<input type="text" id="addr" required placeholder="詳細配送先住所" style="padding:8px">
+<button type="submit" class="btn-buy" style="padding:10px;font-size:12px">今すぐ支払う (決済セキュリティ保護)</button>
 </form>
 </div>
 </div>
 
 <div id="c-my" class="tab-content">
-<div id="no-ord" style="text-align:center;padding:30px;color:#999">アクティブなデータがありません。</div>
+<div id="no-ord" style="text-align:center;padding:40px;color:#999;font-size:12px">🚚 追跡中、または処理中のアクティブな国際注文はありません。</div>
 <div id="multi-track-container"></div>
 </div>
 </div>
 
 <div id="chat-modal" class="modal">
 <div class="chat-box">
-<div class="chat-head"><span id="chat-title">セラーに連絡</span><span onclick="closeChat()" style="cursor:pointer">❌</span></div>
+<div class="chat-head"><span id="chat-title">セラー公式チャット</span><span onclick="closeChat()" style="cursor:pointer">❌</span></div>
 <div id="chat-msgs" class="chat-msgs"></div>
 <div class="chat-menu">
-<button class="menu-btn" onclick="handleChatMenu('催促')">🚀 注文の催促</button>
-<button class="menu-btn" onclick="handleChatMenu('変更')">🔄 内容の変更</button>
-<button class="menu-btn" id="chat-cancel-btn" onclick="handleChatMenu('キャンセル')">❌ キャンセル</button>
-<button class="menu-btn" onclick="handleChatMenu('紛争')">⚠️ 紛争(Dispute)</button>
+<button class="menu-btn" onclick="handleChatMenu('催促')">⚡ 急いで発送して</button>
+<button class="menu-btn" onclick="handleChatMenu('変更')">🛠️ 注文情報の変更</button>
+<button class="menu-btn" id="chat-cancel-btn" onclick="handleChatMenu('キャンセル')">🛑 注文キャンセル</button>
+<button class="menu-btn" onclick="handleChatMenu('紛争')">⚖️ 紛争(Open Dispute)</button>
 </div>
 </div>
 </div>
 
 <div class="bottom-nav">
 <button id="nav-shop" class="nav-btn active" onclick="switchTab('shop')">🛒 ホーム</button>
-<button id="nav-my" class="nav-btn" onclick="switchTab('my')">📦 追跡センター</button>
+<button id="nav-my" class="nav-btn" onclick="switchTab('my')">📦 追跡確認</button>
 </div>
 
 <script>
-// 🌟 あなたのスプシからCSVを抽出するURLを直接埋め込みました！
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1LK09yYcLi63EW9-xhXIENfszwyFLC4Jmz_-tO69ab94/export?format=csv&gid=0";
+// 🌟 1つ目の商品棚データスプシURL
+const SHEET_PROD_URL = "https://docs.google.com/spreadsheets/d/1LK09yYcLi63EW9-xhXIENfszwyFLC4Jmz_-tO69ab94/export?format=csv&gid=0";
+// 🌟 送っていただいた2つ目の追跡コードデータスプシURL
+const SHEET_TRACK_URL = "https://docs.google.com/spreadsheets/d/178-dcD4xd0fUdEORnoC9haQrKmfGiKTaY0OxiOKBRrQ/export?format=csv&gid=0";
 
 let products = { CHINA: [], JAPAN: [] };
+let availableTrackingCodes = []; // スプシから吸い上げた「配達状況なし」のプール
 let currentWH="CHINA", cart=[], globalTimer=null, orders=[], notis=[], coins=120, hasCheckedIn=false, hasCoupon=false, couponClaimed=false, activeChatIdx=null;
 
-// スプシからリアルタイムにデータをフェッチして解析
+// スプシデータの自動同期フェッチ
 async function loadSpreadsheetData() {
   try {
-    const response = await fetch(SHEET_CSV_URL);
-    if (!response.ok) throw new Error('通信エラー');
-    const csvText = await response.text();
-    
-    // 行ごとに分解（ヘッダー行はスキップ）
-    const rows = csvText.split('\n').slice(1);
+    // 1. 商品データの読み込み
+    const resProd = await fetch(SHEET_PROD_URL);
+    if (!resProd.ok) throw new Error('Product Sheet Error');
+    const csvProd = await resProd.text();
+    const rowsProd = csvProd.split('\n').slice(1);
     
     products.CHINA = [];
     products.JAPAN = [];
 
-    rows.forEach((row, idx) => {
+    rowsProd.forEach((row, idx) => {
       if (!row.trim()) return;
-      
-      // カンマ区切りのパース（簡易版）
       const cols = row.split(',').map(c => c.replace(/^"(.*)"$/, '$1').trim());
-      
-      const warehouse = cols[0] ? cols[0].toUpperCase() : ""; // A列: 倉庫
-      const name = cols[1] || "無名の商品";                  // B列: 商品名
-      const price = parseInt(cols[2]) || 0;                   // C列: 元価格
-      const icon = cols[4] || "📦";                           // E列: アイコン
-      const optStr = cols[5] || "標準";                       // F列: オプション
-
-      // スプシの「3点対象」フラグ（もしあれば。デフォルトは全てtrueか価格等で判断）
-      const is3For = price < 5000; 
-
-      // スラッシュやカンマで区切られたオプションを配列化
+      const warehouse = cols[0] ? cols[0].toUpperCase() : "CHINA";
+      const name = cols[1] || "Global Item";
+      const price = parseInt(cols[2]) || 0;
+      const icon = cols[4] || "📦";
+      const optStr = cols[5] || "Default";
       const optArray = optStr.split(/[\/,]/).map(o => o.trim()).filter(Boolean);
 
-      const item = {
+      products[warehouse].push({
         id: idx + 1,
         name: name,
         price: price,
         icon: icon,
         opt: optArray.length ? optArray : ["標準"],
-        is3For: is3For
-      };
-
-      if (warehouse === "CHINA" || warehouse === "JAPAN") {
-        products[warehouse].push(item);
-      }
+        is3For: price < 6000
+      });
     });
 
-    // ローディングを隠してグリッドを表示
+    // 2. 追跡コードデータの読み込み（ガチリアルタイム抽出）
+    const resTrack = await fetch(SHEET_TRACK_URL);
+    if (resTrack.ok) {
+      const csvTrack = await resTrack.text();
+      const rowsTrack = csvTrack.split('\n').slice(1);
+      availableTrackingCodes = [];
+      
+      rowsTrack.forEach(row => {
+        if (!row.trim()) return;
+        const cols = row.split(',').map(c => c.replace(/^"(.*)"$/, '$1').trim());
+        const code = cols[0]; // A列: 追跡番号
+        const status = cols[1]; // B列: 配達状況
+        
+        // 「配達状況なし」のコードだけを抽出してプールに貯める
+        if (code && status === "配達状況なし") {
+          availableTrackingCodes.push(code);
+        }
+      });
+    }
+
     document.getElementById('live-loading').style.display = 'none';
     document.getElementById('p-grid').style.display = 'grid';
     renderProducts();
 
   } catch (err) {
-    document.getElementById('live-loading').innerHTML = "❌ スプレッドシートの読み込みに失敗しました。<br><br><b>【重要】</b>スプシ側で「ファイル」＞「共有」＞「一般的なアクセス」を<b>『リンクを知っている全員』</b>に変更してください！";
-    console.error(err);
+    document.getElementById('live-loading').innerHTML = "❌ 【同期エラー】スプレッドシートへのアクセスに制限がかかっています。<br><br>両方のスプシ画面右上にある<b>「共有」ボタン</b>を押し、一般的なアクセスを<b>「リンクを知っている全員」</b>に変更してください！";
   }
 }
 
-function switchWarehouse(wh){ currentWH=wh; document.getElementById('tab-china').classList.toggle('active',wh==='CHINA'); document.getElementById('tab-japan').classList.toggle('active',wh==='JAPAN'); renderProducts(); }
-function checkIn(){ if(hasCheckedIn){alert("❌ 既に完了しています。");return;} coins+=20; hasCheckedIn=true; document.getElementById('chk-btn').style.background="#CCC"; document.getElementById('chk-btn').textContent="済"; updateCoinUI(); updateCart(); }
-function claimCoupon(){ if(couponClaimed)return; hasCoupon=true; couponClaimed=true; document.getElementById('coupon-box').style.opacity='0.5'; updateCart(); }
+function switchWarehouse(wh){ 
+  currentWH=wh; 
+  document.getElementById('tab-china').classList.toggle('active',wh==='CHINA'); 
+  document.getElementById('tab-japan').classList.toggle('active',wh==='JAPAN'); 
+  
+  let bannerArea = document.getElementById('store-banner-area');
+  if(wh === 'JAPAN'){
+    bannerArea.innerHTML = `
+      <div class="store-banner">
+        <div class="store-title">🏪 JAPAN PREMIUM - 製品心安ストア <span class="store-badge">優良セラー 99.4%</span></div>
+        <div style="font-size:9px;opacity:0.9;">国内倉庫発送だから安心安全。迅速な関税なしルートでお届けします。</div>
+      </div>`;
+  } else { bannerArea.innerHTML = ''; }
+  renderProducts(); 
+}
+
+function checkIn(){ if(hasCheckedIn){alert("本日のチェックインは既に完了しています");return;} coins+=20; hasCheckedIn=true; document.getElementById('chk-btn').style.background="#CCC"; document.getElementById('chk-btn').textContent="チェックイン済"; updateCoinUI(); updateCart(); }
+function claimCoupon(){ if(couponClaimed)return; hasCoupon=true; couponClaimed=true; document.getElementById('coupon-box').style.opacity='0.4'; updateCart(); }
 function updateCoinUI(){ document.getElementById('coin-txt').textContent=coins; document.getElementById('coin-disc').textContent=Math.floor(coins*0.1); }
 
 function switchTab(t){
@@ -266,19 +320,19 @@ function renderProducts(){
   let fList=products[currentWH] || [];
   let grid=document.getElementById('p-grid');
   if(!fList.length) {
-    grid.innerHTML = `<div style="grid-column:1/3;text-align:center;padding:4px;color:#999">この倉庫に有効な商品がありません。</div>`;
+    grid.innerHTML = `<div style="grid-column:1/3;text-align:center;padding:30px;color:#999">該当の倉庫セクションにアクティブな登録商品がありません。</div>`;
     return;
   }
   grid.innerHTML=fList.map(p=>`
     <div class="p-card">
-    ${p.is3For?'<span class="badge-3item">3点対象</span>':''}
-    <span class="sale-badge" style="margin-top:4px;margin-left:4px">40% OFF</span>
+    ${p.is3For?'<span class="badge-3item">3点まとめ買い対象</span>':''}
+    <div class="sale-badge">40% OFF</div>
     <img-placeholder>${p.icon}</img-placeholder>
     <div class="p-info">
-    <div style="font-weight:bold;height:24px;overflow:hidden;line-height:1.2">${p.name}</div>
+    <div style="font-weight:bold;height:26px;overflow:hidden;line-height:1.2;font-size:11px;color:#222">${p.name}</div>
     ${p.opt&&p.opt.length?`<select id="prod-opt-${p.id}" class="opt-select">${p.opt.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`:''}
-    <div class="price-box"><span class="original-price">${p.price}円</span><span class="sale-price"> ${Math.floor(p.price*0.6)}円</span></div>
-    <button class="btn-buy" onclick="addToCart(${p.id})">＋カート追加</button>
+    <div class="price-box"><span class="original-price">${p.price}円</span><span class="sale-price">${Math.floor(p.price*0.6)}円</span></div>
+    <button class="btn-buy" onclick="addToCart(${p.id})">カートに追加</button>
     </div>
     </div>`).join('');
 }
@@ -286,14 +340,14 @@ function renderProducts(){
 function addToCart(id){
   let p=products[currentWH].find(x=>x.id===id);
   let optEl=document.getElementById(`prod-opt-${id}`);
-  cart.push({...p, chosenOpt:optEl?optEl.value:"標準"});
+  cart.push({...p, chosenOpt:optEl?optEl.value:"標準モデル", whSource:currentWH});
   updateCart();
 }
 
 function updateCart(){
   let list=document.getElementById('cart-list');
   if(!cart.length){ list.innerHTML="カートは空です。"; document.getElementById('total').textContent="0円"; document.getElementById('promo-3item').style.display='none'; return; }
-  list.innerHTML=cart.map((i,idx)=>`<div style="display:flex;justify-content:between"><span>${i.icon} ${i.name} (${i.chosenOpt})</span><span>${Math.floor(i.price*0.6)}円 <a href="#" onclick="cart.splice(${idx},1);updateCart();return false;" style="color:var(--ali-red)">[×]</a></span></div>`).join('');
+  list.innerHTML=cart.map((i,idx)=>`<div style="display:flex;justify-content:between;margin-bottom:3px;align-items:center"><span>${i.icon} ${i.name} (${i.chosenOpt}) [${i.whSource==='JAPAN'?'国内':'海外'}]</span><span><b>${Math.floor(i.price*0.6)}円</b> <a href="#" onclick="cart.splice(${idx},1);updateCart();return false;" style="color:var(--ali-red);margin-left:4px;text-decoration:none">✕</a></span></div>`).join('');
   let baseSum=cart.reduce((s,i)=>s+Math.floor(i.price*0.6),0);
   let is3ForPromo=(cart.length>=3 && cart.every(i=>i.is3For));
   document.getElementById('promo-3item').style.display=is3ForPromo?'block':'none';
@@ -309,22 +363,34 @@ function updateCart(){
 
 function order(e){
   e.preventDefault(); if(!cart.length)return;
-  let isChina=cart.some(x=>x.id<100 || x.id > 0); 
-  // スプシの振り分け判定（ID等で簡易識別、あるいは倉庫名義）
-  if (currentWH === 'JAPAN') isChina = false;
-
+  
+  let hasChina = cart.some(x => x.whSource === 'CHINA');
   let cSel=document.getElementById('country-select'), countryCode=cSel.value, countryName=cSel.options[cSel.selectedIndex].text.split(' ')[0];
   let distTime=parseInt(cSel.options[cSel.selectedIndex].getAttribute('data-time'));
   let method=document.getElementById('shipping-method').value;
-  let finalLimit=(isChina?(method==='FAST'?210:240):60)+distTime;
-  let trackNum=(isChina?"LP":"JP")+Math.floor(10000000+Math.random()*90000000)+"CN";
-  let itemsInfo=cart.map(c=>`${c.icon}${c.name}(${c.chosenOpt})`).join(', ');
+  let finalLimit=(hasChina?(method==='FAST'?180:220):50)+distTime;
+  
+  // 🎯 【超進化】スプシの「配達状況なし」プールからランダムに1個ガチ選出！
+  let trackNum = "";
+  if(availableTrackingCodes.length > 0) {
+    let randIdx = Math.floor(Math.random() * availableTrackingCodes.length);
+    trackNum = availableTrackingCodes[randIdx];
+    // 使用したコードは重複を避けるため今回の一時配列から1回抜いておく
+    availableTrackingCodes.splice(randIdx, 1);
+  } else {
+    // スプシ側が万が一空っぽだった場合の保険用バックアップ
+    trackNum = (hasChina?"LP":"JP") + Math.floor(10000000+Math.random()*90000000) + "CN";
+  }
+
+  let itemsInfo=cart.map(c=>`${c.icon}${c.name}`).join(', ');
 
   orders.push({
-    tn:trackNum, isChina:isChina, sec:0, limit:finalLimit, countryCode:countryCode, countryName:countryName,
-    carrier:isChina?"CAINIAO":"LOCAL-POST", logs:[], status:"[科目: 1/11] 支払承認済・データ同期中", step:1, progress:"2%", finished:false, errTriggered:false, itemsSummary:itemsInfo, memo:"通常ハンドリング", isDisputing:false, disputeTimer:0
+    tn:trackNum, isChina:hasChina, sec:0, limit:finalLimit, countryCode:countryCode, countryName:countryName,
+    carrier:hasChina?"CAINIAO Global":"JapanLocal宅配", logs:[], status:"[科目 1/11] 支払承認、出荷データ伝達中", step:1, progress:"2%", finished:false, errTriggered:false, itemsSummary:itemsInfo, memo:"パッケージ待機中", isDisputing:false, disputeTimer:0
   });
-  orders[orders.length-1].logs.unshift({time:getTimeStr(),msg:`[EDI] 国際取引決済処理を正常に承認。`});
+  
+  orders[orders.length-1].logs.unshift({time:getTimeStr(),msg:`[スプシ同期] 追跡コードホストより固有識別子「${trackNum}」を正常にロック・引き当てました。`});
+  document.getElementById('success-tn-info').innerHTML = `スプシから追跡コード <b>【${trackNum}】</b> を正常に引き当てました！`;
   document.getElementById('success-modal').style.display='flex';
 }
 
@@ -335,8 +401,8 @@ function toggleNoti(){ let p=document.getElementById('noti-panel'); p.style.disp
 function clearNoti(){ notis=[]; updateNotiUI(); }
 function updateNotiUI(){
   let b=document.getElementById('noti-badge'), list=document.getElementById('noti-list');
-  if(notis.length){ b.style.display='block'; b.textContent=notis.length; list.innerHTML=notis.map(n=>`<div class="noti-item"><div>${n.time} | ID: ${n.tn}</div><b>${n.msg}</b></div>`).join(''); }
-  else{ b.style.display='none'; list.innerHTML="通知なし"; }
+  if(notis.length){ b.style.display='block'; b.textContent=notis.length; list.innerHTML=notis.map(n=>`<div class="noti-item"><div>${n.time} | 追跡ID: ${n.tn}</div><b>${n.msg}</b></div>`).join(''); }
+  else{ b.style.display='none'; list.innerHTML="新着通知はありません"; }
 }
 
 function renderTrackers(){
@@ -345,42 +411,44 @@ function renderTrackers(){
   document.getElementById('no-ord').style.display='none';
   container.innerHTML=orders.map((s,idx)=>`
     <div class="track-card ${s.finished?'active':''}">
-    <div class="track-header"><b>${s.tn}</b><span class="carrier-badge">${s.carrier}</span></div>
-    <div style="font-size:9px;color:#444;background:#F0F0F0;padding:2px 4px;border-radius:3px;margin-bottom:2px">📦 <b>同梱:</b> ${s.itemsSummary}</div>
-    <div style="color:#007BFF;font-size:9px;margin-bottom:4px">📝 <b>メモ:</b> ${s.memo}</div>
-    <div style="font-weight:bold;color:var(--ali-red);margin:2px 0">${s.status}</div>
+    <div class="track-header"><b>🚚 トラッキングID: ${s.tn}</b><span class="carrier-badge">${s.carrier}</span></div>
+    <div style="font-size:10px;color:#333;background:#FFF3E0;padding:4px;border-radius:4px;margin-bottom:4px">📦 <b>同梱品目:</b> ${s.itemsSummary}</div>
+    <div style="color:var(--cainiao-blue);font-size:10px;margin-bottom:6px">📋 <b>貨物ステータス:</b> ${s.memo}</div>
+    <div style="font-weight:bold;color:var(--ali-red);margin:4px 0;font-size:11px;background:#FFEBEE;padding:4px;border-radius:4px">${s.status}</div>
+    
     <div class="progress-container">
     <div class="progress-line"></div><div class="progress-line-fill" style="width:${s.progress}"></div>
-    <div class="progress-dot ${s.step>=1?'active':''}"><span>ソート</span></div>
-    <div class="progress-dot ${s.step>=4?'active':''}"><span>航空便</span></div>
-    <div class="progress-dot ${s.step>=6?'active':''}"><span>税関</span></div>
+    <div class="progress-dot ${s.step>=1?'active':''}"><span>仕分け</span></div>
+    <div class="progress-dot ${s.step>=4?'active':''}"><span>発送済</span></div>
+    <div class="progress-dot ${s.step>=6?'active':''}"><span>通関審査</span></div>
     <div class="progress-dot ${s.step>=8?'active':''}"><span>国内網</span></div>
-    <div class="progress-dot ${s.step>=11?'active':''}"><span>完了</span></div>
+    <div class="progress-dot ${s.step>=11?'active':''}"><span>配達完了</span></div>
     </div>
-    <div style="font-size:8px;color:#666;margin-bottom:4px"><b>宛先:</b> ${s.countryName} | <b>経過:</b> ${s.sec}秒 / 目安: ${s.limit}秒</div>
-    <div class="action-bar"><div class="action-btn" onclick="openChat(${idx})">💬 セラーに連絡</div></div>
-    ${s.finished?`<button class="btn-buy" style="background:#888;width:100%" onclick="orders.splice(${idx},1);renderTrackers();">アーカイブ</button>`:''}
-    <div class="log-box">${s.logs.map(l=>`<div class="log-line"><span class="log-time">${l.time}</span>${l.msg}</div>`).join('')}</div>
+    
+    <div style="font-size:9px;color:#78909C;margin-bottom:6px"><b>仕向先国:</b> ${s.countryName} | <b>ロジスティクス経過時間:</b> ${s.sec}s / 推定限界: ${s.limit}s</div>
+    <div class="action-bar"><div class="action-btn" onclick="openChat(${idx})">💬 セラーへ問い合わせ</div></div>
+    ${s.finished?`<button class="btn-buy" style="background:#78909C;width:100%;margin-top:6px" onclick="orders.splice(${idx},1);renderTrackers();">このデータをアーカイブ</button>`:''}
+    <div class="log-box">${s.logs.map(l=>`<div class="log-line"><span class="log-time">[${l.time}]</span><span>${l.msg}</span></div>`).join('')}</div>
     </div>`).join('');
 }
 
-function openChat(idx){ activeChatIdx=idx; let s=orders[idx]; document.getElementById('chat-modal').style.display='flex'; document.getElementById('chat-cancel-btn').disabled=(s.step>=5); document.getElementById('chat-msgs').innerHTML=`<div class="msg seller">ハロー友人！何かお困りですか？</div>`; }
+function openChat(idx){ activeChatIdx=idx; let s=orders[idx]; document.getElementById('chat-modal').style.display='flex'; document.getElementById('chat-cancel-btn').disabled=(s.step>=5); document.getElementById('chat-msgs').innerHTML=`<div class="msg seller">ハロー親愛なる友人！私たちは製品を迅速に準備しています。何か問題がありますか？</div>`; }
 function closeChat(){ document.getElementById('chat-modal').style.display='none'; }
 
 function handleChatMenu(type){
   let s=orders[activeChatIdx], box=document.getElementById('chat-msgs');
   if(type==='催促'){
-    box.innerHTML+=`<div class="msg user">発送を急いで！</div>`; s.memo="【至急：強い催促あり】";
-    if(!s.boosted && s.step<4){ s.boosted=true; s.limit=Math.max(15, s.limit-160); s.status="[特急ブースト] 優先ライン移行中"; s.logs.unshift({time:getTimeStr(),msg:`[セラー介入] 優先タグへ書き換え完了。`}); }
-    setTimeout(()=>{box.innerHTML+=`<div class="msg seller">了解フレンド！極限まで早めました！</div>`; renderTrackers();},500);
+    box.innerHTML+=`<div class="msg user">まだ届きません。至急発送、または状況を確認してください。</div>`; s.memo="⚠️ 購入者から強い発送催促シグナルを受信";
+    if(!s.boosted && s.step<4){ s.boosted=true; s.limit=Math.max(15, s.limit-130); s.status="[特急フラグ] 物流優先ハブへ緊急転送中"; s.logs.unshift({time:getTimeStr(),msg:`[警告] セラーが緊急優先タグを上書き適用。発送シーケンスをショートカット。`}); }
+    setTimeout(()=>{box.innerHTML+=`<div class="msg seller">了解しましたフレンド！運送業者に強くプッシュしました。今すぐ移動します！</div>`; renderTrackers();},500);
   }else if(type==='変更'){
-    box.innerHTML+=`<div class="msg user">内容を変更したい。</div>`;
-    if(s.step>=5){ s.step=1; s.sec=0; s.limit+=40; s.status="[逆流リターン] 中国倉庫へ強制回送中"; s.logs.unshift({time:getTimeStr(),msg:`[警告] フライト引き返し要求を送信。`}); setTimeout(()=>{box.innerHTML+=`<div class="msg seller">飛行機を呼び戻して倉庫へ再送させます！</div>`; renderTrackers();},500); }
-    else{ s.logs.unshift({time:getTimeStr(),msg:`[情報] 出荷前リストを上書き修正。`}); setTimeout(()=>{box.innerHTML+=`<div class="msg seller">発送前なので変更しておきます。</div>`; renderTrackers();},500); }
+    box.innerHTML+=`<div class="msg user">カラーやオプションを間違えました。今から変更できますか？</div>`;
+    if(s.step>=5){ s.step=1; s.sec=0; s.limit+=40; s.status="[回送反転] 航空コンテナから取り出し、倉庫へ再送中"; s.logs.unshift({time:getTimeStr(),msg:`[国際警告] 航空機積載リストの取り消し要求が受理されました。物理逆流処理を実行。`}); setTimeout(()=>{box.innerHTML+=`<div class="msg seller">なんてことだ！すでにフライト枠にありましたが、なんとか回収を試みます！</div>`; renderTrackers();},500); }
+    else{ s.logs.unshift({time:getTimeStr(),msg:`[システム] 出荷マニフェスト情報の修正要求を上書き。`}); setTimeout(()=>{box.innerHTML+=`<div class="msg seller">大丈夫です友人、出荷前のパレットを修正しておきます！</div>`; renderTrackers();},500); }
   }else if(type==='キャンセル'){
-    if(s.step>=5)return; box.innerHTML+=`<div class="msg user">キャンセルしてください。</div>`; s.status="[規約クローズ] キャンセル完了"; s.finished=true; s.logs.unshift({time:getTimeStr(),msg:`[システム] ラインを安全に破棄しました。`}); setTimeout(()=>{box.innerHTML+=`<div class="msg seller">承知しました。全額返金されます。</div>`; closeChat(); renderTrackers();},500);
+    if(s.step>=5)return; box.innerHTML+=`<div class="msg user">この注文をキャンセルして返金してください。</div>`; s.status="[注文クローズ] 合意に基づくキャンセル承認"; s.finished=true; s.logs.unshift({time:getTimeStr(),msg:`[ロジスティクス] トラッキングパレットの破棄プロセスが完了しました。`}); setTimeout(()=>{box.innerHTML+=`<div class="msg seller">承知しました。キャンセルを確認しました。システムから全額が払い戻されます。</div>`; closeChat(); renderTrackers();},500);
   }else if(type==='紛争'){
-    box.innerHTML+=`<div class="msg user">紛争を開きます。</div>`; s.isDisputing=true; s.disputeTimer=10; s.status="⚖️ 紛争処理中（自動裁定まであと 10 秒）"; s.logs.unshift({time:getTimeStr(),msg:`[紛争事務局] 物流整合性審査を開始。`}); setTimeout(()=>{box.innerHTML+=`<div class="msg seller">フレンド、お店の評価が傷つくので取り下げて！返金します！</div>`; closeChat(); renderTrackers();},500);
+    box.innerHTML+=`<div class="msg user">物流情報が異常です。紛争（オープンディスピュート）を開始します。</div>`; s.isDisputing=true; s.disputeTimer=10; s.status="⚖️ プラットフォーム紛争調停中（自動裁定まであと 10 秒）"; s.logs.unshift({time:getTimeStr(),msg:`[AliExpress事務局] 物流トラッキングデータの整合性審査およびペナルティ審査を開始。`}); setTimeout(()=>{box.innerHTML+=`<div class="msg seller">親愛なる友人、紛争は私たちのストア評価を激しく破壊します！すぐに全額補償しますので取り下げてください！</div>`; closeChat(); renderTrackers();},500);
   }
   renderTrackers();
 }
@@ -391,13 +459,13 @@ function startLoop(){
     orders.forEach((s)=>{
       if(s.finished)return;
       if(s.isDisputing && s.disputeTimer > 0){
-        s.disputeTimer--; s.status=`⚖️ 紛争処理中（自動裁定まであと ${s.disputeTimer} 秒）`;
-        if(s.disputeTimer===0){ s.status="💰 紛争勝利！全額返金されました"; s.finished=true; s.isDisputing=false; s.logs.unshift({time:getTimeStr(),msg:`[アリエク判定] 配送異常が認められたため購入者勝訴。`}); }
+        s.disputeTimer--; s.status=`⚖️ プラットフォーム紛争調停中（自動裁定まであと ${s.disputeTimer} 秒）`;
+        if(s.disputeTimer===0){ s.status="💰 紛争解決（購入者の勝利：全額返金完了）"; s.finished=true; s.isDisputing=false; s.logs.unshift({time:getTimeStr(),msg:`[裁定] 物流プロセスの遅延/異常が立証され、購入者への全額返金が確定しました。`}); }
         return;
       }
       s.sec++; let oldStep=s.step;
       if(s.isChina) tickChinaOrder(s); else tickDomesticOrder(s);
-      if(s.step!==oldStep) addNotification(s.tn,`🚚 【${s.status}】ヘ移行`);
+      if(s.step!==oldStep) addNotification(s.tn,`【${s.status}】に更新されました`);
     });
     renderTrackers();
   },1000);
@@ -405,26 +473,26 @@ function startLoop(){
 
 function tickChinaOrder(s){
   let p=s.sec/s.limit;
-  if(!s.errTriggered && s.countryCode !== 'JP' && p > 0.45 && Math.random() < 0.15){ s.errTriggered=true; s.limit+=35; pushLog(s,`[警告] 仕分けエラー検出。フライト再準備中（${s.countryName}）`); }
-  if(p<0.08){s.step=1;s.progress="5%";s.status="[科目: 1/11] 倉庫センター内・ピッキング中";if(s.sec===2)pushLog(s,`[倉庫] ピッキングおよびカートン割り当て開始。`);}
-  else if(p<0.16){s.step=2;s.progress="12%";s.status="[科目: 2/11] 輸出梱包・コンテナ積載中";if(s.step!==2)pushLog(s,`[倉庫] 防水シールド梱包・コンテナ積載完了。`);}
-  else if(p<0.25){s.step=3;s.progress="20%";s.status="[科目: 3/11] 国際発送中継ハブ到着";if(s.step!==3)pushLog(s,`[CAINIAO] 中継ハブ入庫。自動ソート完了。`);}
-  else if(p<0.38){s.step=4;s.progress="32%";s.status="[科目: 4/11] 輸出通関ライン通過審査中";if(s.step!==4)pushLog(s,`[中国税関] 輸出申告およびX線検査クリア。`);}
-  else if(p<0.50){s.step=5;s.progress="45%";s.status="[科目: 5/11] 航空会社引渡・フライト枠待機";if(s.step!==5)pushLog(s,`[空路] 目的地空港向けフライト割当待ち。`);}
-  else if(p<0.62){s.step=6;s.progress="55%";s.status="[科目: 6/11] 国際航空路巡航中";if(s.step!==6)pushLog(s,`[航空] パートナー機が離陸、国際ルートを巡航中.`);}
-  else if(p<0.75){s.step=7;s.progress="68%";s.status="[科目: 7/11] 空港到着・輸入通関審査中";if(s.step!==7)pushLog(s,`[税関] 目的国デポ入庫。関税局インボイススキャン中。`);}
-  else if(p<0.84){s.step=8;s.progress="78%";s.status="[科目: 8/11] 通関解除・ローカルデポ委託";if(s.step!==8)pushLog(s,`[情報] 輸入通関正常終了。現地配送網へ引渡。`);}
-  else if(p<0.92){s.step=9;s.progress="85%";s.status="[科目: 9/11] 現地幹線輸送・エリア仕分け中";if(s.step!==9)pushLog(s,`[現地業者] 主要配送センター通過。ルートソート完了。`);}
-  else if(p<0.98){s.step=10;s.progress="95%";s.status="[科目: 10/11] ラストワンマイル・配達スタッフ巡回";if(s.step!==10)pushLog(s,`[現地業者] 最寄りデポより最終アプローチ中。`);}
-  else{s.step=11;s.progress="100%";s.status="[科目: 11/11] 配達完了 (Delivered)";if(!s.finished){pushLog(s,`[現地業者] 引き渡しを完了。全プロセス正常クローズ。`);s.finished=true;}}
+  if(!s.errTriggered && s.countryCode !== 'JP' && p > 0.45 && Math.random() < 0.12){ s.errTriggered=true; s.limit+=40; pushLog(s,`[国際交換局異常] ソートエラーまたは仕向国ミスを検知。フライトスケジュール再編成中。`); }
+  if(p<0.08){s.step=1;s.progress="5%";s.status="[科目 1/11] 荷主が荷物をピッキングしています";if(s.sec===2)pushLog(s,`[Cainiaoデポ] 出荷倉庫にて商品のピッキングおよび個別スキャンが完了しました。`);}
+  else if(p<0.16){s.step=2;s.progress="12%";s.status="[科目 2/11] 倉庫でのパッキング・コンテナ積載が完了";if(s.step!==2)pushLog(s,`[Cainiaoデポ] パッケージが国際配送用バルクコンテナにパレット詰めされました。`);}
+  else if(p<0.26){s.step=3;s.progress="22%";s.status="[科目 3/11] 追跡番号: " + s.tn + " | 集荷ハブに到着しました";if(s.step!==3)pushLog(s,`[幹線運送業者] グローバル中継ハブ施設に入庫、ソート処理待ち。`);}
+  else if(p<0.38){s.step=4;s.progress="35%";s.status="[科目 4/11] 輸出通関手続きが正常に完了しました";if(s.step!==4)pushLog(s,`[中国関税局] 輸出税関の審査を通過。マニフェストデータ正常送信。`);}
+  else if(p<0.50){s.step=5;s.progress="48%";s.status="[科目 5/11] 航空会社に引き渡し・フライト待機中";if(s.step!==5)pushLog(s,`[国際空港デポ] パッケージがハンドリング業者に引き渡され、出発便コンテナに格納されました。`);}
+  else if(p<0.62){s.step=6;s.progress="58%";s.status="[科目 6/11] 原産国を出発・国際フライト巡航中";if(s.step!==6)pushLog(s,`[フライト] 目的地に向け航空機が離陸しました。空路輸送中。`);}
+  else if(p<0.74){s.step=7;s.progress="70%";s.status="[科目 7/11] 目的地空港に到着・輸入通関開始";if(s.step!==7)pushLog(s,`[インバウンド税関] 到着地交換局に入庫。植物・一般貨物 X線スクリーニング審査中。`);}
+  else if(p<0.84){s.step=8;s.progress="80%";s.status="[科目 8/11] 輸入通関手続きが完了しました（解除）";if(s.step!==8)pushLog(s,`[税関国税局] 通関承認。国内の最終デリバリーアライアンスへ配送委託。`);}
+  else if(p<0.92){s.step=9;s.progress="88%";s.status="[科目 9/11] 現地物流センターでの仕分け処理中";if(s.step!==9)pushLog(s,`[国内配送センター] 郵便区番号/エリアコード別に自動レーン仕分けが終了しました。`);}
+  else if(p<0.98){s.step=10;s.progress="96%";s.status="[科目 10/11] お近くの配達員が貨物を巡回携行中";if(s.step!==10)pushLog(s,`[ラストワンマイル] 現地配達ドライバーが車両に積み込み、最終ルートを移動中。`);}
+  else{s.step=11;s.progress="100%";s.status="[科目 11/11] 配達が正常に完了しました";if(!s.finished){pushLog(s,`[完了窓口] 指定の住所、または受取箱への格納を完了しました。`);s.finished=true;}}
 }
 
 function tickDomesticOrder(s){
   let p=s.sec/s.limit;
-  if(p<0.15){s.step=1;s.progress="15%";s.status="[国内] 自社倉庫ピッキング作業中";}
-  else if(p<0.40){s.step=4;s.progress="40%";s.status="[国内] 出荷ハブ発車・幹線トラック移送中";if(s.sec===5)pushLog(s,`[運送] 自社ハブ出発。中継デポへ向け運行中。`);}
-  else if(p<0.75){s.step=8;s.progress="75%";s.status="[国内] 営業所受付・最終配達中";if(s.step!==8)pushLog(s,`[運送] 管轄営業所より担当配達員が配送中。`);}
-  else{s.step=11;s.progress="100%";s.status="[国内] 配達完了";if(!s.finished){pushLog(s,`[運送] ポスト投函または手渡しにてお届け完了。`);s.finished=true;}}
+  if(p<0.15){s.step=1;s.progress="15%";s.status="[製品心安ストア] 追跡ID: " + s.tn + " | 国内スピード出荷準備中";if(s.sec===1)pushLog(s,`[製品心安] 日本国内倉庫にて最優先ピッキングラインが稼働。`);}
+  else if(p<0.45){s.step=4;s.progress="45%";s.status="[国内幹線] 配送デポ発車・最寄りセンターへ急送中";if(s.step!==4)pushLog(s,`[国内運送] 出荷ハブより幹線大型トラックにて目的地エリアへ高速移送中。`);}
+  else if(p<0.80){s.step=8;s.progress="82%";s.status="[配達中] 地元営業所よりお届け先へアプローチ中";if(s.step!==8)pushLog(s,`[国内運送] 最寄りサービスセンターより、ルート配達員がお手元へ急行中。`);}
+  else{s.step=11;s.progress="100%";s.status="🎉 国内最速ルートでお届け完了（受領済）";if(!s.finished){pushLog(s,`[完了] ご指定宅へ非対面または手渡しにて安全にお届けしました！`);s.finished=true;}}
 }
 function pushLog(s,m){s.logs.unshift({time:getTimeStr(),msg:m});}
 
