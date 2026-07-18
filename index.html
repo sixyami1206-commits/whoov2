@@ -3,26 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AliExpress - お買い物</title>
+<title>安全产品出荷</title>
 <style>
-:root{--ali-orange:#FF4747;--ali-red:#FD384F;--ali-black:#191919;--bg-gray:#F2F2F7;--cainiao-blue:#0052CC}
+:root{--ali-orange:#FF4747;--ali-red:#FD384F;--ali-black:#191919;--bg-gray:#F2F2F7;--cainiao-blue:#0052CC;--chat-green:#4CAF50}
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px}
 body{background:var(--bg-gray);color:var(--ali-black);max-width:420px;margin:0 auto;min-height:100vh;position:relative;border-left:1px solid #E0E0E0;border-right:1px solid #E0E0E0;box-shadow:0 0 20px rgba(0,0,0,0.05);padding-bottom:60px}
 
-/* アリエク風ヘッダー & 検索バー */
+/* ヘッダー & 検索バー */
 header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 .header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.logo{font-size:18px;font-weight:900;color:var(--ali-black);font-style:italic;letter-spacing:-0.5px}
+.logo{font-size:16px;font-weight:900;color:var(--ali-black);letter-spacing:-0.5px}
 .logo span{color:var(--ali-red)}
 .coin-badge{background:#FFF8E1;color:#FFA000;border:1px solid #FFE082;padding:2px 8px;border-radius:12px;font-weight:bold;font-size:10px}
 .search-bar-wrap{display:flex;align-items:center;background:#F0F0F0;border-radius:20px;padding:4px 6px 4px 12px;border:2px solid var(--ali-black)}
 .search-input{border:none;background:none;outline:none;flex:1;font-size:12px;color:#333}
 .search-btn{background:var(--ali-black);color:#FFF;border:none;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px}
 
-/* カテゴリーアイコン風 */
+/* カテゴリーナビゲーション */
 .cat-nav{display:flex;justify-content:space-between;background:#FFF;padding:8px;margin-bottom:6px}
-.cat-item{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;cursor:pointer}
-.cat-icon{font-size:18px;background:#F9F9F9;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.cat-item{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;cursor:pointer;transition: transform 0.1s}
+.cat-item:active{transform: scale(0.95)}
+.cat-item.selected .cat-icon{background:#FFEAEA;border:1px solid var(--ali-red)}
+.cat-icon{font-size:18px;background:#F9F9F9;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition: all 0.2s}
 .cat-label{font-size:9px;color:#666;font-weight:bold}
 
 /* 倉庫タブ */
@@ -34,18 +36,19 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 .tab-content{display:none}
 .tab-content.active{display:block}
 
-/* アリエク風商品グリッド */
+/* 商品カード */
 .p-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .p-card{background:#FFF;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.04);display:flex;flex-direction:column;justify-content:space-between;padding:8px;border:1px solid #EAEAEA}
-.img-box{background:#F4F4F4;height:130px;border-radius:8px;display:flex;justify-content:center;align-items:center;color:#444;font-size:48px;position:relative}
+.img-box{background:#F4F4F4;height:120px;border-radius:8px;display:flex;justify-content:center;align-items:center;color:#444;font-size:48px;position:relative}
 .discount-tag{position:absolute;top:4px;left:4px;background:var(--ali-red);color:#FFF;font-size:9px;font-weight:bold;padding:2px 6px;border-radius:4px}
 .p-info{padding:6px 0 0 0;display:flex;flex-direction:column;gap:3px}
-.opt-select{width:100%;padding:6px;font-size:11px;margin:4px 0;background:#F6F6F6;border:1px solid #E0E0E0;border-radius:6px;outline:none;color:#333;font-weight:bold}
+.opt-select{width:100%;padding:4px;font-size:10px;margin:2px 0;background:#F6F6F6;border:1px solid #E0E0E0;border-radius:6px;outline:none;color:#333}
 .price-box{margin-top:2px;display:flex;align-items:baseline;gap:4px;flex-wrap:wrap}
-.sale-price{color:var(--ali-red);font-weight:900;font-size:15px}
+.sale-price{color:var(--ali-red);font-weight:900;font-size:14px}
 .original-price{text-decoration:line-through;color:#999;font-size:9px}
 
-.btn-buy{background:linear-gradient(90deg,#FF8800,#FF3300);color:#FFF;border:none;border-radius:18px;padding:7px;cursor:pointer;font-weight:bold;font-size:11px;margin-top:4px;text-align:center;width:100%}
+.btn-buy{background:linear-gradient(90deg,#FF8800,#FF3300);color:#FFF;border:none;border-radius:18px;padding:6px;cursor:pointer;font-weight:bold;font-size:11px;margin-top:4px;text-align:center;width:100%}
+.btn-contact{background:#FFF;color:#555;border:1px solid #CCC;border-radius:18px;padding:5px;cursor:pointer;font-weight:bold;font-size:10px;margin-top:4px;text-align:center;width:100%;display:flex;align-items:center;justify-content:center;gap:3px}
 
 /* パネル */
 .panel{background:#FFF;border-radius:12px;padding:12px;margin-top:8px;box-shadow:0 1px 4px rgba(0,0,0,0.04);border:1px solid #EAEAEA}
@@ -66,6 +69,34 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 .progress-dot.active span{color:#2E7D32;font-weight:bold}
 .log-box{background:#F7F9FA;border:1px solid #EDF1F2;border-radius:6px;padding:8px;font-size:10px;color:#37474F;max-height:140px;overflow-y:auto;margin-top:10px}
 
+/* 安全产品追跡センター (チャット画面) */
+.chat-container{display:flex;flex-direction:column;background:#FFF;border-radius:12px;height:480px;border:1px solid #EAEAEA;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden}
+.chat-header{background:var(--ali-black);color:#FFF;padding:10px;display:flex;flex-direction:column;gap:2px}
+.chat-title{font-size:13px;font-weight:900;display:flex;align-items:center;gap:6px}
+.chat-status{font-size:10px;color:#00E676;animation:pulse 1.5s infinite}
+.chat-body{flex:1;padding:12px;overflow-y:auto;background:#F5F5F9;display:flex;flex-direction:column;gap:10px}
+
+/* チャットバルーン */
+.msg{display:flex;flex-direction:column;max-width:85%;padding:8px 12px;border-radius:14px;line-height:1.4;position:relative}
+.msg.seller{background:#FFF;color:#333;align-self:flex-start;border-top-left-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,0.05)}
+.msg.user{background:linear-gradient(135deg,#FF8800,#FF3300);color:#FFF;align-self:flex-end;border-top-right-radius:2px}
+.msg-time{font-size:8px;color:#999;align-self:flex-end;margin-top:3px}
+.msg.user .msg-time{color:#FFCCBC}
+
+/* アンケート / 定型文選択肢ボタン */
+.survey-box{background:#FFF;border:1px solid #E0E0E0;border-radius:10px;padding:8px;margin-top:4px;display:flex;flex-direction:column;gap:6px}
+.survey-btn{background:#FFF;color:var(--ali-red);border:1px solid var(--ali-red);border-radius:6px;padding:6px;font-weight:bold;cursor:pointer;text-align:center;transition:all 0.2s}
+.survey-btn:hover{background:#FFEAEA}
+
+/* チャット入力エリア */
+.chat-footer{background:#FFF;border-top:1px solid #EAEAEA;padding:8px;display:flex;flex-direction:column;gap:6px}
+.quick-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;white-space:nowrap}
+.chip{background:#F0F0F0;color:#555;padding:4px 10px;border-radius:12px;cursor:pointer;font-size:10px;font-weight:bold;border:1px solid #E0E0E0}
+.chip:hover{background:#E0E0E0}
+.input-row{display:flex;gap:6px}
+.chat-input{flex:1;padding:8px 12px;border:1px solid #DDD;border-radius:20px;outline:none;font-size:12px}
+.chat-send-btn{background:var(--ali-black);color:#FFF;border:none;border-radius:20px;padding:0 16px;cursor:pointer;font-weight:bold}
+
 /* ボトムナビゲーションバー */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:#FFF;border-top:1px solid #EAEAEA;display:flex;justify-content:space-around;align-items:center;padding:6px 0;z-index:100}
 .nav-btn{background:none;border:none;color:#666;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;flex:1;font-weight:bold;font-size:9px}
@@ -74,6 +105,8 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 
 #success-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:120;justify-content:center;align-items:center}
 .success-box{background:#FFF;border-radius:16px;width:300px;padding:24px;text-align:center}
+
+@keyframes pulse{0%{opacity:0.4}50%{opacity:1}100%{opacity:0.4}}
 </style>
 </head>
 <body>
@@ -81,96 +114,126 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 <div id="success-modal">
 <div class="success-box">
 <div style="font-size:40px;margin-bottom:10px">📦</div>
-<h3 style="font-size:14px;font-weight:900;margin-bottom:6px;color:#2E7D32">注文が完了しました！</h3>
-<p style="color:#666;font-size:10px;margin-bottom:12px">注文データはFormspreeへ送信され、ローカルストレージへ保存されました。</p>
-<button class="btn-buy" style="width:100%" onclick="closeSuccess()">追跡ページで確認する</button>
+<h3 style="font-size:14px;font-weight:900;margin-bottom:6px;color:#2E7D32">注文承認されました</h3>
+<p style="color:#666;font-size:10px;margin-bottom:12px">注文情報はFormspreeへ安全に転送され、記録が保持されました。</p>
+<button class="btn-buy" style="width:100%" onclick="closeSuccess()">配送ステータス画面へ</button>
 </div>
 </div>
 
 <header>
 <div class="header-top">
-<div class="logo">Ali<span>Express</span></div>
-<div class="coin-badge">🪙 コインゲット20 ＞</div>
+<div class="logo">安全产品<span>出荷</span></div>
+<div class="coin-badge">🪙 特典コインあり ＞</div>
 </div>
 <div class="search-bar-wrap">
-<input type="text" class="search-input" placeholder="クリップファン" value="クリップファン" readonly>
-<button class="search-btn">🔍</button>
+<input type="text" id="search-box" class="search-input" placeholder="全商品を検索..." oninput="filterBySearch()">
+<button class="search-btn" onclick="filterBySearch()">🔍</button>
 </div>
 </header>
 
+<!-- カテゴリーボタン -->
 <div class="cat-nav">
-<div class="cat-item"><div class="cat-icon">❤️</div><div class="cat-label">おすすめ</div></div>
-<div class="cat-item"><div class="cat-icon">📱</div><div class="cat-label">テック</div></div>
-<div class="cat-item"><div class="cat-icon">💄</div><div class="cat-label">ホーム＆美容</div></div>
-<div class="cat-item"><div class="cat-icon">🐣</div><div class="cat-label">おもちゃ</div></div>
-<div class="cat-item"><div class="cat-icon">🏋️</div><div class="cat-label">スポーツ</div></div>
+<div class="cat-item id-all selected" onclick="filterByCategory('ALL', this)"><div class="cat-icon">✨</div><div class="cat-label">すべて</div></div>
+<div class="cat-item" onclick="filterByCategory('おすすめ', this)"><div class="cat-icon">❤️</div><div class="cat-label">おすすめ</div></div>
+<div class="cat-item" onclick="filterByCategory('テック', this)"><div class="cat-icon">📱</div><div class="cat-label">テック</div></div>
+<div class="cat-item" onclick="filterByCategory('美容', this)"><div class="cat-icon">💄</div><div class="cat-label">ホーム＆美容</div></div>
+<div class="cat-item" onclick="filterByCategory('おもちゃ', this)"><div class="cat-icon">🐣</div><div class="cat-label">おもちゃ</div></div>
 </div>
 
 <div class="warehouse-tabs">
-<div id="tab-china" class="wh-tab active" onclick="switchWarehouse('CHINA')">🇨🇳 よりどりセール (海外直送)</div>
-<div id="tab-japan" class="wh-tab" onclick="switchWarehouse('JAPAN')">🇯🇵 日本国内発送 (製品心安ストア)</div>
+<div id="tab-china" class="wh-tab active" onclick="switchWarehouse('CHINA')">🇨🇳 グローバルハブ便 (海外直送)</div>
+<div id="tab-japan" class="wh-tab" onclick="switchWarehouse('JAPAN')">🇯🇵 国内スピード便 (安心ストア)</div>
 </div>
 
 <div class="container">
-<div id="c-shop" class="tab-content active">
-<div id="live-loading" style="text-align:center;padding:40px;font-weight:bold;color:#666;">🔄 スプレッドシートから同期中...</div>
-<div id="p-grid" class="p-grid" style="display:none;"></div>
+  <!-- ショップ画面 -->
+  <div id="c-shop" class="tab-content active">
+    <div id="live-loading" style="text-align:center;padding:40px;font-weight:bold;color:#666;">🔄 最新の製品棚をスプシから抽出し中...</div>
+    <div id="p-grid" class="p-grid" style="display:none;"></div>
 
-<div class="panel">
-<h4 style="font-weight:900;margin-bottom:8px;font-size:12px;color:var(--ali-red)">🛒 お支払い手続きカウンター</h4>
-<div id="cart-list" style="margin:6px 0;color:#555;line-height:1.5;">カートに商品が入っていません。</div>
+    <div class="panel">
+      <h4 style="font-weight:900;margin-bottom:8px;font-size:12px;color:var(--ali-red)">🛒 お支払いチェックアウト</h4>
+      <div id="cart-list" style="margin:6px 0;color:#555;line-height:1.5;">カート内は空です。</div>
 
-<div style="border-top:1px dashed #CFD8DC;padding-top:6px;margin:8px 0;">
-<div style="display:flex;justify-content:space-between;font-size:11px;color:#666;">
-<span>商品合計:</span><span id="subtotal-val">0円</span>
-</div>
-<div style="display:flex;justify-content:space-between;font-size:11px;color:#E62E04;font-weight:bold;">
-<span>決済手数料 (代引き時40%):</span><span id="fee-val">0円</span>
-</div>
-<div style="display:flex;justify-content:space-between;font-weight:900;font-size:13px;margin-top:4px;">
-<span>総合決済支払い金額:</span><span id="total" style="color:var(--ali-red);font-size:16px">0円</span>
-</div>
-</div>
+      <div style="border-top:1px dashed #CFD8DC;padding-top:6px;margin:8px 0;">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#666;">
+          <span>商品小計 (3%割引適用済):</span><span id="subtotal-val">0円</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#666;">
+          <span>配送料金:</span><span id="shipping-val">0円</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#666;">
+          <span>代金引換手数料 (選択時40%):</span><span id="fee-val">0円</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-weight:900;font-size:13px;margin-top:4px;">
+          <span>お支払い総合計金額:</span><span id="total" style="color:var(--ali-red);font-size:16px">0円</span>
+        </div>
+      </div>
 
-<form onsubmit="order(event)" style="display:flex;flex-direction:column;gap:6px">
-<div class="f-group">
-<label>配送方法</label>
-<select><option>標準 (無料 / Cainiao スーパーエコノミー)</option></select>
-</div>
-<div class="f-group">
-<label>お支払い方法の選択</label>
-<select id="pay-method" onchange="updateCartPrice()">
-<option value="CASH">現金送金 (手数料 0円)</option>
-<option value="COD">代金引換 (代引き手数料 40%追加)</option>
-</select>
-</div>
-<input type="text" id="name" required placeholder="受取人氏名（アルファベット氏名）" style="padding:8px">
-<input type="text" id="addr" required placeholder="お届け先住所（都道府県・市区町村）" style="padding:8px">
-<button type="submit" class="btn-buy" style="padding:10px;font-size:12px;text-transform:uppercase;">安全な決済を行う</button>
-</form>
-</div>
-</div>
+      <form onsubmit="order(event)" style="display:flex;flex-direction:column;gap:6px">
+        <div class="f-group">
+          <label>お支払い方法</label>
+          <select id="pay-method" onchange="updateCartPrice()">
+            <option value="CASH">現金送集金 (手数料 0円)</option>
+            <option value="COD">代金引換 (代引手数料 40%別算)</option>
+          </select>
+        </div>
+        <input type="text" id="name" required placeholder="受取人氏名を入力" style="padding:8px">
+        <input type="text" id="addr" required placeholder="配送先詳細住所を入力" style="padding:8px">
+        <button type="submit" class="btn-buy" style="padding:10px;font-size:12px;text-transform:uppercase;">安全な注文を確定する</button>
+      </form>
+    </div>
+  </div>
 
-<div id="c-my" class="tab-content">
-<div id="no-ord" style="text-align:center;padding:40px;color:#999;font-size:12px">🚚 追跡中の注文はありません。</div>
-<div id="multi-track-container"></div>
-</div>
+  <!-- 注文追跡画面 -->
+  <div id="c-my" class="tab-content">
+    <div id="no-ord" style="text-align:center;padding:40px;color:#999;font-size:12px">🚚 現在アクティブな追跡案件はありません。</div>
+    <div id="multi-track-container"></div>
+  </div>
+
+  <!-- 安全产品追跡センター (チャット) 画面 -->
+  <div id="c-chat" class="tab-content">
+    <div class="chat-container">
+      <div class="chat-header">
+        <div class="chat-title">🛠️ 安全产品追跡センター</div>
+        <div id="seller-status-text" class="chat-status">🟢 セーラーがオンライン・メッセージ入力中...</div>
+      </div>
+      <div id="chat-box" class="chat-body">
+        <!-- 最初のウェルカムメッセージ -->
+        <div class="msg seller">
+          ようこそ安全产品追跡センターへ！親愛なるお客様、私は公式店舗の担当セーラーです。お客様の貨物物流の安全を監視しています。何かお困りのことはありますか？
+          <span class="msg-time">システムボット</span>
+        </div>
+      </div>
+      <div class="chat-footer">
+        <div class="quick-chips">
+          <div class="chip" onclick="clickQuickChip('発送を早くしますか？')">🚀 発送の催促</div>
+          <div class="chip" onclick="clickQuickChip('紛争抗議をしますか？')">⚖️ 紛争(ディスピュート)の開始</div>
+          <div class="chip" onclick="clickQuickChip('配送先住所を変更したい')">📍 住所変更要求</div>
+          <div class="chip" onclick="clickQuickChip('全額返金してほしい')">💰 補償金請求</div>
+        </div>
+        <div class="input-row">
+          <input type="text" id="chat-input-field" class="chat-input" placeholder="セーラーにメッセージを送信...">
+          <button class="chat-send-btn" onclick="sendUserMessage()">送信</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="bottom-nav">
-<button id="nav-shop" class="nav-btn active" onclick="switchTab('shop')"><div class="nav-icon">🏠</div>ホーム</button>
-<button class="nav-btn" onclick="alert('お買い物かご機能')"><div class="nav-icon">🔍</div>お買い物</button>
-<button class="nav-btn" onclick="switchWarehouse('JAPAN');switchTab('shop')"><div class="nav-icon">🇯🇵</div>国内発送</button>
-<button class="nav-btn" onclick="switchTab('shop')"><div class="nav-icon">🛒</div>カート</button>
-<button id="nav-my" class="nav-btn" onclick="switchTab('my')"><div class="nav-icon">👤</div>アカウント(追跡)</button>
+  <button id="nav-shop" class="nav-btn active" onclick="switchTab('shop')"><div class="nav-icon">🏠</div>ホーム</button>
+  <button id="nav-my" class="nav-btn" onclick="switchTab('my')"><div class="nav-icon">📦</div>注文追跡</button>
+  <button id="nav-chat" class="nav-btn" onclick="switchTab('chat')"><div class="nav-icon">💬</div>追跡センター</button>
 </div>
 
 <script>
 const SHEET_PROD_URL = "https://docs.google.com/spreadsheets/d/1LK09yYcLi63EW9-xhXIENfszwyFLC4Jmz_-tO69ab94/export?format=csv&gid=0";
 const SHEET_TRACK_URL = "https://docs.google.com/spreadsheets/d/178-dcD4xd0fUdEORnoC9haQrKmfGiKTaY0OxiOKBRrQ/export?format=csv&gid=0";
-const FORMSPREE_URL = "https://formspree.io/f/xkoezezr";
+const FORMSPREE_URL = "https://formspree.io/f/xrenqbpg";
 
 let products = { CHINA: [], JAPAN: [] }, availableTrackingPool = [], cart = [], orders = [], currentWH = "CHINA";
+let selectedCategory = "ALL";
 
 const SUBJECT_MAP = {
   1: { status: "荷主が荷物をピッキングしています", info: "出荷倉庫にて商品のピッキングが完了しました。" },
@@ -186,7 +249,6 @@ const SUBJECT_MAP = {
   11: { status: "配達が正常に完了しました", info: "指定場所へのお届けを完了。" }
 };
 
-// 初回起動時にLocalStorageから注文履歴を復元
 if (localStorage.getItem('ali_orders')) {
   try { orders = JSON.parse(localStorage.getItem('ali_orders')); } catch(e) { orders = []; }
 }
@@ -205,7 +267,10 @@ async function loadSpreadsheetData() {
       const optArray = (cols[5] || "標準").split(/\r?\n/).map(o => o.trim()).filter(Boolean);
 
       products[warehouse].push({
-        id: idx + 1, name: cols[1] || "Global Item", price: parseInt(cols[2]) || 0, icon: cols[4] || "📦",
+        id: idx + 1, 
+        name: cols[1] || "製品アイテム", 
+        price: parseInt(cols[2]) || 0, 
+        icon: cols[4] || "📦",
         opt: optArray.length ? optArray : ["標準"]
       });
     });
@@ -215,7 +280,7 @@ async function loadSpreadsheetData() {
     document.getElementById('p-grid').style.display = 'grid';
     renderProducts();
   } catch (err) {
-    document.getElementById('live-loading').innerText = "スプシ読み込みエラー";
+    document.getElementById('live-loading').innerText = "データベース同期エラー";
   }
 }
 
@@ -247,16 +312,40 @@ function switchTab(t){
   if(t==='my') renderTrackers();
 }
 
+function filterByCategory(cat, element) {
+  selectedCategory = cat;
+  document.querySelectorAll('.cat-nav .cat-item').forEach(el => el.classList.remove('selected'));
+  element.classList.add('selected');
+  renderProducts();
+}
+
+function filterBySearch() {
+  renderProducts();
+}
+
 function renderProducts(){
   let fList = products[currentWH] || [];
-  document.getElementById('p-grid').innerHTML = fList.map(p=>`
+  let searchWord = document.getElementById('search-box').value.trim().toLowerCase();
+
+  if(selectedCategory !== "ALL") { fList = fList.filter(p => p.name.includes(selectedCategory)); }
+  if(searchWord) { fList = fList.filter(p => p.name.toLowerCase().includes(searchWord)); }
+
+  let grid = document.getElementById('p-grid');
+  if(!fList.length) {
+    grid.innerHTML = `<div style="grid-column:1/3;text-align:center;padding:4px;color:#999">該当する商品はありません。</div>`;
+    return;
+  }
+
+  // 「セーラーに連絡」ボタンを各カードへ配置
+  grid.innerHTML = fList.map(p=>`
     <div class="p-card">
-      <div class="img-box"><div class="discount-tag">58% OFF</div>${p.icon}</div>
+      <div class="img-box"><div class="discount-tag">3% OFF</div>${p.icon}</div>
       <div class="p-info">
         <div style="font-weight:bold;height:26px;overflow:hidden;line-height:1.2;">${p.name}</div>
         <select id="prod-opt-${p.id}" class="opt-select">${p.opt.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>
-        <div class="price-box"><span class="sale-price">${Math.floor(p.price*0.6)}円</span><span class="original-price">${p.price}円</span></div>
-        <button class="btn-buy" onclick="addToCart(${p.id})">カートへ追加</button>
+        <div class="price-box"><span class="sale-price">${Math.floor(p.price * 0.97)}円</span><span class="original-price">${p.price}円</span></div>
+        <button class="btn-buy" onclick="addToCart(${p.id})">カートへ入れる</button>
+        <button class="btn-contact" onclick="openSellerChat('${p.name}', '${p.icon}')">💬 セーラーに連絡</button>
       </div>
     </div>`).join('');
 }
@@ -271,8 +360,9 @@ function addToCart(id){
 function updateCartPrice(){
   let list = document.getElementById('cart-list');
   if(!cart.length){
-    list.innerHTML = "カートに商品が入っていません。";
+    list.innerHTML = "カート内は空です。";
     document.getElementById('subtotal-val').textContent = "0円";
+    document.getElementById('shipping-val').textContent = "0円";
     document.getElementById('fee-val').textContent = "0円";
     document.getElementById('total').textContent = "0円";
     return;
@@ -281,15 +371,17 @@ function updateCartPrice(){
   list.innerHTML = cart.map((i,idx)=>`
     <div style="display:flex;justify-content:between;margin-bottom:3px;">
       <span>${i.icon} ${i.name} (${i.chosenOpt})</span>
-      <span><b>${Math.floor(i.price*0.6)}円</b> <a href="#" onclick="cart.splice(${idx},1);updateCartPrice();return false;" style="color:var(--ali-red);text-decoration:none;margin-left:4px">✕</a></span>
+      <span><b>${Math.floor(i.price * 0.97)}円</b> <a href="#" onclick="cart.splice(${idx},1);updateCartPrice();return false;" style="color:var(--ali-red);text-decoration:none;margin-left:4px">✕</a></span>
     </div>`).join('');
 
-  let subtotal = cart.reduce((s,i)=> s + Math.floor(i.price*0.6), 0);
+  let subtotal = cart.reduce((s,i)=> s + Math.floor(i.price * 0.97), 0);
+  let shipping = 130; 
   let isCOD = document.getElementById('pay-method').value === "COD";
   let fee = isCOD ? Math.floor(subtotal * 0.4) : 0;
-  let finalTotal = subtotal + fee;
+  let finalTotal = subtotal + shipping + fee;
 
   document.getElementById('subtotal-val').textContent = `${subtotal}円`;
+  document.getElementById('shipping-val').textContent = `${shipping}円`;
   document.getElementById('fee-val').textContent = `${fee}円`;
   document.getElementById('total').textContent = `${finalTotal}円`;
 }
@@ -303,28 +395,26 @@ async function order(e){
   e.preventDefault(); if(!cart.length) return;
   await refreshTrackingPool();
 
-  let trackNum = "CN-" + Math.floor(Math.random()*100000000);
+  let trackNum = "JP-" + Math.floor(Math.random()*100000000);
   let initialStep = 1;
   if(availableTrackingPool.length > 0) {
     let rand = availableTrackingPool[Math.floor(Math.random() * availableTrackingPool.length)];
     trackNum = rand.code; initialStep = rand.step;
   }
 
-  let subtotal = cart.reduce((s,i)=> s + Math.floor(i.price*0.6), 0);
   let payMethodStr = document.getElementById('pay-method').value === "COD" ? "代金引換(手数料40%)" : "現金送金";
   let finalTotal = document.getElementById('total').textContent;
   let itemsStr = cart.map(c=> `${c.name}(${c.chosenOpt})`).join(', ');
 
-  // 🎯 FormspreeへのPOST送信オブジェクト組み立て
   let formData = new FormData();
-  formData.append("追跡番号", trackNum);
-  formData.append("注文商品リスト", itemsStr);
-  formData.append("お支払い方法", payMethodStr);
-  formData.append("合計支払金額", finalTotal);
-  formData.append("購入者氏名", document.getElementById('name').value);
-  formData.append("配送先住所", document.getElementById('addr').value);
+  formData.append("追跡ID", trackNum);
+  formData.append("購入製品一連", itemsStr);
+  formData.append("お支払い選択", payMethodStr);
+  formData.append("配送料金", "130円");
+  formData.append("総合決済金額", finalTotal);
+  formData.append("受取顧客名", document.getElementById('name').value);
+  formData.append("指定お届け先住所", document.getElementById('addr').value);
 
-  // Formspreeへバックグラウンド送信
   fetch(FORMSPREE_URL, { method: "POST", body: formData, headers: {'Accept': 'application/json'} });
 
   let estDelivery = `${getDeliveryDateStr(6)} 〜 ${getDeliveryDateStr(8)}`;
@@ -337,21 +427,21 @@ async function order(e){
   };
 
   orders.push(newOrder);
-  // 🎯 ローカルストレージに即時保存
   localStorage.setItem('ali_orders', JSON.stringify(orders));
-
   document.getElementById('success-modal').style.display = 'flex';
 }
 
 function closeSuccess(){
   document.getElementById('success-modal').style.display = 'none';
-  cart = []; updateCartPrice(); switchTab('my'); startLoop();
+  cart = []; updateCartPrice(); switchTab('my');
 }
 
 function renderTrackers(){
   let container = document.getElementById('multi-track-container');
   if(!orders.length){ document.getElementById('no-ord').style.display='block'; container.innerHTML=''; return; }
   document.getElementById('no-ord').style.display='none';
+  
+  // 追跡欄カード内にも「セーラーに連絡」ボタンを増設！
   container.innerHTML = orders.map(s=>`
     <div class="track-card">
       <div class="track-header"><b>🚚 トラッキングID: ${s.tn}</b><span class="carrier-badge">Cainiao Global</span></div>
@@ -367,9 +457,112 @@ function renderTrackers(){
         <div class="progress-dot ${s.step>=11?'active':''}"><span>完了</span></div>
       </div>
       <div class="log-box">${s.logs.map(l=>`<div style="margin-bottom:4px;border-bottom:1px dashed #EEE;padding-bottom:2px;"><span style="color:#999;margin-right:4px;">[${l.time}]</span>${l.msg}</div>`).join('')}</div>
+      <button class="btn-contact" style="margin-top:8px;border-color:var(--ali-orange);color:var(--ali-orange);" onclick="openSellerChat('${s.itemsSummary}', '📦')">💬 この注文についてセーラーに不満を言う</button>
     </div>`).join('');
 }
 
+/* ==========================================================================
+   💬 安全产品追跡センター チャットボット・コアエンジン
+   ========================================================================== */
+function openSellerChat(prodName, prodIcon) {
+  switchTab('chat');
+  const chatBox = document.getElementById('chat-box');
+  
+  // セーラーが入力中アニメーション
+  setSellerStatus(true);
+  
+  setTimeout(() => {
+    appendChatBubble("seller", `親愛なる友よ、この製品のお問い合わせですか？<br><br><span style="background:#FFF;padding:6px;border:1px solid #DDD;border-radius:4px;display:inline-block;font-weight:bold;">${prodIcon} ${prodName}</span><div class="survey-box"><button class="survey-btn" onclick="answerSurvey('YES', '${prodName}')">はい、これです</button><button class="survey-btn" onclick="answerSurvey('NO', '${prodName}')">いいえ、違います</button></div>`);
+    setSellerStatus(false);
+  }, 800);
+}
+
+function setSellerStatus(isTyping) {
+  const el = document.getElementById('seller-status-text');
+  if(isTyping) {
+    el.innerText = "💬 セーラーが返信を入力中...";
+    el.style.color = "#FF8800";
+  } else {
+    el.innerText = "🟢 セーラーがオンライン";
+    el.style.color = "#00E676";
+  }
+}
+
+function appendChatBubble(sender, text) {
+  const chatBox = document.getElementById('chat-box');
+  const timeStr = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  const bubble = document.createElement('div');
+  bubble.className = `msg ${sender}`;
+  bubble.innerHTML = `${text}<span class="msg-time">${timeStr}</span>`;
+  chatBox.appendChild(bubble);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function answerSurvey(type, name) {
+  appendChatBubble("user", type === 'YES' ? "はい、その商品です！" : "いいえ、別の件です。");
+  setSellerStatus(true);
+  
+  setTimeout(() => {
+    if(type === 'YES') {
+      appendChatBubble("seller", `オッケー！該当商品の確認が取れました👌 親愛なる友よ、このお取引についてどのような処理を望みますか？以下のアンケートから選んでください：<div class="survey-box"><button class="survey-btn" onclick="triggerSubSurvey('SPEED')">⚡ 発送を早くしますか？ (特別スピード最優先催促)</button><button class="survey-btn" onclick="triggerSubSurvey('DISPUTE')">⚖️ 紛争(ディスピュート)抗議をしますか？</button></div>`);
+    } else {
+      appendChatBubble("seller", "了解しました。どのような問題が発生しているか、メッセージを直接入力するか、下のクイックボタンを選んで教えてください。");
+    }
+    setSellerStatus(false);
+  }, 1000);
+}
+
+function triggerSubSurvey(action) {
+  if(action === 'SPEED') {
+    appendChatBubble("user", "発送を早くしてください！急いでいます！");
+    setSellerStatus(true);
+    setTimeout(() => {
+      appendChatBubble("seller", "【セーラー承認済】了解しました！すぐに国際物流ハブの責任者に通知し、優先コンテナに積み込みます。発送完了までしばらくお待ちください、親愛なる友よ！🌟");
+      setSellerStatus(false);
+    }, 1000);
+  } else if(action === 'DISPUTE') {
+    appendChatBubble("user", "紛争（ディスピュート）抗議手続きを開始したい！");
+    setSellerStatus(true);
+    setTimeout(() => {
+      appendChatBubble("seller", "【安全产品警告】紛争が検知されました。プラットフォームによる強制介入が入る前に、セーラーとの和解を提案します！補償案として『次回使える50%割引クポーン』または『全額返金（※条件あり）』を提示できますが、どうしますか？");
+      setSellerStatus(false);
+    }, 1200);
+  }
+}
+
+function clickQuickChip(text) {
+  document.getElementById('chat-input-field').value = text;
+  sendUserMessage();
+}
+
+function sendUserMessage() {
+  const inputEl = document.getElementById('chat-input-field');
+  const txt = inputEl.value.trim();
+  if(!txt) return;
+  
+  appendChatBubble("user", txt);
+  inputEl.value = "";
+  setSellerStatus(true);
+  
+  setTimeout(() => {
+    let reply = "親愛なるお客様、メッセージを受け取りました。現在、安全产品出荷チームが全力を尽くしてあなたの小包を追跡しています。少々お待ちください。";
+    
+    if(txt.includes("発送を早く") || txt.includes("催促")) {
+      reply = "オッケー！発送スピードの加速リクエストをシステムへ同期しました。税関のグリーン通路を通るよう手続きを強化します。⚡";
+    } else if(txt.includes("紛争") || txt.includes("抗議")) {
+      reply = "ディスピュート（紛争）申請を一旦取り下げていただけますか？😭 評価に悪い星をつけないでください！私たちが必ず返金または再発送で解決することをお約束します！";
+    } else if(txt.includes("住所")) {
+      reply = "住所変更を試みます！すでに税関を通過してフライトに乗っている場合はルート変更手数料がかかる可能性があるため、現地配達員とも連携します。";
+    } else if(txt.includes("返金")) {
+      reply = "全額返金の手続きをバックオフィスに申請しました。審査完了後、ご指定の決済口座、またはストアコインにて補償が実行されます。💰";
+    }
+    
+    appendChatBubble("seller", reply);
+    setSellerStatus(false);
+  }, 1200);
+}
+
+// 追跡自動同期ループ
 let loopTimer = null;
 function startLoop(){
   if(loopTimer) return;
