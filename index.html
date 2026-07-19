@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>安全产品出荷 - グローバルフルフィルメントシステム</title>
 <style>
-:root{--ali-orange:#FF4747;--ali-red:#FD384F;--ali-black:#191919;--bg-gray:#F2F2F7;--cainiao-blue:#0052CC;--chat-green:#4CAF50;--success:#2E7D32}
+:root{--ali-orange:#FF4747;--ali-red:#FD384F;--ali-black:#191919;--bg-gray:#F2F2F7;--cainiao-blue:#0052CC;--chat-green:#4CAF50;--success:#2E7D32;--warn:#FBC02D}
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px}
 body{background:var(--bg-gray);color:var(--ali-black);max-width:420px;margin:0 auto;min-height:100vh;position:relative;border-left:1px solid #E0E0E0;border-right:1px solid #E0E0E0;box-shadow:0 0 20px rgba(0,0,0,0.05);padding-bottom:60px}
 
@@ -43,16 +43,18 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 .original-price{text-decoration:line-through;color:#999;font-size:9px}
 
 .btn-buy{background:linear-gradient(90deg,#FF8800,#FF3300);color:#FFF;border:none;border-radius:18px;padding:6px;cursor:pointer;font-weight:bold;font-size:11px;margin-top:4px;text-align:center;width:100%}
+.btn-urge{background:linear-gradient(90deg,#FBC02D,#F57F17);color:#FFF;border:none;border-radius:6px;padding:4px 8px;cursor:pointer;font-weight:bold;font-size:10px;margin-top:4px}
+
 .panel{background:#FFF;border-radius:12px;padding:12px;margin-top:8px;box-shadow:0 1px 4px rgba(0,0,0,0.04);border:1px solid #EAEAEA}
 
 .cart-item-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed #EEE}
 .cart-item-delete{color:var(--ali-red);cursor:pointer;font-weight:bold;margin-left:8px}
 
 .track-card{background:#FFF;border-radius:12px;padding:12px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,0.04);border:1px solid #EAEAEA;position:relative}
-.track-card.cancelled{background:#F5F5F5;opacity:0.75;border:2px dashed #999}
+.track-card.waiting{border:2px solid #FFA000;background:#FFFDF7}
 .track-header{display:flex;justify-content:space-between;font-weight:bold;margin-bottom:6px;border-bottom:1px solid #F0F0F0;padding-bottom:6px;align-items:center}
 .carrier-badge{background:#E8F0FE;color:var(--cainiao-blue);padding:2px 6px;border-radius:4px;font-size:9px;font-weight:bold}
-.btn-delete-history{background:#FFEBEE;color:var(--ali-red);border:1px solid #FFCDD2;border-radius:4px;padding:2px 6px;cursor:pointer;font-weight:bold;font-size:9px;float:right}
+.btn-delete-history{background:#FFEBEE;color:var(--ali-red);border:1px solid #FFCDD2;border-radius:4px;padding:2px 6px;cursor:pointer;font-weight:bold;font-size:9px}
 
 .progress-container{display:flex;justify-content:space-between;margin:12px 4px 22px 4px;position:relative}
 .progress-line{position:absolute;top:5px;left:2%;right:2%;height:3px;background:#ECEFF1;z-index:1}
@@ -175,7 +177,7 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 </div>
 
 <script>
-// 【過去の注文を全部消す対応】実行時に古いローカルストレージデータをクリア
+// アプリ起動時に古い注文履歴を全削除して初期化
 localStorage.removeItem('ali_orders');
 
 const SHEET_PROD_URL = "https://docs.google.com/spreadsheets/d/1LK09yYcLi63EW9-xhXIENfszwyFLC4Jmz_-tO69ab94/export?format=csv&gid=0";
@@ -186,7 +188,7 @@ let products = { CHINA: [], JAPAN: [] };
 let allProductsList = [];
 let availableTrackingPool = [];
 let cart = [];
-let orders = []; // 過去データを消去したため空配列からスタート
+let orders = [];
 let currentWH = "CHINA";
 let selectedCategory = "ALL";
 
@@ -234,6 +236,7 @@ async function loadSpreadsheetData() {
   }
 }
 
+// B欄（インデックス1）とC欄（インデックス2：伝達メッセージ）を取得
 async function refreshTrackingPool() {
   try {
     const resTrack = await fetch(SHEET_TRACK_URL + "&t=" + new Date().getTime());
@@ -241,7 +244,12 @@ async function refreshTrackingPool() {
     availableTrackingPool = csvTrack.split('\n').slice(1).map(row => {
       if (!row.trim()) return null;
       const cols = row.split(',').map(c => c.replace(/^"(.*)"$/, '$1').trim());
-      return { code: cols[0], step: parseInt(cols[1]) || 0, memo: cols[2] || "" };
+      return { 
+        code: cols[0], 
+        stepStr: cols[1] ? cols[1].trim() : "", // B欄の文字をそのまま取得
+        step: parseInt(cols[1]) || 0, 
+        memo: cols[2] || "" // C欄＝伝達メッセージ
+      };
     }).filter(Boolean);
   } catch(e){}
 }
@@ -347,7 +355,7 @@ function updateCartUI() {
   document.getElementById('total').innerText = `¥${totalCost.toLocaleString()}`;
 }
 
-// 📦 注文実行（LP, CJ, JPコードを識別割当 ＆ 住所を画面に残す）
+// 📦 注文実行（1注文につき1つの追跡番号を発行 ＆ B欄空欄のみ使用 ＆ 待機型対応）
 async function order(e) {
   e.preventDefault();
   if(cart.length === 0) return alert("カート内に製品がありません。");
@@ -356,59 +364,67 @@ async function order(e) {
   const addr = document.getElementById('addr').value;
 
   await refreshTrackingPool();
-  let assignedCodesLog = [];
 
-  cart.forEach(item => {
-    let finalCode = "ERR-" + Math.floor(Math.random()*90000+10000);
-    let freeCodeObj = null;
+  // カート内の発送元をチェック
+  const hasChina = cart.some(item => item.warehouse === "CHINA");
+  const hasJapan = cart.some(item => item.warehouse === "JAPAN");
 
-    if (item.warehouse === "JAPAN") {
-      // 🇯🇵 国内便なら「JP」コードを探す
-      freeCodeObj = availableTrackingPool.find(p => p.step === 0 && p.code.startsWith("JP") && !orders.some(o => o.tn === p.code));
-    } else {
-      // 🇨🇳 海外便（グローバルハブ便）の場合：LPコードとCJコードを順に探索して切り分ける
-      freeCodeObj = availableTrackingPool.find(p => p.step === 0 && p.code.startsWith("LP") && !orders.some(o => o.tn === p.code));
-      if (!freeCodeObj) {
-        freeCodeObj = availableTrackingPool.find(p => p.step === 0 && p.code.startsWith("CJ") && !orders.some(o => o.tn === p.code));
-      }
-    }
+  let prefix = "LP";
+  if (hasChina && hasJapan) {
+    prefix = "CJ"; // 両方混在はCJコード
+  } else if (hasJapan && !hasChina) {
+    prefix = "JP"; // 日本発送のみはJPコード
+  } else {
+    prefix = "LP"; // 中国発送のみはLPコード
+  }
 
-    if (freeCodeObj) finalCode = freeCodeObj.code;
+  // 【条件】B欄（stepStr）が完全に空欄のコードのみを取得
+  let freeCodeObj = availableTrackingPool.find(p => p.stepStr === "" && p.code.startsWith(prefix) && !orders.some(o => o.tn === p.code));
 
-    const newOrder = {
-      id: "ORD-" + new Date().getTime() + "-" + Math.random().toString(36).substr(2, 4),
-      name: name,
-      addr: addr,
-      pName: item.name,
-      pIcon: item.icon,
-      opt: item.selectedOpt,
-      price: item.price,
-      tn: finalCode,
-      step: freeCodeObj ? 1 : 0,
-      isCancelled: false,
-      isClosed: false
-    };
+  let finalCode = "";
+  let isWaiting = false;
 
-    orders.push(newOrder);
-    assignedCodesLog.push(`${item.icon} ${item.name} ➔ ${finalCode}`);
-  });
+  if (freeCodeObj) {
+    finalCode = freeCodeObj.code;
+  } else {
+    // 空きがない場合は待機番号なしの「待機型」状態にする
+    finalCode = "配車・入荷待ち (未割り当て)";
+    isWaiting = true;
+  }
 
+  // 1注文に全商品をまとめて保存
+  const orderItemsInfo = cart.map(item => `${item.icon} ${item.name} (${item.selectedOpt})`).join(", ");
+  
+  const newOrder = {
+    id: "ORD-" + new Date().getTime(),
+    name: name,
+    addr: addr,
+    itemsText: orderItemsInfo,
+    price: cart.reduce((sum, item) => sum + item.price, 0),
+    tn: finalCode,
+    step: isWaiting ? 0 : 1,
+    isWaiting: isWaiting,
+    isCancelled: false,
+    prefixType: prefix
+  };
+
+  orders.push(newOrder);
   localStorage.setItem('ali_orders', JSON.stringify(orders));
 
   try {
     await fetch(FORMSPREE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: name, address: addr, summary: assignedCodesLog.join(" | ") })
+      body: JSON.stringify({ name: name, address: addr, summary: `コード種類: ${prefix} | 番号: ${finalCode} | 商品: ${orderItemsInfo}` })
     });
   } catch(err){}
 
   cart = [];
   updateCartUI();
-  
-  // 【住所入力残し対応】 document.getElementById('name').value = ""; 等のクリア処理を削除し、入力を維持
 
-  document.getElementById('modal-desc').innerHTML = `以下の通りフルフィルメントコードが即時発行されました。<br><br>${assignedCodesLog.join("<br>")}`;
+  document.getElementById('modal-desc').innerHTML = isWaiting 
+    ? `現在、空き物流コードがないため【配車・入荷待ち（待機状態）】として受理されました。追跡画面から発送の催促が可能です。`
+    : `以下の通り、統合フルフィルメントコード [ ${prefix} ] が即時割り当てられました。<br><br> ➔ <strong>${finalCode}</strong>`;
   document.getElementById('success-modal').style.display = 'flex';
 }
 
@@ -417,6 +433,19 @@ function closeSuccess() {
   switchTab('my');
 }
 
+// 🚀 発送催促アクション
+function urgeShipping(orderId) {
+  alert("🚨 運営フルフィルメントセンターへ「発送催促シグナル」を緊急送信しました！空きコードが確保され次第、自動で割り当てられます。");
+  
+  // チャット画面にも自動で催促メッセージを連携するギミック
+  switchTab('chat');
+  appendMessage(`【システム自動送信】注文番号 [ ${orderId} ] の発送催促がユーザーより実行されました。最優先でコード枠の確保をお願いします。`, 'user');
+  setTimeout(() => {
+    appendMessage(`【カスタマーセンター】催促通知を受信いたしました。現在、該当発送ルートの新規コード枠を至急手配しております。確保され次第、追跡画面へ自動反映されますのでしばらくお待ちください。`, 'seller');
+  }, 600);
+}
+
+// 📦 配送追跡表示（C欄の伝達メッセージ対応 ＆ 催促ボタン配置）
 function renderTrackers() {
   const container = document.getElementById('multi-track-container');
   const noOrd = document.getElementById('no-ord');
@@ -429,37 +458,56 @@ function renderTrackers() {
   noOrd.style.display = 'none';
 
   orders.forEach(ord => {
-    const steps = ["処理中", "倉庫引き渡し", "国際交換局", "航空会社渡", "日本到着", "通関手続き", "国内配送網", "配達中", "完了"];
-    let dotsHtml = "";
-    steps.forEach((st, i) => {
-      let activeClass = (i <= ord.step) ? "active" : "";
-      dotsHtml += `<div class="progress-dot ${activeClass}"><span>${st}</span></div>`;
-    });
-    let fillWidth = Math.min(100, (ord.step / (steps.length - 1)) * 100);
-
     let matchPool = availableTrackingPool.find(p => p.code === ord.tn) || {};
-    let memoText = matchPool.memo || "国際物流センターにて発送準備中。";
+    // C欄のテキストがあればそれを優先、なければ規定のメッセージ
+    let memoText = matchPool.memo || (ord.isWaiting ? "現在配車枠の空きを探索中です。コードの発行をお待ちください。" : "国際物流センターにて発送準備中。");
 
-    let html = `
-      <div class="track-card ${ord.isCancelled ? 'cancelled' : ''}">
-        <div class="track-header">
-          <span class="carrier-badge">物流管理コード: CAINIAO NETWORK</span>
-          <span style="font-size:10px; color:#111; font-weight:bold;">${ord.tn}</span>
-          <button class="btn-delete-history" onclick="deleteHistory('${ord.id}')">削除</button>
+    let statusContent = "";
+
+    if (ord.isWaiting) {
+      // 待機型用の表示（催促ボタン付き）
+      statusContent = `
+        <div style="background:#FFF3E0; border:1px solid #FFB74D; padding:10px; border-radius:6px; margin-top:8px; text-align:center;">
+          <span style="color:#E65100; font-weight:bold; font-size:11px;">⚠️ 待機中: 利用可能な${ord.prefixType}コードの空きがありません</span>
+          <br>
+          <button class="btn-urge" onclick="urgeShipping('${ord.id}')">🚀 発送を催促する（優先割り当て要請）</button>
         </div>
-        <div style="margin:4px 0; font-size:12px;">
-          製品情報: <strong>${ord.pIcon} ${ord.pName}</strong> (${ord.opt})
-        </div>
-        
+      `;
+    } else {
+      // 通常の進捗ドット
+      const steps = ["処理中", "倉庫引き渡し", "国際交換局", "航空会社渡", "日本到着", "通関手続き", "国内配送網", "配達中", "完了"];
+      let dotsHtml = "";
+      steps.forEach((st, i) => {
+        let activeClass = (i <= ord.step) ? "active" : "";
+        dotsHtml += `<div class="progress-dot ${activeClass}"><span>${st}</span></div>`;
+      });
+      let fillWidth = Math.min(100, (ord.step / (steps.length - 1)) * 100);
+
+      statusContent = `
         <div class="progress-container">
           <div class="progress-line"></div>
           <div class="progress-line-fill" style="width: ${fillWidth}%"></div>
           ${dotsHtml}
         </div>
+      `;
+    }
+
+    let html = `
+      <div class="track-card ${ord.isWaiting ? 'waiting' : ''}">
+        <div class="track-header">
+          <span class="carrier-badge">CAINIAO 統合発送（種別: ${ord.prefixType}）</span>
+          <span style="font-size:11px; color:#111; font-weight:bold; background:#EEE; padding:2px 6px; border-radius:4px;">${ord.tn}</span>
+          <button class="btn-delete-history" onclick="deleteHistory('${ord.id}')">削除</button>
+        </div>
+        <div style="margin:6px 0; font-size:11px; color:#333;">
+          📦 <strong>内包商品:</strong> ${ord.itemsText}
+        </div>
+        
+        ${statusContent}
 
         <div class="log-box">
-          <div class="carrier-memo-log">【最新ステータス情報】<br>${memoText}</div>
-          <div style="color:#999; margin-top:4px;">・同期時刻: ${new Date().toLocaleTimeString()} (自動データ同期)</div>
+          <div class="carrier-memo-log">【C欄 伝達メッセージ】<br>${memoText}</div>
+          <div style="color:#999; margin-top:4px;">・データ同期時刻: ${new Date().toLocaleTimeString()}</div>
         </div>
       </div>
     `;
@@ -483,12 +531,22 @@ function startLoop() {
     let isChanged = false;
     
     orders.forEach(ord => {
-      if(ord.isCancelled || ord.isClosed) return; 
+      // もし待機中だった注文に対して、新しくB欄が空欄のコードが見つかれば自動で割り当てる処理
+      if(ord.isWaiting) {
+        let newFreeCode = availableTrackingPool.find(p => p.stepStr === "" && p.code.startsWith(ord.prefixType) && !orders.some(o => o.tn === p.code));
+        if(newFreeCode) {
+          ord.tn = newFreeCode.code;
+          ord.isWaiting = false;
+          ord.step = 1;
+          isChanged = true;
+        }
+        return;
+      }
+
       let match = availableTrackingPool.find(p => p.code === ord.tn);
       if(match && match.step !== ord.step) {
         ord.step = match.step;
         isChanged = true;
-        if(ord.step === 8) ord.isClosed = true; 
       }
     });
     
@@ -511,9 +569,9 @@ function sendUserMessage() {
     let matchOrder = orders.find(o => o.tn === text);
     if(matchOrder) {
       let pool = availableTrackingPool.find(p => p.code === matchOrder.tn) || {};
-      appendMessage(`【照会結果通知】<br>ご入力いただきました追跡番号［${matchOrder.tn}］の輸送ステータスを照会いたしました。<br><br>■ 対象商品: ${matchOrder.pName}<br>■ 現在の位置付け: ステージ [ ${matchOrder.step} ]<br>■ 輸送状況詳細: ${pool.memo || '国際交換局にて通関審査中、または配送網への引き継ぎ処理中となっております。'}<br><br>データはリアルタイムで更新されております。今しばらくお待ちいただきますようお願い申し上げます。`, 'seller');
+      appendMessage(`【照会結果通知】<br>追跡番号［${matchOrder.tn}］の輸送ステータスを照会しました。<br><br>■ 商品: ${matchOrder.itemsText}<br>■ 伝達メッセージ: ${pool.memo || '順調に輸送処理が行われています。'}<br><br>引き続きお届けまでお待ちください。`, 'seller');
     } else {
-      appendMessage(`【カスタマーセンター自動総合返信】<br>ご提示いただきました文字列［${text}］に該当する有効なフルフィルメントコード（追跡番号）が当システム上で確認できませんでした。<br><br>お手数ではございますが、「📦追跡」タブより正確な番号（例: LPから始まる番号、またはJPから始まる番号）をご確認の上、再度ご照会いただけますようお願い申し上げます。その他のお問い合わせにつきましては、順次オペレーターが確認いたします。`, 'seller');
+      appendMessage(`【メッセージ受信】お問い合わせありがとうございます。フルフィルメントコード（LP/JP/CJから始まる番号）をご入力いただくと、自動で現在のC欄伝達メッセージや進行状況を検索して返信いたします。`, 'seller');
     }
   }, 800);
 }
