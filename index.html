@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AliExpress Style Fulfillment ERP - PRO</title>
+<title>日本产品安全出荷</title>
 <style>
 :root{--ali-red:#FD384F;--ali-orange:#FF6A00;--bg-gray:#F4F4F4;--text-main:#191919;--text-sub:#666;--border-color:#EAEAEA;--choice-yellow:#FFF5CC}
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:12px}
@@ -16,78 +16,87 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90;border-
 .search-container{flex:1;display:flex;align-items:center;background:#F5F5F5;border-radius:20px;padding:6px 12px}
 .search-input{border:none;background:none;outline:none;width:100%;font-size:12px;color:#333}
 
-/* 注文状態タブ */
-.order-tabs{display:flex;background:#FFF;border-bottom:1px solid var(--border-color);overflow-x:auto}
-.o-tab{padding:10px 14px;color:var(--text-sub);cursor:pointer;white-space:nowrap;font-weight:bold;position:relative}
-.o-tab.active{color:var(--text-main);font-size:13px}
-.o-tab.active::after{content:'';position:absolute;bottom:0;left:15%;width:70%;height:3px;background:var(--text-main);border-radius:2px}
-
+/* タブ */
+.tabs-container{display:flex;background:#FFF;border-bottom:1px solid var(--border-color);overflow-x:auto;scrollbar-width:none;}
+.tabs-container::-webkit-scrollbar{display:none;}
+.tab-item{padding:10px 14px;color:var(--text-sub);cursor:pointer;white-space:nowrap;position:relative}
+.tab-item.active{color:var(--text-main);font-size:13px;font-weight:bold;}
+.tab-item.active::after{content:'';position:absolute;bottom:0;left:15%;width:70%;height:3px;background:var(--text-main);border-radius:2px}
 .container{padding:0}
 .tab-content{display:none}
 .tab-content.active{display:block}
 
-/* カタログ用グリッド */
+/* カタログ */
 .p-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px}
 .p-card{background:#FFF;border-radius:10px;padding:8px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid #EEE}
 .img-box{background:#F8F8F8;height:120px;border-radius:6px;display:flex;justify-content:center;align-items:center;font-size:48px;position:relative}
 .choice-badge{position:absolute;top:4px;left:4px;background:#FFD600;color:#000;font-weight:900;font-size:9px;padding:2px 5px;border-radius:4px}
+.wh-badge{position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.6);color:#FFF;font-size:9px;padding:2px 4px;border-radius:4px}
 .price-line{color:var(--ali-red);font-size:15px;font-weight:900;margin-top:6px}
 .btn-add-cart{background:#FFF;border:1px solid var(--ali-red);color:var(--ali-red);border-radius:15px;padding:6px;font-weight:bold;cursor:pointer;width:100%;margin-top:6px;transition:all 0.2s}
 .btn-add-cart:active{background:var(--ali-red);color:#FFF}
 
-/* ==========================================
-   🛒 注文確認（カート）画面専用デザイン（完全再現）
-========================================== */
+/* カート & 決済 */
 .checkout-header{background:#FFF;padding:12px;display:flex;align-items:center;gap:10px;font-size:16px;font-weight:bold;border-bottom:1px solid #EEE}
-.checkout-header .secure{color:#4CAF50;font-size:10px;display:flex;align-items:center;gap:4px;margin-top:2px}
 .checkout-section{background:#FFF;margin-bottom:8px;padding:14px}
 .mail-border{height:4px;background:repeating-linear-gradient(to right, #E53935 0, #E53935 12px, transparent 12px, transparent 16px, #1E88E5 16px, #1E88E5 28px, transparent 28px, transparent 32px);margin:10px -14px -14px -14px}
-.addr-title{font-weight:bold;margin-bottom:8px}
-.addr-name{font-weight:bold;font-size:13px;margin-bottom:4px}
-.addr-desc{color:#666;font-size:11px;line-height:1.4}
-.store-bar{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #EEE;padding-bottom:10px;margin-bottom:10px}
 .co-prod-row{display:flex;gap:12px;margin-bottom:14px}
 .co-img{width:64px;height:64px;background:#F5F5F5;border-radius:6px;display:flex;justify-content:center;align-items:center;font-size:32px;border:1px solid #EEE}
 .qty-ctrl{display:inline-flex;align-items:center;border:1px solid #DDD;border-radius:15px;overflow:hidden;margin-top:6px}
 .qty-btn{background:#FFF;border:none;padding:2px 10px;font-size:16px;cursor:pointer;color:#555}
 .qty-val{padding:0 12px;font-weight:bold;font-size:13px;border-left:1px solid #DDD;border-right:1px solid #DDD}
 .shipping-info{border-top:1px dashed #EEE;padding-top:10px;font-size:11px;color:#555;line-height:1.6}
-.pay-method-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #F5F5F5}
-.pay-method-row:last-child{border-bottom:none}
-.radio-circle{width:18px;height:18px;border:1px solid #CCC;border-radius:50%;display:flex;justify-content:center;align-items:center}
+
+/* 新しい支払いUI */
+.pay-method-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #F5F5F5;cursor:pointer;}
+.pay-method-row.disabled{opacity:0.5;pointer-events:none;}
+.radio-circle{width:18px;height:18px;border:1px solid #CCC;border-radius:50%;display:flex;justify-content:center;align-items:center;flex-shrink:0;}
 .radio-circle.selected{border-color:var(--ali-red);background:var(--ali-red)}
 .radio-circle.selected::after{content:'';width:6px;height:6px;background:#FFF;border-radius:50%}
+.pay-detail{background:#FAFAFA;border:1px solid #EEE;border-radius:8px;padding:12px;margin:0 0 12px 28px;display:none;}
+.pay-input{width:100%;padding:10px;margin-bottom:8px;border:1px solid #CCC;border-radius:6px;font-size:12px;outline:none;}
+.pay-input:focus{border-color:var(--text-main);}
 
 .checkout-footer{position:fixed;bottom:55px;left:50%;transform:translateX(-50%);width:100%;max-width:440px;background:#FFF;border-top:1px solid #EEE;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;z-index:95}
 .btn-pay-now{background:var(--ali-red);color:#FFF;border:none;border-radius:20px;padding:10px 24px;font-size:14px;font-weight:bold;cursor:pointer}
 
-/* 📦 アリエク風 注文＆追跡カード */
-.alie-card{background:#FFF;border-radius:12px;padding:12px;margin:8px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
-.store-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.store-choice{background:var(--choice-yellow);color:#996600;font-weight:bold;padding:1px 4px;border-radius:3px;font-size:9px;margin-right:4px}
-.prod-row{display:flex;gap:10px;margin-bottom:10px}
-.prod-img{width:60px;height:60px;background:#F5F5F5;border-radius:6px;display:flex;justify-content:center;align-items:center;font-size:28px}
-.prod-title{height:28px;overflow:hidden;font-weight:500;line-height:1.3;font-size:11px}
-.status-alert-box{background:#F9F9F9;border-radius:8px;padding:8px 10px;margin-bottom:10px;display:flex;flex-direction:column;gap:4px;border:1px solid #EEE}
-.status-alert-box.alert-waiting{background:#FFFDE7;border-color:#FFF59D} /* 支払い待ち用カラー */
-.status-alert-box.alert-ready{background:#E8F5E9;border-color:#C8E6C9}
-.card-actions{display:flex;justify-content:flex-end;gap:8px;border-top:1px solid #F5F5F5;padding-top:8px}
-.btn-outline{background:#FFF;border:1px solid #CCC;color:#333;padding:5px 12px;border-radius:15px;cursor:pointer;font-weight:bold}
-.btn-outline.primary{border-color:var(--text-main);color:var(--text-main)}
+/* 追跡カード */
+.track-card{background:#FFF;margin-bottom:8px;}
+.track-store-name{padding:12px 12px 8px 12px;font-weight:bold;font-size:13px;display:flex;align-items:center;gap:6px;}
+.track-store-name .choice{background:var(--choice-yellow);color:#996600;font-size:10px;padding:2px 4px;border-radius:2px;}
+.track-item-row{display:flex;padding:0 12px 12px 12px;gap:10px;}
+.track-item-img{width:70px;height:70px;background:#F9F9F9;border-radius:8px;display:flex;justify-content:center;align-items:center;font-size:32px;border:1px solid #EEE;flex-shrink:0;}
+.track-item-info{flex:1;display:flex;flex-direction:column;justify-content:space-between;}
+.track-item-title{font-size:12px;color:#333;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.track-item-spec{font-size:11px;color:#888;margin-top:2px;}
+.track-item-price-row{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
+.track-item-price{font-weight:bold;font-size:13px;}
+.track-coupon{color:#009688;font-size:11px;margin-top:2px;}
+.track-status-box{margin:0 12px 12px 12px;background:#F9F9F9;border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;border:1px solid #F0F0F0;}
+.track-status-icon{font-size:18px;}
+.track-status-text{flex:1;}
+.track-status-main{font-size:13px;font-weight:bold;color:#111;margin-bottom:4px;}
+.track-status-date{font-size:11px;color:#888;}
+.track-total-row{padding:10px 12px;text-align:right;font-size:12px;font-weight:bold;border-bottom:1px solid #F5F5F5;}
+
+/* チャット UI */
+.chat-window{display:flex;flex-direction:column;height:calc(100vh - 120px);background:#F4F4F4;}
+.chat-messages{flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;}
+.bubble{max-width:80%;padding:10px 14px;border-radius:15px;font-size:13px;line-height:1.4;word-break:break-all;}
+.bubble.bot{background:#FFF;align-self:flex-start;border-bottom-left-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,0.05);}
+.bubble.user{background:var(--ali-red);color:#FFF;align-self:flex-end;border-bottom-right-radius:2px;}
+.chat-quick-actions{display:flex;gap:8px;padding:10px 12px;background:#FFF;overflow-x:auto;border-top:1px solid #EEE;scrollbar-width:none;}
+.chat-quick-actions::-webkit-scrollbar{display:none;}
+.btn-quick{white-space:nowrap;background:#F4F4F4;border:1px solid #DDD;padding:6px 14px;border-radius:15px;font-size:12px;font-weight:bold;cursor:pointer;color:#333;}
+.chat-input-area{padding:8px 12px;background:#FFF;border-top:1px solid #F0F0F0;display:flex;gap:8px;align-items:center;}
+.chat-input{flex:1;background:#F5F5F5;border:none;padding:10px 14px;border-radius:20px;outline:none;}
+.btn-send{background:none;border:none;color:var(--text-main);font-weight:bold;font-size:14px;padding:0 8px;cursor:pointer;}
 
 /* ボトムナビ */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;background:#FFF;border-top:1px solid var(--border-color);display:flex;justify-content:space-around;padding:6px 0;z-index:100}
 .nav-item{background:none;border:none;color:#666;display:flex;flex-direction:column;align-items:center;flex:1;cursor:pointer;font-weight:bold;font-size:10px;position:relative}
 .nav-item.active{color:var(--ali-red)}
 .cart-badge{position:absolute;top:-2px;right:18px;background:var(--ali-red);color:#FFF;font-size:9px;width:14px;height:14px;border-radius:50%;display:flex;justify-content:center;align-items:center}
-
-/* カスタマーチャット */
-.chat-window{background:#FFF;height:calc(100vh - 120px);display:flex;flex-direction:column}
-.chat-messages{flex:1;padding:10px;overflow-y:auto;background:#F4F4F4;display:flex;flex-direction:column;gap:8px}
-.bubble{max-width:85%;padding:8px 10px;border-radius:10px;line-height:1.4}
-.bubble.bot{background:#FFF;align-self:flex-start}
-.bubble.user{background:var(--ali-red);color:#FFF;align-self:flex-end}
-.chat-input-row{padding:6px;background:#FFF;border-top:1px solid #EEE;display:flex;gap:6px}
 
 #success-pop{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.8);color:#FFF;padding:12px 20px;border-radius:20px;z-index:300;text-align:center;font-weight:bold}
 </style>
@@ -96,79 +105,100 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90;border-
 
 <div id="success-pop">カートに追加しました</div>
 
-<!-- ヘッダー（ショップ・追跡用） -->
+<!-- ヘッダー -->
 <header id="main-header">
   <div class="hdr-top">
-    <span class="back-arrow">❮</span>
+    <span class="back-arrow" onclick="switchTab('shop')">❮</span>
     <div class="search-container">
-      <input type="text" id="search-box" class="search-input" placeholder="注文ID、商品名、またはキーワード..." oninput="renderCatalog()">
+      <input type="text" id="search-box" class="search-input" placeholder="注文 ID、商品名、または..." oninput="renderCatalog()">
     </div>
   </div>
-  <div class="order-tabs" id="track-tabs" style="display:none;">
-    <div class="o-tab" id="tab-wait-pay" onclick="filterOrders('支払い待ち')">支払い待ち</div>
-    <div class="o-tab" id="tab-process" onclick="filterOrders('処理中')">処理中</div>
-    <div class="o-tab" id="tab-done" onclick="filterOrders('処理済み')">処理済み</div>
+  
+  <!-- カタログ用タブ -->
+  <div class="tabs-container" id="shop-tabs">
+    <div class="tab-item active" onclick="filterRegion('ALL', this)">すべて</div>
+    <div class="tab-item" onclick="filterRegion('JAPAN', this)">国内(日本)</div>
+    <div class="tab-item" onclick="filterRegion('CHINA', this)">海外</div>
+  </div>
+
+  <!-- 追跡用タブ -->
+  <div class="tabs-container" id="track-tabs" style="display:none;">
+    <div class="tab-item active" onclick="filterOrders('すべて', this)">すべて</div>
+    <div class="tab-item" onclick="filterOrders('支払い待ち', this)">支払い待ち</div>
+    <div class="tab-item" onclick="filterOrders('処理中', this)">処理中</div>
+    <div class="tab-item" onclick="filterOrders('処理済み', this)">処理済み</div>
   </div>
 </header>
 
 <div class="container">
   
-  <!-- 1. カタログ画面 -->
+  <!-- 1. カタログ -->
   <div id="sec-shop" class="tab-content active">
-    <div id="catalog-grid" class="p-grid">
-      <div style="text-align:center;padding:20px;grid-column:span 2;">商品を読み込み中...</div>
-    </div>
+    <div id="catalog-grid" class="p-grid"></div>
   </div>
 
-  <!-- 2. 注文確認（カート）画面 -->
+  <!-- 2. カート＆決済 -->
   <div id="sec-cart" class="tab-content" style="padding-bottom: 60px;">
     <div class="checkout-header">
       <span class="back-arrow" onclick="switchTab('shop')">❮</span> 
-      <div>
-        <div>注文確認</div>
-        <div class="secure">✔ 紛失補償</div>
-      </div>
+      <div>注文確認</div>
     </div>
     
     <div id="cart-empty" style="text-align:center;padding:40px;color:#999;font-weight:bold;">カートに商品がありません。</div>
 
     <div id="cart-content" style="display:none;">
-      <!-- 配送先 -->
       <div class="checkout-section">
-        <div class="addr-title">配送先住所</div>
-        <div class="addr-name">しゃーる かん (シャミール かん) +81 08053536387</div>
-        <div class="addr-desc">西町, 12-22 ダイヤモンドマンション613<br>横浜市 磯子区, 神奈川県, Japan, 2350007</div>
+        <div style="font-weight:bold;margin-bottom:8px;">配送先住所</div>
+        <div style="font-weight:bold;font-size:13px;margin-bottom:4px;">しゃーる かん (シャミール かん) +81 08053536387</div>
+        <div style="color:#666;font-size:11px;line-height:1.4;">西町, 12-22 ダイヤモンドマンション613<br>横浜市 磯子区, 神奈川県, Japan, 2350007</div>
         <div class="mail-border"></div>
       </div>
 
-      <!-- 商品リスト -->
       <div class="checkout-section" id="checkout-items"></div>
 
-      <!-- 支払い方法 -->
+      <!-- 支払い方法の詳細分岐 -->
       <div class="checkout-section">
-        <div style="font-weight:bold;font-size:14px;margin-bottom:8px;display:flex;justify-content:space-between;">
-          支払い方法 <span style="font-size:11px;color:#999;cursor:pointer;">もっと見る ></span>
-        </div>
-        <div class="pay-method-row" onclick="selectPay('PayPay')">
-          <div class="radio-circle selected" id="rad-paypal"></div>
-          <span style="font-size:18px;color:#003087;font-weight:900;font-style:italic;">PayPal</span>
-        </div>
+        <div style="font-weight:bold;font-size:14px;margin-bottom:8px;">支払い方法</div>
+        
+        <!-- カード -->
         <div class="pay-method-row" onclick="selectPay('card')">
-          <div class="radio-circle" id="rad-card"></div>
-          <span style="font-weight:bold;">代引き</span>
+          <div class="radio-circle selected" id="rad-card"></div>
+          <span style="font-weight:bold;font-size:13px;">💳 クレジットカード</span>
         </div>
-        <div class="pay-method-row" onclick="selectPay('conbini')">
-          <div class="radio-circle" id="rad-conbini"></div>
-          <span style="font-weight:bold;">現金送金</span>
+        <div id="pay-detail-card" class="pay-detail" style="display:block;">
+          <input type="text" placeholder="カード番号" class="pay-input">
+          <input type="text" placeholder="機嫌 (MM/YY)" class="pay-input">
+          <input type="text" placeholder="名前" class="pay-input">
+          <input type="text" placeholder="セキュリティコード" class="pay-input">
+        </div>
+
+        <!-- 現金 -->
+        <div class="pay-method-row" onclick="selectPay('cash')">
+          <div class="radio-circle" id="rad-cash"></div>
+          <span style="font-weight:bold;font-size:13px;">💴 現金書留</span>
+        </div>
+        <div id="pay-detail-cash" class="pay-detail">
+          <p style="color:var(--ali-red); font-weight:bold; font-size:12px;">以下の住所に封筒等で送金して下さい。</p>
+          <p style="font-size:12px; margin-top:6px; line-height:1.5;">〒235-0007<br>神奈川県横浜市磯子区西町12-22-613</p>
+        </div>
+
+        <!-- PayPay -->
+        <div class="pay-method-row" onclick="selectPay('paypay')">
+          <div class="radio-circle" id="rad-paypay"></div>
+          <span style="font-weight:bold;font-size:13px;">📱 PayPay</span>
+        </div>
+        <div id="pay-detail-paypay" class="pay-detail">
+          <p style="font-size:12px;">以下の電話番号に送金して下さい。</p>
+          <p style="font-weight:bold; font-size:16px; margin-top:6px; color:#333;">090-3680-9495</p>
+        </div>
+
+        <!-- 代引き（使用不可） -->
+        <div class="pay-method-row disabled">
+          <div class="radio-circle" style="background:#EEE;border-color:#CCC;"></div>
+          <span style="font-weight:bold;font-size:13px;color:#999;">📦 代引き (使用不可)</span>
         </div>
       </div>
 
-      <!-- プロモコード -->
-      <div class="checkout-section" style="display:flex;justify-content:space-between;font-weight:bold;">
-        プロモコード <span>></span>
-      </div>
-
-      <!-- 下部固定バー -->
       <div class="checkout-footer">
         <div style="font-weight:bold;font-size:14px;">合計: <span id="co-total-price">0円</span></div>
         <button class="btn-pay-now" onclick="executePayment()">今支払います</button>
@@ -176,7 +206,7 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90;border-
     </div>
   </div>
 
-  <!-- 3. アリエク風 配送追跡センター -->
+  <!-- 3. 追跡センター -->
   <div id="sec-track" class="tab-content">
     <div id="empty-notice" style="text-align:center;padding:40px;color:#999;font-weight:bold;">該当する注文はありません。</div>
     <div id="orders-list-container"></div>
@@ -185,18 +215,18 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90;border-
   <!-- 4. カスタマーサポートチャット -->
   <div id="sec-chat" class="tab-content">
     <div class="chat-window">
-      <div style="padding:8px;background:#F9F9F9;border-bottom:1px solid #EEE;">
-        <span style="font-weight:bold;">対象の注文:</span>
-        <select id="chat-target-code" style="width:100%;padding:4px;margin-top:4px;border:1px solid #CCC;border-radius:4px;">
-          <option value="">-- 選択してください --</option>
-        </select>
+      <div id="chat-messages" class="chat-messages">
+        <div class="bubble bot">🤖 チャットサポートへようこそ！商品の入金確認や、追跡の催促など何でもお申し付けください。</div>
       </div>
-      <div id="chat-box" class="chat-messages">
-        <div class="bubble bot">🤖 チャットサポートへようこそ！支払い待ちの入金確認や、追跡の催促など何でもお申し付けください！</div>
+      <!-- 追加：クイックアクションボタン -->
+      <div class="chat-quick-actions">
+        <button class="btn-quick" onclick="sendQuickChat('発送催促')">発送催促</button>
+        <button class="btn-quick" onclick="sendQuickChat('返品返金')">返品返金</button>
+        <button class="btn-quick" onclick="sendQuickChat('キャンセル✖️')">キャンセル✖️</button>
       </div>
-      <div class="chat-input-row">
-        <input type="text" id="chat-input" style="flex:1;padding:8px 12px;border:1px solid #DDD;border-radius:15px;outline:none;" placeholder="メッセージを入力..." onkeypress="if(event.key==='Enter')sendChat()">
-        <button class="btn-outline primary" style="border-radius:15px;" onclick="sendChat()">送信</button>
+      <div class="chat-input-area">
+        <input type="text" id="chat-input-text" class="chat-input" placeholder="メッセージを入力...">
+        <button class="btn-send" onclick="sendManualChat()">送信</button>
       </div>
     </div>
   </div>
@@ -216,16 +246,15 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90;border-
 <script>
 const SHEET_PROD_URL = "https://docs.google.com/spreadsheets/d/1LK09yYcLi63EW9-xhXIENfszwyFLC4Jmz_-tO69ab94/export?format=csv&gid=0";
 const SHEET_TRACK_URL = "https://docs.google.com/spreadsheets/d/178-dcD4xd0fUdEORnoC9haQrKmfGiKTaY0OxiOKBRrQ/export?format=csv&gid=0";
-const FORMSPREE_URL = "https://formspree.io/f/xrenqbpg";
 const SHIPPING_FEE = 300;
 
 let catalogList = [];
 let cart = [];
-let orders = [];
+let orders = JSON.parse(localStorage.getItem('myOrdersV2')) || [];
 let trackingPool = [];
-let bgSyncInterval = null;
-let currentTrackFilter = '支払い待ち';
-let selectedPay = 'paypal';
+let currentRegion = 'ALL';
+let currentTrackFilter = 'すべて';
+let selectedPay = 'card';
 
 async function initApp() {
   await loadCatalog();
@@ -233,7 +262,6 @@ async function initApp() {
   setupBgSync();
 }
 
-// 📦 スプレッドシートから商品取得復活！
 async function loadCatalog() {
   try {
     const res = await fetch(SHEET_PROD_URL);
@@ -242,35 +270,31 @@ async function loadCatalog() {
     catalogList = rows.map((row, i) => {
       if (!row.trim()) return null;
       const cols = row.split(',').map(c => c.replace(/^"(.*)"$/, '$1').trim());
-      return {
-        id: i + 1,
-        wh: cols[0] ? cols[0].toUpperCase() : "CHINA",
-        name: cols[1] || "商品名未設定",
-        price: parseInt(cols[2]) || 0,
-        icon: cols[4] || "🎁",
-        store: "Choice AliExpress Store"
-      };
+      return { id: i+1, wh: cols[0] ? cols[0].toUpperCase() : "CHINA", name: cols[1], price: parseInt(cols[2])||0, icon: cols[4]||"📦", store: "Choice Store" };
     }).filter(Boolean);
   } catch(e) {
-    // 取得失敗時のフォールバック
     catalogList = [
-      { id: 1, name: "ターボハンドヘルド小型ファン USB 充電", price: 395, icon: "🌀", store: "Choice AliExpress Store", wh:"CHINA" },
-      { id: 2, name: "Extreme PRO SDカード 512GB", price: 857, icon: "💾", store: "Choice AliExpress Store", wh:"CHINA" }
+      { id: 1, name: "ポータブルスピーカー", price: 395, icon: "🔊", store: "Choice Store", wh:"CHINA" }
     ];
   }
+}
+
+function filterRegion(region, el) {
+  currentRegion = region;
+  document.querySelectorAll('#shop-tabs .tab-item').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderCatalog();
 }
 
 function renderCatalog() {
   const grid = document.getElementById('catalog-grid');
   grid.innerHTML = "";
-  const q = document.getElementById('search-box').value.toLowerCase();
-  
   catalogList.forEach(p => {
-    if(q && !p.name.toLowerCase().includes(q)) return;
+    if(currentRegion !== 'ALL' && p.wh !== currentRegion) return;
     grid.innerHTML += `
       <div class="p-card">
-        <div class="img-box"><span class="choice-badge">Choice</span>${p.icon}</div>
-        <div style="font-weight:500;margin-top:6px;height:34px;overflow:hidden;line-height:1.2;">${p.name}</div>
+        <div class="img-box"><span class="wh-badge">${p.wh==='JAPAN'?'🇯🇵国内':'✈️海外'}</span>${p.icon}</div>
+        <div style="font-weight:500;margin-top:6px;">${p.name}</div>
         <div class="price-line">¥${p.price.toLocaleString()}</div>
         <button class="btn-add-cart" onclick="addToCart(${p.id})">カートに追加</button>
       </div>
@@ -280,325 +304,158 @@ function renderCatalog() {
 
 function addToCart(id) {
   const p = catalogList.find(x => x.id === id);
-  const existing = cart.find(x => x.id === id);
-  if(existing) {
-    existing.qty++;
-  } else {
-    cart.push({...p, qty: 1, cartId: new Date().getTime()});
-  }
+  cart.push({...p, qty: 1, cartId: new Date().getTime()});
   updateCartBadge();
   const pop = document.getElementById('success-pop');
-  pop.style.display = 'block';
-  setTimeout(() => pop.style.display='none', 1000);
+  pop.style.display = 'block'; setTimeout(() => pop.style.display='none', 1000);
 }
 
 function updateCartBadge() {
-  const badge = document.getElementById('cart-badge');
-  const totalQty = cart.reduce((s, i) => s + i.qty, 0);
-  if(totalQty > 0) {
-    badge.style.display = 'flex';
-    badge.innerText = totalQty;
-  } else {
-    badge.style.display = 'none';
-  }
-}
-
-function changeQty(cartId, delta) {
-  const item = cart.find(x => x.cartId === cartId);
-  if(!item) return;
-  item.qty += delta;
-  if(item.qty <= 0) cart = cart.filter(x => x.cartId !== cartId);
-  updateCartBadge();
-  renderCart();
+  const b = document.getElementById('cart-badge');
+  const q = cart.reduce((s, i) => s + i.qty, 0);
+  if(q > 0){ b.style.display='flex'; b.innerText=q; } else b.style.display='none';
 }
 
 function renderCart() {
   const empty = document.getElementById('cart-empty');
   const content = document.getElementById('cart-content');
-  if(cart.length === 0) {
-    empty.style.display = 'block';
-    content.style.display = 'none';
-    return;
-  }
-  empty.style.display = 'none';
-  content.style.display = 'block';
-
-  let html = "";
-  let subtotal = 0;
+  if(cart.length === 0) { empty.style.display='block'; content.style.display='none'; return; }
+  empty.style.display='none'; content.style.display='block';
+  
+  let html = "", sub = 0;
   cart.forEach(item => {
-    subtotal += item.price * item.qty;
+    sub += item.price;
     html += `
-      <div class="store-bar">
-        <div><span class="choice-badge" style="position:static;font-size:10px;">Choice</span> <strong>AliExpressで配送</strong></div>
-        <div style="color:#666;font-size:11px;">表示する(1) ></div>
-      </div>
       <div class="co-prod-row">
         <div class="co-img">${item.icon}</div>
-        <div style="flex:1;">
-          <div style="font-weight:500;margin-bottom:4px;height:16px;overflow:hidden;">${item.name}</div>
-          <div style="font-weight:900;font-size:14px;margin-bottom:4px;">${item.price}円</div>
-          <div class="qty-ctrl">
-            <button class="qty-btn" onclick="changeQty(${item.cartId}, -1)">-</button>
-            <div class="qty-val">${item.qty}</div>
-            <button class="qty-btn" onclick="changeQty(${item.cartId}, 1)">+</button>
-          </div>
+        <div>
+          <div style="font-weight:500;">${item.name}</div>
+          <div style="font-weight:900;font-size:14px;">${item.price}円</div>
         </div>
       </div>
-      <div class="shipping-info">
-        <strong style="font-size:12px;color:#333;">発送 : ${SHIPPING_FEE}円</strong><br>
-        配達: 7月 27 - 8月 03<br>
-        Courier company: 🐈‍⬛ ヤマト運輸 🟦 佐川急便 📮 Japan Post, etc.
-      </div>
-      <div style="height:10px;background:#F5F5F5;margin:10px -14px 0 -14px;"></div>
     `;
   });
-  
+  html += `<div class="shipping-info">発送: ${SHIPPING_FEE}円 (おまとめ配送)</div>`;
   document.getElementById('checkout-items').innerHTML = html;
-  const total = subtotal + SHIPPING_FEE;
-  document.getElementById('co-total-price').innerText = `${total.toLocaleString()}円`;
+  document.getElementById('co-total-price').innerText = `${(sub + SHIPPING_FEE).toLocaleString()}円`;
 }
 
+// 支払い方法選択ロジック
 function selectPay(type) {
+  if (type === 'cod') return; // 代引きは無効化
   selectedPay = type;
-  document.getElementById('rad-paypal').className = type === 'paypal' ? 'radio-circle selected' : 'radio-circle';
-  document.getElementById('rad-card').className = type === 'card' ? 'radio-circle selected' : 'radio-circle';
-  document.getElementById('rad-conbini').className = type === 'conbini' ? 'radio-circle selected' : 'radio-circle';
+  ['card', 'cash', 'paypay'].forEach(t => {
+    document.getElementById(`rad-${t}`).className = (t === type) ? 'radio-circle selected' : 'radio-circle';
+    document.getElementById(`pay-detail-${t}`).style.display = (t === type) ? 'block' : 'none';
+  });
 }
 
-async function executePayment() {
+function executePayment() {
   if(cart.length === 0) return;
-  const total = cart.reduce((s, i) => s + (i.price * i.qty), 0) + SHIPPING_FEE;
-  const itemNames = cart.map(i => `${i.name}x${i.qty}`).join(", ");
-  
-  // D欄連動！最初は「支払い待ち」でスタート
+  const sub = cart.reduce((s, i) => s + i.price, 0);
   const newOrd = {
-    id: "AX-" + new Date().getTime(),
-    tn: "発番待機中", // 番号はシート同期時に付与
-    itemsStr: itemNames,
-    total: total,
-    step: 0,
-    // 超重要：「支払い待ち」フラグ
-    paymentStatus: 'waiting', 
-    prefixType: cart[0].wh === "JAPAN" ? "JP" : "LP"
+    id: "AX-" + new Date().getTime(), tn: "発番待機中", items: [...cart], totalPrice: sub + SHIPPING_FEE,
+    step: 0, paymentStatus: 'waiting', prefixType: cart[0].wh === "JAPAN" ? "JP" : "LP"
   };
-  
-  orders.push(newOrd);
-  
-  try {
-    await fetch(FORMSPREE_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ note: "新規注文発生(支払い待ち)", items: itemNames, total: total })
-    });
-  } catch(e){}
-
-  cart = [];
-  updateCartBadge();
-  const pop = document.getElementById('success-pop');
-  pop.innerText = "注文を受け付けました！";
-  pop.style.display = 'block';
-  setTimeout(() => { 
-    pop.style.display='none'; 
-    switchTab('track');
-    filterOrders('支払い待ち'); // 支払い待ちタブへ遷移
-  }, 1500);
+  orders.unshift(newOrd);
+  localStorage.setItem('myOrdersV2', JSON.stringify(orders));
+  cart = []; updateCartBadge();
+  switchTab('track'); renderOrders();
 }
 
-/* =======================================
-   D欄（cols[3]）連動バックグラウンド同期
-======================================= */
-async function fetchTrackingState() {
-  try {
-    const res = await fetch(SHEET_TRACK_URL + "&t=" + new Date().getTime());
-    const text = await res.text();
-    trackingPool = text.split('\n').slice(1).map(row => {
-      if (!row.trim()) return null;
-      const cols = row.split(',').map(c => c.replace(/^"(.*)"$/, '$1').trim());
-      return { 
-        code: cols[0], 
-        stepStr: cols[1] || "", 
-        step: parseInt(cols[1]) || 0, 
-        memo: cols[2] || "",
-        // D欄(4列目)を取得
-        colD: cols[3] || "" 
-      };
-    }).filter(Boolean);
-  } catch(e) {}
+// チャットロジック
+function sendQuickChat(text) {
+  appendChat(text, 'user');
+  setTimeout(() => {
+    let reply = "ご連絡ありがとうございます。システムとスプレッドシートへの連携を確認いたします。";
+    if(text === '発送催促') reply = "かしこまりました。担当部署に至急発送するよう手配いたします。";
+    if(text === 'キャンセル✖️') reply = "キャンセルのリクエストを受け付けました。処理状況を確認いたします。";
+    appendChat(reply, 'bot');
+  }, 1000);
+}
+function sendManualChat() {
+  const input = document.getElementById('chat-input-text');
+  if(!input.value.trim()) return;
+  appendChat(input.value, 'user');
+  input.value = "";
+  setTimeout(() => appendChat("ご連絡ありがとうございます。確認いたします。", 'bot'), 1000);
+}
+function appendChat(text, type) {
+  const box = document.getElementById('chat-messages');
+  box.innerHTML += `<div class="bubble ${type}">${text}</div>`;
+  box.scrollTop = box.scrollHeight;
 }
 
+// 追跡同期
 function setupBgSync() {
-  if(bgSyncInterval) clearInterval(bgSyncInterval);
-  bgSyncInterval = setInterval(async () => {
-    await fetchTrackingState();
-    let updated = false;
-
-    orders.forEach(ord => {
-      // 1. 番号がない場合は空き枠を探す
-      if(ord.tn === "発番待機中") {
-        let freeObj = trackingPool.find(p => p.stepStr === "" && p.code.startsWith(ord.prefixType) && !orders.some(o => o.tn === p.code));
-        if(freeObj) {
-          ord.tn = freeObj.code;
-          updated = true;
-        }
-      }
-
-      // 2. 番号がある場合、シートの状態を同期
-      if(ord.tn !== "発番待機中") {
-        let match = trackingPool.find(p => p.code === ord.tn);
-        if(match) {
-          // D欄に「支払い待ち」と書いてあれば待機キープ。
-          // 空欄や他の文字になれば支払い完了として処理中へ移行！
-          if(match.colD.includes("支払い待ち")) {
-            if(ord.paymentStatus !== 'waiting') {
-              ord.paymentStatus = 'waiting';
-              updated = true;
-            }
-          } else {
-            if(ord.paymentStatus === 'waiting') {
-              ord.paymentStatus = 'paid';
-              updated = true;
-            }
-            // ステップ同期
-            if(match.stepStr !== "" && match.step !== ord.step) {
-              ord.step = Math.min(10, match.step);
-              updated = true;
-            }
+  setInterval(async () => {
+    if(orders.length === 0) return;
+    try {
+      const res = await fetch(SHEET_TRACK_URL + "&t=" + new Date().getTime());
+      const text = await res.text();
+      trackingPool = text.split('\n').slice(1).map(row => {
+        const c = row.split(',').map(x => x.replace(/^"(.*)"$/, '$1').trim());
+        return { code: c[0], step: parseInt(c[1]) || 0, colD: c[3] || "" };
+      });
+      let updated = false;
+      orders.forEach(ord => {
+        if(ord.tn === "発番待機中") {
+          let f = trackingPool.find(p => p.step === 0 && p.code.startsWith(ord.prefixType) && !orders.some(o => o.tn === p.code));
+          if(f) { ord.tn = f.code; updated = true; }
+        } else {
+          let m = trackingPool.find(p => p.code === ord.tn);
+          if(m) {
+            let n = m.colD.includes("支払い待ち") ? 'waiting' : 'paid';
+            if(ord.paymentStatus !== n || ord.step !== m.step) { ord.paymentStatus = n; ord.step = m.step; updated = true; }
           }
         }
-      }
-    });
-
-    if(updated) {
-      if(document.getElementById('sec-track').classList.contains('active')) renderOrders();
-      updateChatDropdown();
-    }
-  }, 2000);
+      });
+      if(updated) { localStorage.setItem('myOrdersV2', JSON.stringify(orders)); if(document.getElementById('sec-track').classList.contains('active')) renderOrders(); }
+    } catch(e){}
+  }, 1000);
 }
 
-function filterOrders(status) {
+function filterOrders(status, el) {
   currentTrackFilter = status;
-  document.querySelectorAll('.o-tab').forEach(t => t.classList.remove('active'));
-  
-  if(status === '支払い待ち') document.getElementById('tab-wait-pay').classList.add('active');
-  if(status === '処理中') document.getElementById('tab-process').classList.add('active');
-  if(status === '処理済み') document.getElementById('tab-done').classList.add('active');
-  
+  document.querySelectorAll('#track-tabs .tab-item').forEach(t => t.classList.remove('active'));
+  if(el) el.classList.add('active');
   renderOrders();
 }
 
 function renderOrders() {
-  const container = document.getElementById('orders-list-container');
-  container.innerHTML = "";
-  
-  // フィルタリングロジック
-  let filtered = orders.filter(o => {
+  const con = document.getElementById('orders-list-container');
+  con.innerHTML = "";
+  let f = orders.filter(o => {
+    if(currentTrackFilter === 'すべて') return true;
     if(currentTrackFilter === '支払い待ち') return o.paymentStatus === 'waiting';
     if(currentTrackFilter === '処理中') return o.paymentStatus === 'paid' && o.step < 10;
     if(currentTrackFilter === '処理済み') return o.paymentStatus === 'paid' && o.step >= 10;
-    return false;
+    return true;
   });
+  if(f.length === 0) { document.getElementById('empty-notice').style.display='block'; return; }
+  document.getElementById('empty-notice').style.display='none';
 
-  if(filtered.length === 0) {
-    document.getElementById('empty-notice').style.display = 'block';
-    return;
-  }
-  document.getElementById('empty-notice').style.display = 'none';
-
-  filtered.forEach(ord => {
-    let alertHtml = "";
-    let btnHtml = "";
-    
-    if(ord.paymentStatus === 'waiting') {
-      alertHtml = `
-        <div class="status-alert-box alert-waiting">
-          <div style="font-weight:bold;color:#F57F17;">⏳ お支払いの確認をお待ちしています</div>
-          <div style="color:#666;font-size:11px;">※管理者がスプレッドシートのD欄を更新すると「処理中」へ移行します。</div>
-        </div>`;
-      btnHtml = `<button class="btn-outline primary">支払い方法を変更</button>`;
-    } else if(ord.step >= 10) {
-      alertHtml = `<div class="status-alert-box alert-ready"><div style="font-weight:bold;color:#2E7D32;">✨ 配達完了</div></div>`;
-      btnHtml = `<button class="btn-outline">受取確認</button>`;
-    } else {
-      alertHtml = `
-        <div class="status-alert-box alert-ready">
-          <div style="font-weight:bold;color:#1976D2;">🚚 処理中・追跡可能</div>
-          <div style="font-size:11px;">追跡番号: ${ord.tn}</div>
-        </div>`;
-      btnHtml = `<button class="btn-outline primary">ステータスを追跡する</button>`;
-    }
-
-    container.innerHTML += `
-      <div class="alie-card">
-        <div class="store-header">
-          <div><span class="store-choice">Choice</span><span style="font-weight:bold;font-size:11px;">AliExpress Store ❯</span></div>
-        </div>
-        <div class="prod-row">
-          <div class="prod-img">📦</div>
-          <div style="flex:1">
-            <div class="prod-title">${ord.itemsStr}</div>
-            <div style="font-weight:bold;font-size:13px;margin-top:4px;">¥${ord.total.toLocaleString()}</div>
-          </div>
-        </div>
-        ${alertHtml}
-        <div class="card-actions">${btnHtml}</div>
-      </div>
-    `;
+  f.forEach(ord => {
+    let stat = ord.paymentStatus === 'waiting' ? "お支払いの確認をお待ちしています" : "お客様のお荷物は地元の空港に到着しました";
+    let html = `<div class="track-card"><div class="track-store-name">Choice Store</div>`;
+    ord.items.forEach(item => {
+      html += `<div class="track-item-row"><div class="track-item-img">${item.icon}</div><div><div class="track-item-title">${item.name}</div><div class="track-item-price">${item.price}円</div></div></div>`;
+    });
+    html += `<div class="track-status-box"><div class="track-status-main">${stat}</div></div></div>`;
+    con.innerHTML += html;
   });
-}
-
-function updateChatDropdown() {
-  const select = document.getElementById('chat-target-code');
-  select.innerHTML = '<option value="">-- 選択してください --</option>';
-  orders.forEach(o => {
-    let stat = o.paymentStatus === 'waiting' ? "(支払い待ち)" : `(${o.tn})`;
-    select.innerHTML += `<option value="${o.id}">${o.itemsStr.substring(0,10)}... ${stat}</option>`;
-  });
-}
-
-function appendChat(text, sender) {
-  const box = document.getElementById('chat-box');
-  const b = document.createElement('div');
-  b.className = `bubble ${sender}`;
-  b.innerHTML = text;
-  box.appendChild(b);
-  box.scrollTop = box.scrollHeight;
-}
-
-function sendChat() {
-  const inp = document.getElementById('chat-input');
-  const txt = inp.value.trim();
-  if(!txt) return;
-  appendChat(txt, 'user');
-  inp.value = "";
-  
-  setTimeout(() => {
-    appendChat(`🤖 ご連絡ありがとうございます。システムとスプレッドシートへの連携を確認いたします。`, 'bot');
-  }, 600);
 }
 
 function switchTab(tab) {
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  document.getElementById('main-header').style.display = 'block';
+  document.getElementById('shop-tabs').style.display = 'none';
   document.getElementById('track-tabs').style.display = 'none';
 
-  if(tab === 'shop') {
-    document.getElementById('sec-shop').classList.add('active');
-    document.getElementById('nav-item-shop').classList.add('active');
-  } else if(tab === 'cart') {
-    document.getElementById('sec-cart').classList.add('active');
-    document.getElementById('nav-item-cart').classList.add('active');
-    document.getElementById('main-header').style.display = 'none'; // カートは専用ヘッダー
-    renderCart();
-  } else if(tab === 'track') {
-    document.getElementById('sec-track').classList.add('active');
-    document.getElementById('nav-item-track').classList.add('active');
-    document.getElementById('track-tabs').style.display = 'flex';
-    filterOrders(currentTrackFilter);
-  } else if(tab === 'chat') {
-    document.getElementById('sec-chat').classList.add('active');
-    document.getElementById('nav-item-chat').classList.add('active');
-  }
+  if(tab === 'shop') { document.getElementById('sec-shop').classList.add('active'); document.getElementById('nav-item-shop').classList.add('active'); document.getElementById('shop-tabs').style.display = 'flex'; }
+  else if(tab === 'cart') { document.getElementById('sec-cart').classList.add('active'); document.getElementById('nav-item-cart').classList.add('active'); renderCart(); }
+  else if(tab === 'track') { document.getElementById('sec-track').classList.add('active'); document.getElementById('nav-item-track').classList.add('active'); document.getElementById('track-tabs').style.display = 'flex'; renderOrders(); }
+  else if(tab === 'chat') { document.getElementById('sec-chat').classList.add('active'); document.getElementById('nav-item-chat').classList.add('active'); }
 }
 
 initApp();
