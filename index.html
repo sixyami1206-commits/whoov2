@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>安全产品出荷</title>
+<title>安全产品出荷 - ウルトラ完全版(B欄0判定・C欄伝達対応)</title>
 <style>
-:root{--ali-orange:#FF4747;--ali-red:#FD384F;--ali-black:#191919;--bg-gray:#F2F2F7;--cainiao-blue:#0052CC;--chat-green:#4CAF50}
+:root{--ali-orange:#FF4747;--ali-red:#FD384F;--ali-black:#191919;--bg-gray:#F2F2F7;--cainiao-blue:#0052CC;--chat-green:#4CAF50;--success:#2E7D32}
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px}
 body{background:var(--bg-gray);color:var(--ali-black);max-width:420px;margin:0 auto;min-height:100vh;position:relative;border-left:1px solid #E0E0E0;border-right:1px solid #E0E0E0;box-shadow:0 0 20px rgba(0,0,0,0.05);padding-bottom:60px}
 
-/* ヘッダー & 検索バー */
+/* ヘッダー */
 header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 .header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .logo{font-size:16px;font-weight:900;color:var(--ali-black);letter-spacing:-0.5px}
@@ -19,12 +19,11 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 .search-input{border:none;background:none;outline:none;flex:1;font-size:12px;color:#333}
 .search-btn{background:var(--ali-black);color:#FFF;border:none;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px}
 
-/* カテゴリーナビゲーション */
+/* カテゴリー */
 .cat-nav{display:flex;justify-content:space-between;background:#FFF;padding:8px;margin-bottom:6px}
-.cat-item{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;cursor:pointer;transition: transform 0.1s}
-.cat-item:active{transform: scale(0.95)}
+.cat-item{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;cursor:pointer}
 .cat-item.selected .cat-icon{background:#FFEAEA;border:1px solid var(--ali-red)}
-.cat-icon{font-size:18px;background:#F9F9F9;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition: all 0.2s}
+.cat-icon{font-size:18px;background:#F9F9F9;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .cat-label{font-size:9px;color:#666;font-weight:bold}
 
 /* 倉庫タブ */
@@ -56,7 +55,7 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 .f-group label{font-weight:bold;color:#444;font-size:11px}
 .f-group select, .f-group input{padding:8px;background:#F9F9F9;border:1px solid #DDD;border-radius:6px;outline:none;font-size:11px}
 
-/* 追跡用UI */
+/* 追跡UI */
 .track-card{background:#FFF;border-radius:12px;padding:12px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,0.04);border:1px solid #EAEAEA;position:relative}
 .track-card.cancelled{background:#F5F5F5;opacity:0.75;border:2px dashed #999}
 .track-header{display:flex;justify-content:space-between;font-weight:bold;margin-bottom:6px;border-bottom:1px solid #F0F0F0;padding-bottom:6px}
@@ -69,45 +68,34 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 .progress-dot span{position:absolute;top:16px;font-size:8px;color:#90A4AE;white-space:nowrap;left:50%;transform:translateX(-50%)}
 .progress-dot.active span{color:#2E7D32;font-weight:bold}
 .log-box{background:#F7F9FA;border:1px solid #EDF1F2;border-radius:6px;padding:8px;font-size:10px;color:#37474F;max-height:140px;overflow-y:auto;margin-top:10px}
+.carrier-memo-log{background:#FFF9C4;border-left:3px solid #FBC02D;padding:4px 6px;margin-bottom:4px;font-weight:bold;color:#5D4037}
 
-/* 安全产品追跡センター (チャット画面) */
-.chat-container{display:flex;flex-direction:column;background:#FFF;border-radius:12px;height:480px;border:1px solid #EAEAEA;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden}
+/* チャット */
+.chat-container{display:flex;flex-direction:column;background:#FFF;border-radius:12px;height:450px;border:1px solid #EAEAEA;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden}
 .chat-header{background:var(--ali-black);color:#FFF;padding:10px;display:flex;flex-direction:column;gap:2px}
 .chat-title{font-size:13px;font-weight:900;display:flex;align-items:center;gap:6px}
-.chat-status{font-size:10px;color:#00E676;animation:pulse 1.5s infinite}
+.chat-status{font-size:10px;color:#00E676}
 .chat-body{flex:1;padding:12px;overflow-y:auto;background:#F5F5F9;display:flex;flex-direction:column;gap:10px}
-
-/* チャットバルーン */
 .msg{display:flex;flex-direction:column;max-width:85%;padding:8px 12px;border-radius:14px;line-height:1.4;position:relative}
 .msg.seller{background:#FFF;color:#333;align-self:flex-start;border-top-left-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,0.05)}
 .msg.user{background:linear-gradient(135deg,#FF8800,#FF3300);color:#FFF;align-self:flex-end;border-top-right-radius:2px}
 .msg-time{font-size:8px;color:#999;align-self:flex-end;margin-top:3px}
-.msg.user .msg-time{color:#FFCCBC}
-
-/* アンケート / 定型文選択肢ボタン */
 .survey-box{background:#FFF;border:1px solid #E0E0E0;border-radius:10px;padding:8px;margin-top:4px;display:flex;flex-direction:column;gap:6px}
-.survey-btn{background:#FFF;color:var(--ali-red);border:1px solid var(--ali-red);border-radius:6px;padding:6px;font-weight:bold;cursor:pointer;text-align:center;transition:all 0.2s}
-.survey-btn:hover{background:#FFEAEA}
-
-/* チャット入力エリア */
+.survey-btn{background:#FFF;color:var(--ali-red);border:1px solid var(--ali-red);border-radius:6px;padding:6px;font-weight:bold;cursor:pointer;text-align:center}
 .chat-footer{background:#FFF;border-top:1px solid #EAEAEA;padding:8px;display:flex;flex-direction:column;gap:6px}
 .quick-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;white-space:nowrap}
 .chip{background:#F0F0F0;color:#555;padding:4px 10px;border-radius:12px;cursor:pointer;font-size:10px;font-weight:bold;border:1px solid #E0E0E0}
-.chip:hover{background:#E0E0E0}
 .input-row{display:flex;gap:6px}
 .chat-input{flex:1;padding:8px 12px;border:1px solid #DDD;border-radius:20px;outline:none;font-size:12px}
 .chat-send-btn{background:var(--ali-black);color:#FFF;border:none;border-radius:20px;padding:0 16px;cursor:pointer;font-weight:bold}
 
-/* ボトムナビゲーションバー */
+/* ナビゲーション */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:#FFF;border-top:1px solid #EAEAEA;display:flex;justify-content:space-around;align-items:center;padding:6px 0;z-index:100}
 .nav-btn{background:none;border:none;color:#666;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;flex:1;font-weight:bold;font-size:9px}
-.nav-btn .nav-icon{font-size:16px}
 .nav-btn.active{color:var(--ali-red)}
-
 #success-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:120;justify-content:center;align-items:center}
 .success-box{background:#FFF;border-radius:16px;width:300px;padding:24px;text-align:center}
-
-@keyframes pulse{0%{opacity:0.4}50%{opacity:1}100%{opacity:0.4}}
+.login-status-bar{background:#E8F5E9;color:var(--success);padding:6px 12px;font-weight:bold;text-align:right;border-bottom:1px solid #C8E6C9}
 </style>
 </head>
 <body>
@@ -116,58 +104,53 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 <div class="success-box">
 <div style="font-size:40px;margin-bottom:10px">📦</div>
 <h3 style="font-size:14px;font-weight:900;margin-bottom:6px;color:#2E7D32">注文承認されました</h3>
-<p style="color:#666;font-size:10px;margin-bottom:12px">注文情報はFormspreeへ安全に転送され、記録が保持されました。</p>
-<button class="btn-buy" style="width:100%" onclick="closeSuccess()">配送ステータス画面へ</button>
+<p style="color:#666;font-size:10px;margin-bottom:12px">Formspreeへ送信され、追跡データが生成されました。</p>
+<button class="btn-buy" style="width:100%" onclick="closeSuccess()">追跡画面へ</button>
 </div>
 </div>
 
 <header>
 <div class="header-top">
 <div class="logo">安全产品<span>出荷</span></div>
-<div class="coin-badge">🪙 特典コインあり ＞</div>
+<div class="coin-badge">🪙 初回100円引きクーポン対象店 ＞</div>
 </div>
 <div class="search-bar-wrap">
-<input type="text" id="search-box" class="search-input" placeholder="全商品を検索..." oninput="filterBySearch()">
+<input type="text" id="search-box" class="search-input" placeholder="商品を検索..." oninput="filterBySearch()">
 <button class="search-btn" onclick="filterBySearch()">🔍</button>
 </div>
 </header>
 
-<!-- カテゴリーボタン -->
+<div id="login-bar" class="login-status-bar" style="display:none;"></div>
+
 <div class="cat-nav">
-<div class="cat-item id-all selected" onclick="filterByCategory('ALL', this)"><div class="cat-icon">✨</div><div class="cat-label">すべて</div></div>
+<div class="cat-item selected" onclick="filterByCategory('ALL', this)"><div class="cat-icon">✨</div><div class="cat-label">すべて</div></div>
 <div class="cat-item" onclick="filterByCategory('おすすめ', this)"><div class="cat-icon">❤️</div><div class="cat-label">おすすめ</div></div>
 <div class="cat-item" onclick="filterByCategory('テック', this)"><div class="cat-icon">📱</div><div class="cat-label">テック</div></div>
-<div class="cat-item" onclick="filterByCategory('美容', this)"><div class="cat-icon">💄</div><div class="cat-label">ホーム＆美容</div></div>
-<div class="cat-item" onclick="filterByCategory('おもちゃ', this)"><div class="cat-icon">🐣</div><div class="cat-label">おもちゃ</div></div>
+<div class="cat-item" onclick="filterByCategory('美容', this)"><div class="cat-icon">💄</div><div class="cat-label">美容・ホーム</div></div>
 </div>
 
 <div class="warehouse-tabs">
 <div id="tab-china" class="wh-tab active" onclick="switchWarehouse('CHINA')">🇨🇳 グローバルハブ便 (海外直送)</div>
-<div id="tab-japan" class="wh-tab" onclick="switchWarehouse('JAPAN')">🇯🇵 国内スピード便 (安心ストア)</div>
+<div id="tab-japan" class="wh-tab" onclick="switchWarehouse('JAPAN')">🇯🇵 国内スピード便 (送料無料)</div>
 </div>
 
 <div class="container">
-  <!-- ショップ画面 -->
+  <!-- ショップタブ -->
   <div id="c-shop" class="tab-content active">
-    <div id="live-loading" style="text-align:center;padding:40px;font-weight:bold;color:#666;">🔄 最新の製品棚をスプシから抽出し中...</div>
+    <div id="live-loading" style="text-align:center;padding:30px;font-weight:bold;color:#666;">🔄 製品棚のデータを読み込み中...</div>
     <div id="p-grid" class="p-grid" style="display:none;"></div>
 
     <div class="panel">
-      <h4 style="font-weight:900;margin-bottom:8px;font-size:12px;color:var(--ali-red)">🛒 お支払いチェックアウト</h4>
-      <div id="cart-list" style="margin:6px 0;color:#555;line-height:1.5;">カート内は空です。</div>
+      <h4 style="font-weight:900;margin-bottom:8px;font-size:12px;color:var(--ali-red)">🛒 チェックアウト（自動計算システム）</h4>
+      <div id="cart-list" style="margin:6px 0;color:#555;line-height:1.5;">カートは空です。</div>
 
       <div style="border-top:1px dashed #CFD8DC;padding-top:6px;margin:8px 0;">
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:#666;">
-          <span>商品小計 (3%割引適用済):</span><span id="subtotal-val">0円</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:#666;">
-          <span>配送料金:</span><span id="shipping-val">0円</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:#666;">
-          <span>代金引換手数料 (選択時40%):</span><span id="fee-val">0円</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-weight:900;font-size:13px;margin-top:4px;">
-          <span>お支払い総合計金額:</span><span id="total" style="color:var(--ali-red);font-size:16px">0円</span>
+        <div class="price-row" style="display:flex;justify-content:space-between;"><span>商品小計 (3%割引済):</span><span id="subtotal-val">0円</span></div>
+        <div class="price-row" style="display:flex;justify-content:space-between;"><span>配送料金:</span><span id="shipping-val">0円</span></div>
+        <div class="price-row" style="display:flex;justify-content:space-between;"><span>支払い手数料:</span><span id="fee-val">0円</span></div>
+        <div class="price-row" style="display:flex;justify-content:space-between;color:var(--ali-red);"><span>クーポン割引:</span><span id="coupon-val">-0円</span></div>
+        <div class="price-row" style="display:flex;justify-content:space-between;font-weight:900;font-size:13px;margin-top:4px;border-top:1px solid #EEE;padding-top:4px;">
+          <span>総合計金額:</span><span id="total" style="color:var(--ali-red);font-size:16px">0円</span>
         </div>
       </div>
 
@@ -175,24 +158,28 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
         <div class="f-group">
           <label>お支払い方法</label>
           <select id="pay-method" onchange="updateCartPrice()">
-            <option value="CASH">現金送集金 (手数料 0円)</option>
-            <option value="COD">代金引換 (代引手数料 40%別算)</option>
+            <option value="CARD">クレジットカード/電子決済 (手数料 0円)</option>
+            <option value="CASH">現金送集金 (一律 149円)</option>
           </select>
         </div>
-        <input type="text" id="name" required placeholder="受取人氏名を入力" style="padding:8px">
-        <input type="text" id="addr" required placeholder="配送先詳細住所を入力" style="padding:8px">
-        <button type="submit" class="btn-buy" style="padding:10px;font-size:12px;text-transform:uppercase;">安全な注文を確定する</button>
+        <div class="f-group" style="flex-direction:row;align-items:center;gap:6px;background:#FFF3E0;padding:6px;border-radius:6px;">
+          <input type="checkbox" id="coupon-chk" onchange="updateCartPrice()" style="width:16px;height:16px;">
+          <label for="coupon-chk" style="margin:0;cursor:pointer;">🎁 初回限定 100円引きクーポンを使う</label>
+        </div>
+        <input type="text" id="name" required placeholder="受取人氏名" style="padding:8px;border:1px solid #DDD;border-radius:6px;">
+        <input type="text" id="addr" required placeholder="配送先詳細住所" style="padding:8px;border:1px solid #DDD;border-radius:6px;">
+        <button type="submit" class="btn-buy" style="padding:10px;font-size:12px;">安全な注文を確定する</button>
       </form>
     </div>
   </div>
 
-  <!-- 注文追跡画面 -->
+  <!-- 追跡タブ -->
   <div id="c-my" class="tab-content">
-    <div id="no-ord" style="text-align:center;padding:40px;color:#999;font-size:12px">🚚 現在アクティブな追跡案件はありません。</div>
+    <div id="no-ord" style="text-align:center;padding:40px;color:#999;">🚚 アクティブな追跡案件はありません。</div>
     <div id="multi-track-container"></div>
   </div>
 
-  <!-- 安全产品追跡センター (チャット) 画面 -->
+  <!-- チャットタブ -->
   <div id="c-chat" class="tab-content">
     <div class="chat-container">
       <div class="chat-header">
@@ -201,30 +188,56 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
       </div>
       <div id="chat-box" class="chat-body">
         <div class="msg seller">
-          ようこそ安全产品追跡センターへ！親愛なるお客様、私は公式店舗の担当セーラーです。現在、お取引の安全管理・紛争解決ラインが開通しています。
-          <span class="msg-time">システムボット</span>
+          いらっしゃいませ！公式担当のセーラーです。紛争解決、注文キャンセル、スピード催促、住所変更はこちらのラインで自動連動処理されます。
+          <span class="msg-time">ボット</span>
         </div>
       </div>
       <div class="chat-footer">
         <div class="quick-chips">
           <div class="chip" onclick="clickQuickChip('発送を早くしますか？')">🚀 発送の催促</div>
-          <div class="chip" onclick="clickQuickChip('紛争抗議をしますか？')">⚖️ 紛争(ディスピュート)の開始</div>
+          <div class="chip" onclick="clickQuickChip('紛争抗議をしますか？')">⚖️ 紛争の開始</div>
           <div class="chip" onclick="clickQuickChip('注文キャンセルしたい')">🛑 注文キャンセル</div>
           <div class="chip" onclick="clickQuickChip('配送先住所を変更したい')">📍 住所変更要求</div>
         </div>
         <div class="input-row">
-          <input type="text" id="chat-input-field" class="chat-input" placeholder="セーラーにメッセージを送信...">
+          <input type="text" id="chat-input-field" class="chat-input" placeholder="メッセージを入力...">
           <button class="chat-send-btn" onclick="sendUserMessage()">送信</button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- アカウントタブ -->
+  <div id="c-account" class="tab-content">
+    <div id="reg-panel" class="panel">
+      <h4 style="font-weight:900;margin-bottom:8px;font-size:12px;color:var(--cainiao-blue)">👤 新規アカウント作成 (スプレッドシート連動)</h4>
+      <iframe name="account_iframe" id="account_iframe" style="display:none;" onload="if(regSubmitted){onRegSuccess();}"></iframe>
+      <form action="https://docs.google.com/forms/d/e/1FAIpQLSe0byTlvGkLa36R_7CpUiX_UnZmbaQrLE517rglEMljeFN_OQ/formResponse" method="POST" target="account_iframe" onsubmit="regSubmitted=true;" style="display:flex;flex-direction:column;gap:8px;">
+        <div class="f-group">
+          <label>ユーザー名</label>
+          <input type="text" name="entry.1746654761" id="reg-user" required placeholder="お名前を入力">
+        </div>
+        <div class="f-group">
+          <label>パスワード</label>
+          <input type="password" name="entry.579477000" id="reg-pass" required placeholder="パスワードを設定">
+        </div>
+        <button type="submit" class="btn-buy" style="background:var(--cainiao-blue);padding:10px;">アカウントを登録して同期する</button>
+      </form>
+    </div>
+    <div id="dash-panel" class="panel" style="display:none;text-align:center;padding:20px;">
+      <div style="font-size:32px;margin-bottom:6px;">👑</div>
+      <h4 style="font-weight:900;font-size:14px;margin-bottom:4px;" id="dash-user-name">ようこそ</h4>
+      <p style="color:#666;font-size:10px;margin-bottom:12px;">ログイン認証スプレッドシート同期済み</p>
+      <button class="btn-contact" style="border-color:var(--ali-red);color:var(--ali-red);width:100%;" onclick="logout()">ログアウト</button>
+    </div>
+  </div>
 </div>
 
 <div class="bottom-nav">
-  <button id="nav-shop" class="nav-btn active" onclick="switchTab('shop')"><div class="nav-icon">🏠</div>ホーム</button>
-  <button id="nav-my" class="nav-btn" onclick="switchTab('my')"><div class="nav-icon">📦</div>注文追跡</button>
-  <button id="nav-chat" class="nav-btn" onclick="switchTab('chat')"><div class="nav-icon">💬</div>追跡センター</button>
+  <button id="nav-shop" class="nav-btn active" onclick="switchTab('shop')">🏠 ホーム</button>
+  <button id="nav-my" class="nav-btn" onclick="switchTab('my')">📦 注文追跡</button>
+  <button id="nav-chat" class="nav-btn" onclick="switchTab('chat')">💬 追跡チャット</button>
+  <button id="nav-account" class="nav-btn" onclick="switchTab('account')">👤 アカウント</button>
 </div>
 
 <script>
@@ -233,10 +246,10 @@ const SHEET_TRACK_URL = "https://docs.google.com/spreadsheets/d/178-dcD4xd0fUdEO
 const FORMSPREE_URL = "https://formspree.io/f/xrenqbpg";
 
 let products = { CHINA: [], JAPAN: [] }, availableTrackingPool = [], cart = [], orders = [], currentWH = "CHINA";
-let selectedCategory = "ALL";
-let chatActiveOrder = null; // 現在チャットでターゲットにしている注文
+let selectedCategory = "ALL", chatActiveOrder = null, regSubmitted = false;
 
 const SUBJECT_MAP = {
+  0: { status: "出荷準備中 (未出荷)", info: "注文が承認され、倉庫にて出荷用ラベルの準備を行っています。" },
   1: { status: "荷主が荷物をピッキングしています", info: "出荷倉庫にて商品のピッキングが完了しました。" },
   2: { status: "倉庫でのパッキング完了", info: "国際配送用バルクコンテナに格納されました。" },
   3: { status: "国際発送集荷ハブに到着", info: "グローバル中継ハブ施設に入庫処理。" },
@@ -247,7 +260,7 @@ const SUBJECT_MAP = {
   8: { status: "輸入通関手続き完了（解除）", info: "国内最終デリバリー業者へ委託。" },
   9: { status: "現地物流センターでの仕分け処理中", info: "エリアコード別仕分け完了。" },
   10: { status: "お近くの配達員が貨物を巡回携行中", info: "最寄りの営業所を出発。" },
-  11: { status: "配達が正常に完了しました", info: "指定場所へのお届けを完了。" }
+  11: { status: "配達が正常に完了しました (追跡終了)", info: "指定場所へのお届けを完了。これ以上の自動追跡同期はクローズされます。" }
 };
 
 if (localStorage.getItem('ali_orders')) {
@@ -268,11 +281,7 @@ async function loadSpreadsheetData() {
       const optArray = (cols[5] || "標準").split(/\r?\n/).map(o => o.trim()).filter(Boolean);
 
       products[warehouse].push({
-        id: idx + 1, 
-        name: cols[1] || "製品アイテム", 
-        price: parseInt(cols[2]) || 0, 
-        icon: cols[4] || "📦",
-        opt: optArray.length ? optArray : ["標準"]
+        id: idx + 1, name: cols[1] || "製品アイテム", price: parseInt(cols[2]) || 0, icon: cols[4] || "📦", opt: optArray
       });
     });
 
@@ -280,11 +289,15 @@ async function loadSpreadsheetData() {
     document.getElementById('live-loading').style.display = 'none';
     document.getElementById('p-grid').style.display = 'grid';
     renderProducts();
+    checkLogin();
   } catch (err) {
     document.getElementById('live-loading').innerText = "データベース同期エラー";
   }
 }
 
+/* ==========================================================================
+   🔍 【新仕様】スプレッドシート読み込み（C欄の伝達文対応）
+   ========================================================================== */
 async function refreshTrackingPool() {
   try {
     const resTrack = await fetch(SHEET_TRACK_URL + "&t=" + new Date().getTime());
@@ -293,7 +306,8 @@ async function refreshTrackingPool() {
       if (!row.trim()) return null;
       const cols = row.split(',').map(c => c.replace(/^"(.*)"$/, '$1').trim());
       let stepNum = parseInt(cols[1]);
-      return { code: cols[0], step: isNaN(stepNum) ? 1 : stepNum };
+      let memoText = cols[2] ? cols[2].trim() : ""; // C欄（3列目）を取得
+      return { code: cols[0], step: isNaN(stepNum) ? 0 : stepNum, memo: memoText };
     }).filter(Boolean);
   } catch(e){}
 }
@@ -325,15 +339,11 @@ function filterBySearch() { renderProducts(); }
 function renderProducts(){
   let fList = products[currentWH] || [];
   let searchWord = document.getElementById('search-box').value.trim().toLowerCase();
-
   if(selectedCategory !== "ALL") { fList = fList.filter(p => p.name.includes(selectedCategory)); }
   if(searchWord) { fList = fList.filter(p => p.name.toLowerCase().includes(searchWord)); }
 
   let grid = document.getElementById('p-grid');
-  if(!fList.length) {
-    grid.innerHTML = `<div style="grid-column:1/3;text-align:center;padding:4px;color:#999">該当する商品はありません。</div>`;
-    return;
-  }
+  if(!fList.length) { grid.innerHTML = `<div style="grid-column:1/3;text-align:center;color:#999">なし</div>`; return; }
 
   grid.innerHTML = fList.map(p=>`
     <div class="p-card">
@@ -358,71 +368,97 @@ function addToCart(id){
 function updateCartPrice(){
   let list = document.getElementById('cart-list');
   if(!cart.length){
-    list.innerHTML = "カート内は空です。";
+    list.innerHTML = "カートは空です。";
     document.getElementById('subtotal-val').textContent = "0円";
     document.getElementById('shipping-val').textContent = "0円";
     document.getElementById('fee-val').textContent = "0円";
+    document.getElementById('coupon-val').textContent = "-0円";
     document.getElementById('total').textContent = "0円";
     return;
   }
   
   list.innerHTML = cart.map((i,idx)=>`
-    <div style="display:flex;justify-content:between;margin-bottom:3px;">
-      <span>${i.icon} ${i.name} (${i.chosenOpt})</span>
-      <span><b>${Math.floor(i.price * 0.97)}円</b> <a href="#" onclick="cart.splice(${idx},1);updateCartPrice();return false;" style="color:var(--ali-red);text-decoration:none;margin-left:4px">✕</a></span>
+    <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
+      <span>${i.icon} ${i.name} (${i.chosenOpt}) [${i.whSource}]</span>
+      <span><b>${Math.floor(i.price * 0.97)}円</b> <a href="#" onclick="cart.splice(${idx},1);updateCartPrice();return false;" style="color:var(--ali-red);margin-left:4px">✕</a></span>
     </div>`).join('');
 
   let subtotal = cart.reduce((s,i)=> s + Math.floor(i.price * 0.97), 0);
-  let shipping = 130; 
-  let isCOD = document.getElementById('pay-method').value === "COD";
-  let fee = isCOD ? Math.floor(subtotal * 0.4) : 0;
-  let finalTotal = subtotal + shipping + fee;
+  
+  let shipping = 0;
+  let hasChina = cart.some(i => i.whSource === "CHINA");
+  if (hasChina) {
+    shipping = subtotal >= 1500 ? 0 : 200;
+  }
+  
+  let payMethod = document.getElementById('pay-method').value;
+  let fee = payMethod === "CASH" ? 149 : 0;
+  
+  let useCoupon = document.getElementById('coupon-chk').checked;
+  let discount = useCoupon ? 100 : 0;
+  
+  let finalTotal = subtotal + shipping + fee - discount;
+  if (finalTotal < 0) finalTotal = 0;
 
   document.getElementById('subtotal-val').textContent = `${subtotal}円`;
-  document.getElementById('shipping-val').textContent = `${shipping}円`;
+  document.getElementById('shipping-val').textContent = shipping === 0 ? "無料" : `${shipping}円`;
   document.getElementById('fee-val').textContent = `${fee}円`;
+  document.getElementById('coupon-val').textContent = `-${discount}円`;
   document.getElementById('total').textContent = `${finalTotal}円`;
 }
 
-function getDeliveryDateStr(daysAdded) {
-  let d = new Date(); d.setDate(d.getDate() + daysAdded);
-  return `${d.getMonth() + 1}月${d.getDate()}日`;
-}
-
+/* ==========================================================================
+   🎯 【新仕様】B欄が「0」のコードから優先して抽選する注文ロジック
+   ========================================================================== */
 async function order(e){
   e.preventDefault(); if(!cart.length) return;
   await refreshTrackingPool();
 
   let trackNum = "JP-" + Math.floor(Math.random()*100000000);
-  let initialStep = 1;
-  if(availableTrackingPool.length > 0) {
-    let rand = availableTrackingPool[Math.floor(Math.random() * availableTrackingPool.length)];
-    trackNum = rand.code; initialStep = rand.step;
+  let initialStep = 0;
+  let currentMemo = "";
+
+  // プールの中から「B欄が0」のやつだけを絞り込む
+  let zeroPool = availableTrackingPool.filter(p => p.step === 0);
+
+  if(zeroPool.length > 0) {
+    // 0のやつがあれば、そこからランダムで選ぶ！これで2や3が選ばれるバグを防ぎます
+    let rand = zeroPool[Math.floor(Math.random() * zeroPool.length)];
+    trackNum = rand.code;
+    initialStep = rand.step;
+    currentMemo = rand.memo;
+  } else if(availableTrackingPool.length > 0) {
+    // もし0の空きコードが完全に1つも無ければ、通常のプールから一番ステップが低いやつを選ぶ
+    availableTrackingPool.sort((a,b) => a.step - b.step);
+    trackNum = availableTrackingPool[0].code;
+    initialStep = availableTrackingPool[0].step;
+    currentMemo = availableTrackingPool[0].memo;
   }
 
-  let payMethodStr = document.getElementById('pay-method').value === "COD" ? "代金引換(手数料40%)" : "現金送金";
   let finalTotal = document.getElementById('total').textContent;
   let itemsStr = cart.map(c=> `${c.name}(${c.chosenOpt})`).join(', ');
 
   let formData = new FormData();
   formData.append("追跡ID", trackNum);
-  formData.append("購入製品一連", itemsStr);
-  formData.append("お支払い選択", payMethodStr);
-  formData.append("配送料金", "130円");
+  formData.append("製品一覧", itemsStr);
   formData.append("総合決済金額", finalTotal);
   formData.append("受取顧客名", document.getElementById('name').value);
   formData.append("指定お届け先住所", document.getElementById('addr').value);
-
   fetch(FORMSPREE_URL, { method: "POST", body: formData, headers: {'Accept': 'application/json'} });
 
-  let estDelivery = `${getDeliveryDateStr(6)} 〜 ${getDeliveryDateStr(8)}`;
-  let targetMap = SUBJECT_MAP[initialStep] || SUBJECT_MAP[1];
+  // タイムラインの構築（初期化）
+  let initialLogs = [];
+  for(let i = 0; i <= initialStep; i++) {
+    if(SUBJECT_MAP[i]) {
+      initialLogs.unshift({ time: new Date().toLocaleTimeString(), msg: `[ステップ ${i}] ${SUBJECT_MAP[i].info}` });
+    }
+  }
 
+  let targetMap = SUBJECT_MAP[initialStep] || SUBJECT_MAP[0];
   let newOrder = {
     tn: trackNum, itemsSummary: cart.map(c=>`${c.icon}${c.name}`).join(', '), step: initialStep,
     status: `[科目 ${initialStep}/11] ${targetMap.status}`, progress: `${Math.floor((initialStep/11)*100)}%`,
-    est: estDelivery, logs: [{ time: new Date().toLocaleTimeString(), msg: targetMap.info }],
-    priority: false, isCancelled: false
+    est: "3〜5日以内", logs: initialLogs, priority: false, isCancelled: false, isClosed: (initialStep === 11), memo: currentMemo
   };
 
   orders.push(newOrder);
@@ -435,6 +471,9 @@ function closeSuccess(){
   cart = []; updateCartPrice(); switchTab('my');
 }
 
+/* ==========================================================================
+   📝 【新仕様】追跡画面のレンダリング（C欄メモ表示機能追加）
+   ========================================================================== */
 function renderTrackers(){
   let container = document.getElementById('multi-track-container');
   if(!orders.length){ document.getElementById('no-ord').style.display='block'; container.innerHTML=''; return; }
@@ -445,21 +484,32 @@ function renderTrackers(){
       return `
       <div class="track-card cancelled">
         <div class="track-header"><b>🛑 トラッキングID: ${s.tn}</b> <span style="color:var(--ali-red);font-weight:bold;">[キャンセル済み]</span></div>
-        <div style="font-size:10px;color:#777;">📦 <b>品目:</b> ${s.itemsSummary}</div>
-        <div style="font-weight:bold;color:#666;margin-top:6px;">この注文はユーザーの申請により正常にキャンセルされました。</div>
+        <div style="font-weight:bold;color:#666;margin-top:6px;">ユーザー要求によりこの注文はキャンセルに上書きされました。</div>
       </div>`;
     }
 
-    // 優先発送バッジの表示判定
-    let priorityBadge = s.priority ? `<div style="background:#E8F5E9;color:#2E7D32;padding:6px;border:1px solid #A5D6A7;border-radius:4px;font-weight:bold;margin-bottom:6px;font-size:10px;">⚡ あなたの注文は倉庫が優先しています。</div>` : '';
+    let priorityBadge = s.priority ? `<div style="background:#E8F5E9;color:#2E7D32;padding:6px;border:1px solid #A5D6A7;border-radius:4px;font-weight:bold;margin-bottom:6px;">⚡ あなたの注文は倉庫が優先しています。</div>` : '';
+    
+    let bottomActionUi = '';
+    if (s.isClosed || s.step === 11) {
+      bottomActionUi = `
+      <div style="background:#FFEBEE;border:1px solid #FFCDD2;padding:8px;border-radius:6px;margin-top:10px;">
+        <p style="color:var(--ali-red);font-weight:bold;margin-bottom:6px;">🔒 配達済みのため、このコードの追跡は終了（クローズ）しました。</p>
+        <a href="mailto:sixyami1206@gmail.com?subject=安全产品出荷_返品申請_${s.tn}&body=注文ID: ${s.tn}%0D%0Aお客様理由以外の返品理由をお書きください：%0D%0A" style="display:block;background:var(--ali-red);color:#FFF;text-align:center;padding:8px;border-radius:4px;font-weight:bold;text-decoration:none;">⚠️ お客様理由以外の返品連絡はこちら</a>
+      </div>`;
+    } else {
+      bottomActionUi = `<button class="btn-contact" style="margin-top:8px;border-color:var(--ali-orange);color:var(--ali-orange);" onclick="openSellerChat('${s.itemsSummary}', '📦', '${s.tn}')">💬 この注文についてセーラーに不満を言う</button>`;
+    }
+
+    // C欄（伝達メモ）が入っていたらタイムラインの上に特設ログを挿入する
+    let memoLogHtml = (s.memo && s.memo !== "") ? `<div class="carrier-memo-log">🔔 配達員からの伝達: ${s.memo}</div>` : "";
 
     return `
     <div class="track-card">
-      <div class="track-header"><b>🚚 トラッキングID: ${s.tn}</b><span class="carrier-badge">Cainiao Global</span></div>
+      <div class="track-header"><b>🚚 トラッキングID: ${s.tn}</b><span class="carrier-badge">${s.isClosed?'クローズ済':'Cainiao'}</span></div>
       <div style="font-size:10px;color:#333;background:#FFF3E0;padding:4px;border-radius:4px;margin-bottom:4px">📦 <b>品目:</b> ${s.itemsSummary}</div>
       ${priorityBadge}
-      <div style="color:#2E7D32;font-size:11px;margin-bottom:6px;font-weight:bold;">📅 配達予定日: ${s.est}</div>
-      <div style="font-weight:900;color:var(--ali-red);margin:4px 0;font-size:11px;background:#FFEBEE;padding:6px;border-radius:4px">${s.status}</div>
+      <div style="font-weight:900;color:var(--ali-red);margin:4px 0;background:#FFEBEE;padding:6px;border-radius:4px">${s.status}</div>
       <div class="progress-container">
         <div class="progress-line"></div><div class="progress-line-fill" style="width:${s.progress}"></div>
         <div class="progress-dot ${s.step>=1?'active':''}"><span>仕分け</span></div>
@@ -468,22 +518,24 @@ function renderTrackers(){
         <div class="progress-dot ${s.step>=8?'active':''}"><span>国内網</span></div>
         <div class="progress-dot ${s.step>=11?'active':''}"><span>完了</span></div>
       </div>
-      <div class="log-box">${s.logs.map(l=>`<div style="margin-bottom:4px;border-bottom:1px dashed #EEE;padding-bottom:2px;"><span style="color:#999;margin-right:4px;">[${l.time}]</span>${l.msg}</div>`).join('')}</div>
-      <button class="btn-contact" style="margin-top:8px;border-color:var(--ali-orange);color:var(--ali-orange);" onclick="openSellerChat('${s.itemsSummary}', '📦', '${s.tn}')">💬 この注文についてセーラーに不満を言う</button>
+      <div class="log-box">
+        ${memoLogHtml}
+        ${s.logs.map(l=>`<div style="margin-bottom:4px;border-bottom:1px dashed #EEE;padding-bottom:2px;"><span style="color:#999;margin-right:4px;">[${l.time}]</span>${l.msg}</div>`).join('')}
+      </div>
+      ${bottomActionUi}
     </div>`;
   }).join('');
 }
 
 /* ==========================================================================
-   💬 安全产品追跡センター 超連動チャットエンジン
+   💬 安全产品追跡センター チャットエンジン
    ========================================================================== */
 function openSellerChat(prodName, prodIcon, trackNum) {
   switchTab('chat');
   chatActiveOrder = orders.find(o => o.tn === trackNum) || null;
   setSellerStatus(true);
-  
   setTimeout(() => {
-    appendChatBubble("seller", `この商品のお問い合わせですか？<br><br><span style="background:#FFF;padding:6px;border:1px solid #DDD;border-radius:4px;display:inline-block;font-weight:bold;">${prodIcon} ${prodName}</span><div class="survey-box"><button class="survey-btn" onclick="answerSurvey('YES', '${prodName}')">はい、これです</button><button class="survey-btn" onclick="answerSurvey('NO', '${prodName}')">いいえ、違います</button></div>`);
+    appendChatBubble("seller", `お問い合わせはこれですか？<br><br><b>${prodIcon} ${prodName}</b><div class="survey-box"><button class="survey-btn" onclick="answerSurvey('YES', '${prodName}')">はい、これです</button><button class="survey-btn" onclick="answerSurvey('NO', '${prodName}')">いいえ、違います</button></div>`);
     setSellerStatus(false);
   }, 600);
 }
@@ -491,28 +543,25 @@ function openSellerChat(prodName, prodIcon, trackNum) {
 function setSellerStatus(isTyping) {
   const el = document.getElementById('seller-status-text');
   el.innerText = isTyping ? "💬 セーラーが返信を入力中..." : "🟢 セーラーがオンライン";
-  el.style.color = isTyping ? "#FF8800" : "#00E676";
 }
 
 function appendChatBubble(sender, text) {
   const chatBox = document.getElementById('chat-box');
-  const timeStr = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
   const bubble = document.createElement('div');
   bubble.className = `msg ${sender}`;
-  bubble.innerHTML = `${text}<span class="msg-time">${timeStr}</span>`;
+  bubble.innerHTML = `${text}<span class="msg-time">${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</span>`;
   chatBox.appendChild(bubble);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 function answerSurvey(type, name) {
-  appendChatBubble("user", type === 'YES' ? "はい、その商品です！" : "いいえ、違います。");
+  appendChatBubble("user", type === 'YES' ? "はい、その商品です！" : "いいえ");
   setSellerStatus(true);
-  
   setTimeout(() => {
     if(type === 'YES') {
-      appendChatBubble("seller", `オッケー！親愛なる友よ、このお取引についてどのような処理を望みますか？<div class="survey-box"><button class="survey-btn" onclick="triggerAction('SPEED')">🚀 発送を早くしますか？</button><button class="survey-btn" onclick="triggerAction('DISPUTE_START')">⚖️ 紛争抗議をしますか？</button><button class="survey-btn" onclick="triggerAction('CANCEL_ASK')">🛑 注文をキャンセルしますか？</button><button class="survey-btn" onclick="triggerAction('ADDR_ASK')">📍 配送先住所を変更したい</button></div>`);
+      appendChatBubble("seller", `要望を教えてください：<div class="survey-box"><button class="survey-btn" onclick="triggerAction('SPEED')">🚀 発送を早くしますか？</button><button class="survey-btn" onclick="triggerAction('DISPUTE_START')">⚖️ 紛争抗議をしますか？</button><button class="survey-btn" onclick="triggerAction('CANCEL_ASK')">🛑 注文をキャンセルしますか？</button><button class="survey-btn" onclick="triggerAction('ADDR_ASK')">📍 配送先住所を変更したい</button></div>`);
     } else {
-      appendChatBubble("seller", "了解しました。質問を入力するか、下のショートカットボタンを選んでください。");
+      appendChatBubble("seller", "下のチップかキーボードで要件を教えてください。");
     }
     setSellerStatus(false);
   }, 800);
@@ -520,128 +569,160 @@ function answerSurvey(type, name) {
 
 function triggerAction(action) {
   setSellerStatus(true);
-  
   setTimeout(() => {
     if(action === 'SPEED') {
-      appendChatBubble("user", "発送を早くしてください！");
-      if(chatActiveOrder) {
-        chatActiveOrder.priority = true;
-        localStorage.setItem('ali_orders', JSON.stringify(orders));
-      }
-      appendChatBubble("seller", "【オッケー！】了解しました。発送スピードを最優先にロックしました！追跡ステータス画面を確認してください。倉庫側で優先フラグが立ちました！✨");
-      
-    } else if(action === 'DISPUTE_START') {
-      appendChatBubble("user", "不満があるので紛争を開始したいです。");
-      appendChatBubble("seller", `親愛なる友よ、お願いです！紛争をなしにしませんか？😭 私たちのショップ評価が下がってしまいます！ここで話し合いましょう：<div class="survey-box"><button class="survey-btn" onclick="triggerAction('DISPUTE_AGREE')">🤝 分かりました（紛争をなしにする）</button><button class="survey-btn" onclick="triggerAction('DISPUTE_FORCE')">🔥 いや紛争を行います。</button></div>`);
-      
-    } else if(action === 'DISPUTE_AGREE') {
-      appendChatBubble("user", "分かりました。話し合いに応じます。");
-      appendChatBubble("seller", "本当にありがとう！親愛なる友よ！あなたは最高のお客様です。お詫びとして次回使えるシークレットクーポンを付与いたします！🎁");
-      
-    } else if(action === 'DISPUTE_FORCE') {
-      appendChatBubble("user", "いや紛争を行います。譲れません。");
-      appendChatBubble("seller", "<span style='color:var(--ali-red);font-weight:bold;'>⌛ 紛争処理中... (10秒お待ちください)</span>");
-      
+      appendChatBubble("user", "発送を急いでください！");
+      if(chatActiveOrder) { chatActiveOrder.priority = true; localStorage.setItem('ali_orders', JSON.stringify(orders)); }
+      appendChatBubble("seller", "了解！追跡画面に『あなたの注文は倉庫が優先しています。』の特別表示をロックしました！✨");
+    } 
+    else if(action === 'DISPUTE_START') {
+      appendChatBubble("user", "紛争を起こします。");
+      appendChatBubble("seller", `お願いです、紛争をなしにしませんか？😭 話し合いましょう！<div class="survey-box"><button class="survey-btn" onclick="triggerAction('DISPUTE_AGREE')">分かりましたボタン</button><button class="survey-btn" onclick="triggerAction('DISPUTE_FORCE')">いや紛争を行います。ボタン</button></div>`);
+    } 
+    else if(action === 'DISPUTE_AGREE') {
+      appendChatBubble("user", "分かりました。");
+      appendChatBubble("seller", "和解ありがとうございます！個別に補償トークンを用意します。🤝");
+    } 
+    else if(action === 'DISPUTE_FORCE') {
+      appendChatBubble("user", "いや紛争を行います。");
+      appendChatBubble("seller", "<span style='color:var(--ali-red);font-weight:bold;'>⌛ 紛争処理中10秒... 画面を閉じずにお待ちください</span>");
       setTimeout(() => {
-        // 配送が遅れていないか判定（ステップ4以降なら発送済み＝まだ遅れてないと判定）
         if(chatActiveOrder && chatActiveOrder.step >= 4) {
-          appendChatBubble("seller", "❌ <b>紛争失敗（ディスピュート却下）</b><br>【システム判定】: この注文はすでに正常に出荷網に乗っており、配送遅延の証拠が不十分です。プラットフォームはセーラー側の正当性を支持しました。");
+          appendChatBubble("seller", "❌ <b>紛争失敗</b><br>【判定結果】配送が遅れていないため、紛争は失敗に終わりました。輸送は正常です。");
         } else {
-          appendChatBubble("seller", "✅ <b>紛争成功（返金承認）</b><br>【システム判定】: 未出荷、または物流の停止が確認されました。全額返金処理へ移行します。");
-          if(chatActiveOrder) {
-            chatActiveOrder.isCancelled = true;
-            localStorage.setItem('ali_orders', JSON.stringify(orders));
-          }
+          appendChatBubble("seller", "✅ <b>紛争成功</b><br>未出荷またはルート停止を確認。返金プロセスを開始します。");
+          if(chatActiveOrder) { chatActiveOrder.isCancelled = true; localStorage.setItem('ali_orders', JSON.stringify(orders)); }
         }
-      }, 10000); // 10秒のガチ処理タイマー
-      
-    } else if(action === 'CANCEL_ASK') {
-      appendChatBubble("seller", `本当にこの注文をキャンセルしますか？<div class="survey-box"><button class="survey-btn" onclick="triggerAction('CANCEL_YES')">はい、キャンセルします</button><button class="survey-btn" onclick="triggerAction('CANCEL_NO')">いいえ、継続します</button></div>`);
-      
-    } else if(action === 'CANCEL_YES') {
-      appendChatBubble("user", "はい、完全にキャンセルしてください。");
+      }, 10000);
+    } 
+    else if(action === 'CANCEL_ASK') {
+      appendChatBubble("seller", `本当に注文をキャンセルしますか？<div class="survey-box"><button class="survey-btn" onclick="triggerAction('CANCEL_YES')">はい</button><button class="survey-btn" onclick="triggerAction('CANCEL_NO')">いいえ</button></div>`);
+    } 
+    else if(action === 'CANCEL_YES') {
+      appendChatBubble("user", "はい、キャンセルします。");
       if(chatActiveOrder) {
         chatActiveOrder.isCancelled = true;
         localStorage.setItem('ali_orders', JSON.stringify(orders));
-        appendChatBubble("seller", "🛑 了解しました。注文をキャンセル処理に移行しました。追跡画面上のステータスは『キャンセル済み』に更新されました。またのご利用をお待ちしております。");
-      } else {
-        appendChatBubble("seller", "現在アクティブな注文が見つかりませんが、直近のカート情報を破棄、またはキャンセル対応といたします。");
+        appendChatBubble("seller", "了解です。注文をキャンセル表示に書き換えました。追跡画面を確認してください。");
       }
-      
-    } else if(action === 'CANCEL_NO') {
-      appendChatBubble("user", "いいえ、キャンセルはしません。");
-      appendChatBubble("seller", "よかったです！引き続き安全に商品をお届けできるよう全力で発送網を監視します！");
-      
-    } else if(action === 'ADDR_ASK') {
-      appendChatBubble("seller", `新しいお届け先を教えてください：<br><br><div style="display:flex;gap:4px;"><input type='text' id='inline-addr' placeholder='新住所を入力...' style='padding:4px;flex:1;border:1px solid #CCC;border-radius:4px;outline:none;'><button onclick='submitNewAddr()' style='background:var(--ali-red);color:#FFF;border:none;padding:4px 8px;border-radius:4px;font-weight:bold;cursor:pointer;'>変更</button></div>`);
+    } 
+    else if(action === 'CANCEL_NO') {
+      appendChatBubble("user", "いいえ");
+      appendChatBubble("seller", "継続発送を維持します。");
+    } 
+    else if(action === 'ADDR_ASK') {
+      appendChatBubble("seller", `住所を入力してください：<br><br><div style="display:flex;gap:4px;"><input type='text' id='inline-addr' placeholder='新住所...' style='padding:4px;flex:1;'><button onclick='submitNewAddr()' style='background:var(--ali-red);color:#FFF;border:none;padding:4px;'>変更</button></div>`);
     }
     setSellerStatus(false);
   }, 600);
 }
 
 function submitNewAddr() {
-  const input = document.getElementById('inline-addr');
-  if(!input || !input.value.trim()) return;
-  const newAddress = input.value.trim();
-  appendChatBubble("user", `新しい配送先住所：${newAddress}`);
+  const txt = document.getElementById('inline-addr').value.trim();
+  if(!txt) return;
+  appendChatBubble("user", `新住所: ${txt}`);
   setSellerStatus(true);
-  
   setTimeout(() => {
-    // 発送済み（ステップ4以上）かどうかの条件分岐
     if(chatActiveOrder && chatActiveOrder.step >= 4) {
-      appendChatBubble("seller", `⚠️ <b>【警告】すでに荷物は発送済み（国際輸送網）です！</b><br>現段階でのルート変更には、キャリア側への配送ライン変更手数料（別算）が発生する可能性があります。現地到着後に最寄りのデリバリー業者へもこの新住所（${newAddress}）を伝達します。`);
+      appendChatBubble("seller", "⚠️ <b>発送済みの場合は手数料かかる</b><br>すでに配送ラインが確定しているため、ルート変更変更手数料の対象となります！");
     } else {
-      appendChatBubble("seller", `✅ オッケー！発送前のため、無料でシステム住所を【${newAddress}】へ書き換え完了しました。ご安心ください！`);
+      appendChatBubble("seller", "✅ 無料で新住所システムに書き換え完了しました。");
     }
     setSellerStatus(false);
   }, 800);
 }
 
-function clickQuickChip(text) {
-  document.getElementById('chat-input-field').value = text;
-  sendUserMessage();
-}
-
+function clickQuickChip(t) { document.getElementById('chat-input-field').value = t; sendUserMessage(); }
 function sendUserMessage() {
-  const inputEl = document.getElementById('chat-input-field');
-  const txt = inputEl.value.trim();
-  if(!txt) return;
-  
-  appendChatBubble("user", txt);
-  inputEl.value = "";
-  setSellerStatus(true);
-  
+  const f = document.getElementById('chat-input-field'); const t = f.value.trim(); if(!t) return;
+  appendChatBubble("user", t); f.value = ""; setSellerStatus(true);
   setTimeout(() => {
-    let reply = "親愛なる友人よ、メッセージを確認しました。個別のお問い合わせについては、上記の選択ボタン、または定型フローをご利用いただくとより迅速にシステムへ反映されます！";
-    if(txt.includes("早く") || txt.includes("催促")) { triggerAction('SPEED'); return; }
-    if(txt.includes("紛争") || txt.includes("抗議")) { triggerAction('DISPUTE_START'); return; }
-    if(txt.includes("キャンセル")) { triggerAction('CANCEL_ASK'); return; }
-    if(txt.includes("住所")) { triggerAction('ADDR_ASK'); return; }
-    
-    appendChatBubble("seller", reply);
+    if(t.includes("早く") || t.includes("急ぐ")) { triggerAction('SPEED'); return; }
+    if(t.includes("紛争")) { triggerAction('DISPUTE_START'); return; }
+    if(t.includes("キャンセル")) { triggerAction('CANCEL_ASK'); return; }
+    if(t.includes("住所")) { triggerAction('ADDR_ASK'); return; }
+    appendChatBubble("seller", "上の専用操作ボタンを使うと、システムと完全連動して動くことができます！");
     setSellerStatus(false);
   }, 1000);
 }
 
-// 追跡自動同期ループ
+function onRegSuccess() {
+  let user = document.getElementById('reg-user').value;
+  localStorage.setItem('loggedInUser', user);
+  checkLogin();
+  alert("スプレッドシートにアカウント情報を書き込み、ログインしました！");
+  regSubmitted = false;
+}
+
+function checkLogin() {
+  let user = localStorage.getItem('loggedInUser');
+  let bar = document.getElementById('login-bar');
+  if(user) {
+    bar.style.display = "block"; bar.innerText = `👤 ログインアカウント: ${user} 様`;
+    document.getElementById('reg-panel').style.display = "none";
+    document.getElementById('dash-panel').style.display = "block";
+    document.getElementById('dash-user-name').innerText = `${user} 様のマイページ`;
+  } else {
+    bar.style.display = "none";
+    document.getElementById('reg-panel').style.display = "block";
+    document.getElementById('dash-panel').style.display = "none";
+  }
+}
+
+function logout() {
+  if(confirm("ログアウトしますか？")) {
+    localStorage.removeItem('loggedInUser');
+    document.getElementById('reg-user').value = "";
+    document.getElementById('reg-pass').value = "";
+    checkLogin();
+  }
+}
+
+/* ==========================================================================
+   🔄 【新仕様】一括バックフィル ＆ C欄ライブ同期ループ
+   ========================================================================== */
 let loopTimer = null;
 function startLoop(){
   if(loopTimer) return;
   loopTimer = setInterval(async ()=>{
     await refreshTrackingPool();
     let isChanged = false;
+    
     orders.forEach(ord => {
-      if(ord.isCancelled) return; // キャンセル済みは同期スキップ
+      if(ord.isCancelled || ord.isClosed) return; 
       let match = availableTrackingPool.find(p => p.code === ord.tn);
-      if(match && match.step !== ord.step) {
-        ord.step = match.step;
-        let targetMap = SUBJECT_MAP[ord.step] || SUBJECT_MAP[1];
-        ord.status = `[科目 ${ord.step}/11] ${targetMap.status}`;
-        ord.progress = `${Math.floor((ord.step/11)*100)}%`;
-        ord.logs.unshift({ time: new Date().toLocaleTimeString(), msg: targetMap.info });
-        isChanged = true;
+      
+      if(match) {
+        // C欄のメッセージに変化があれば即時反映
+        if(ord.memo !== match.memo) {
+          ord.memo = match.memo;
+          isChanged = true;
+        }
+
+        // ステップが更新されたときのバックフィル処理
+        if(match.step !== ord.step) {
+          let oldStep = ord.step;
+          ord.step = match.step;
+          
+          // 飛ばされた過去ステップのログを順番に全て遡って復元挿入する
+          for (let j = oldStep + 1; j <= ord.step; j++) {
+            if (SUBJECT_MAP[j]) {
+              ord.logs.unshift({ time: new Date().toLocaleTimeString(), msg: `[ステップ ${j}] ${SUBJECT_MAP[j].info}` });
+            }
+          }
+          
+          let targetMap = SUBJECT_MAP[ord.step] || SUBJECT_MAP[0];
+          ord.status = `[科目 ${ord.step}/11] ${targetMap.status}`;
+          ord.progress = `${Math.floor((ord.step/11)*100)}%`;
+          
+          if (ord.step === 11) {
+            ord.isClosed = true;
+          }
+          isChanged = true;
+        }
       }
     });
+    
     if(isChanged) {
       localStorage.setItem('ali_orders', JSON.stringify(orders));
       renderTrackers();
