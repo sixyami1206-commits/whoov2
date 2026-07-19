@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>安全产品出荷 - FIFO待機番号システム</title>
+<title>安全产品出荷 - グローバルフルフィルメントシステム</title>
 <style>
 :root{--ali-orange:#FF4747;--ali-red:#FD384F;--ali-black:#191919;--bg-gray:#F2F2F7;--cainiao-blue:#0052CC;--chat-green:#4CAF50;--success:#2E7D32}
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px}
@@ -45,6 +45,9 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 .btn-buy{background:linear-gradient(90deg,#FF8800,#FF3300);color:#FFF;border:none;border-radius:18px;padding:6px;cursor:pointer;font-weight:bold;font-size:11px;margin-top:4px;text-align:center;width:100%}
 .panel{background:#FFF;border-radius:12px;padding:12px;margin-top:8px;box-shadow:0 1px 4px rgba(0,0,0,0.04);border:1px solid #EAEAEA}
 
+.cart-item-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed #EEE}
+.cart-item-delete{color:var(--ali-red);cursor:pointer;font-weight:bold;margin-left:8px}
+
 .track-card{background:#FFF;border-radius:12px;padding:12px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,0.04);border:1px solid #EAEAEA;position:relative}
 .track-card.cancelled{background:#F5F5F5;opacity:0.75;border:2px dashed #999}
 .track-header{display:flex;justify-content:space-between;font-weight:bold;margin-bottom:6px;border-bottom:1px solid #F0F0F0;padding-bottom:6px;align-items:center}
@@ -61,10 +64,6 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 
 .log-box{background:#F7F9FA;border:1px solid #EDF1F2;border-radius:6px;padding:8px;font-size:10px;color:#37474F;max-height:140px;overflow-y:auto;margin-top:10px}
 .carrier-memo-log{background:#FFF9C4;border-left:3px solid #FBC02D;padding:4px 6px;margin-bottom:4px;font-weight:bold;color:#5D4037}
-.no-code-alert{background:#FFF3E0;border:1px solid #FFB74D;border-radius:8px;padding:10px;margin-bottom:10px;color:#E65100}
-
-.btn-lock-confirm{background:#4CAF50;color:#FFF;border:none;padding:8px 12px;border-radius:4px;font-weight:bold;cursor:pointer;margin-top:4px;width:100%;font-size:12px;animation:pulse 1.5s infinite}
-@keyframes pulse{0%{opacity:1}50%{opacity:0.7}100%{opacity:1}}
 
 .chat-container{display:flex;flex-direction:column;background:#FFF;border-radius:12px;height:480px;border:1px solid #EAEAEA;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden}
 .chat-header{background:var(--ali-black);color:#FFF;padding:10px;display:flex;flex-direction:column;gap:2px}
@@ -77,8 +76,6 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 .msg-time{font-size:8px;color:#999;align-self:flex-end;margin-top:3px}
 
 .chat-footer{background:#FFF;border-top:1px solid #EAEAEA;padding:8px;display:flex;flex-direction:column;gap:6px}
-.quick-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;white-space:nowrap}
-.chip{background:#F0F0F0;color:#555;padding:4px 10px;border-radius:12px;cursor:pointer;font-size:10px;font-weight:bold;border:1px solid #E0E0E0}
 .input-row{display:flex;gap:6px}
 .chat-input{flex:1;padding:8px 12px;border:1px solid #DDD;border-radius:20px;outline:none;font-size:12px}
 .chat-send-btn{background:var(--ali-black);color:#FFF;border:none;border-radius:20px;padding:0 16px;cursor:pointer;font-weight:bold}
@@ -88,8 +85,7 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 .nav-btn.active{color:var(--ali-red)}
 
 #success-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:120;justify-content:center;align-items:center}
-.success-box{background:#FFF;border-radius:16px;width:300px;padding:24px;text-align:center}
-.login-status-bar{background:#E8F5E9;color:var(--success);padding:6px 12px;font-weight:bold;text-align:right;border-bottom:1px solid #C8E6C9}
+.success-box{background:#FFF;border-radius:16px;width:320px;padding:24px;text-align:center}
 </style>
 </head>
 <body>
@@ -97,9 +93,9 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 <div id="success-modal">
   <div class="success-box">
     <div style="font-size:40px;margin-bottom:10px">📦</div>
-    <h3 style="font-size:14px;font-weight:900;margin-bottom:6px;color:#2E7D32">注文が完了しました</h3>
-    <p id="modal-desc" style="color:#666;font-size:10px;margin-bottom:12px"></p>
-    <button class="btn-buy" style="width:100%" onclick="closeSuccess()">追跡画面へ</button>
+    <h3 style="font-size:14px;font-weight:900;margin-bottom:6px;color:#2E7D32">ご注文を受理いたしました</h3>
+    <p id="modal-desc" style="color:#666;font-size:10px;margin-bottom:12px;line-height:1.4;"></p>
+    <button class="btn-buy" style="width:100%" onclick="closeSuccess()">配送追跡ダッシュボードへ</button>
   </div>
 </div>
 
@@ -113,8 +109,6 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
     <button class="search-btn" onclick="filterBySearch()">🔍</button>
   </div>
 </header>
-
-<div id="login-bar" class="login-status-bar" style="display:none;"></div>
 
 <div class="cat-nav">
   <div class="cat-item selected" onclick="filterByCategory('ALL', this)"><div class="cat-icon">✨</div><div class="cat-label">すべて</div></div>
@@ -131,29 +125,26 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 <div class="container">
   <!-- ホーム（ショップ）画面 -->
   <div id="c-shop" class="tab-content active">
-    <div id="live-loading" style="text-align:center;padding:30px;font-weight:bold;color:#666;">🔄 製品棚読み込み中...</div>
+    <div id="live-loading" style="text-align:center;padding:30px;font-weight:bold;color:#666;">🔄 フルフィルメント・ネットワーク接続中...</div>
     <div id="p-grid" class="p-grid" style="display:none;"></div>
     
     <div class="panel">
-      <h4 style="font-weight:900;margin-bottom:8px;font-size:12px;color:var(--ali-red)">🛒 チェックアウト</h4>
+      <h4 style="font-weight:900;margin-bottom:8px;font-size:12px;color:var(--ali-red)">🛒 チェックアウト（現在のカート内）</h4>
       <div id="cart-list" style="margin:6px 0;color:#555;line-height:1.5;">カートは空です。</div>
       <div style="border-top:1px dashed #CFD8DC;padding-top:6px;margin:8px 0;">
-        <div class="price-row" style="display:flex;justify-content:space-between;"><span>小計:</span><span id="subtotal-val">0円</span></div>
-        <div class="price-row" style="display:flex;justify-content:space-between;font-weight:900;font-size:13px;margin-top:4px;border-top:1px solid #EEE;padding-top:4px;">
-          <span>総合計:</span><span id="total" style="color:var(--ali-red);font-size:16px">0円</span>
-        </div>
+        <div class="price-row" style="display:flex;justify-content:space-between;"><span>ご注文合計金額:</span><span id="total" style="color:var(--ali-red);font-size:16px;font-weight:900;">0円</span></div>
       </div>
       <form onsubmit="order(event)" style="display:flex;flex-direction:column;gap:6px">
-        <input type="text" id="name" required placeholder="受取人氏名" style="padding:8px;border:1px solid #DDD;border-radius:6px;">
+        <input type="text" id="name" required placeholder="受取人氏名（フルネーム）" style="padding:8px;border:1px solid #DDD;border-radius:6px;">
         <input type="text" id="addr" required placeholder="配送先詳細住所" style="padding:8px;border:1px solid #DDD;border-radius:6px;">
-        <button type="submit" class="btn-buy">安全な注文を確定する</button>
+        <button type="submit" class="btn-buy">安全なチェックアウトを確定する</button>
       </form>
     </div>
   </div>
 
   <!-- 追跡画面 -->
   <div id="c-my" class="tab-content">
-    <div id="no-ord" style="text-align:center;padding:40px;color:#999;">🚚 案件なし。</div>
+    <div id="no-ord" style="text-align:center;padding:40px;color:#999;">🚚 配送中または処理中の注文履歴は存在しません。</div>
     <div id="multi-track-container"></div>
   </div>
 
@@ -161,16 +152,15 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
   <div id="c-chat" class="tab-content">
     <div class="chat-container">
       <div class="chat-header">
-        <div class="chat-title">🏢 公式自動サポート</div>
-        <div id="seller-status-text" class="chat-status">🟢 AI稼働中</div>
+        <div class="chat-title">🏢 グローバルカスタマーサポートセンター</div>
+        <div id="seller-status-text" class="chat-status">🟢 オペレーターオンライン</div>
       </div>
       <div id="chat-box" class="chat-body">
-        <div class="msg seller">トラッキングIDを入力してください。</div>
+        <div class="msg seller">お世話になっております。安全产品出荷 カスタマーサポートセンターでございます。ご注文商品の配送状況確認、またはシステムに関するお問い合わせは、こちらにトラッキングID（追跡番号）をご入力ください。</div>
       </div>
       <div class="chat-footer">
-        <div id="chat-quick-wrap" class="quick-chips" style="display:none;"></div>
         <div class="input-row">
-          <input type="text" id="chat-input-field" class="chat-input" placeholder="IDを入力...">
+          <input type="text" id="chat-input-field" class="chat-input" placeholder="追跡番号またはメッセージを入力...">
           <button class="chat-send-btn" onclick="sendUserMessage()">送信</button>
         </div>
       </div>
@@ -185,6 +175,9 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90}
 </div>
 
 <script>
+// 【過去の注文を全部消す対応】実行時に古いローカルストレージデータをクリア
+localStorage.removeItem('ali_orders');
+
 const SHEET_PROD_URL = "https://docs.google.com/spreadsheets/d/1LK09yYcLi63EW9-xhXIENfszwyFLC4Jmz_-tO69ab94/export?format=csv&gid=0";
 const SHEET_TRACK_URL = "https://docs.google.com/spreadsheets/d/178-dcD4xd0fUdEORnoC9haQrKmfGiKTaY0OxiOKBRrQ/export?format=csv&gid=0";
 const FORMSPREE_URL = "https://formspree.io/f/xrenqbpg";
@@ -193,11 +186,10 @@ let products = { CHINA: [], JAPAN: [] };
 let allProductsList = [];
 let availableTrackingPool = [];
 let cart = [];
-let orders = JSON.parse(localStorage.getItem('ali_orders')) || [];
+let orders = []; // 過去データを消去したため空配列からスタート
 let currentWH = "CHINA";
 let selectedCategory = "ALL";
 
-// アプリ初期化
 async function initApp() {
   await loadSpreadsheetData();
   renderProducts();
@@ -230,9 +222,7 @@ async function loadSpreadsheetData() {
         warehouse: warehouse
       };
       
-      if(products[warehouse]) {
-        products[warehouse].push(pItem);
-      }
+      if(products[warehouse]) products[warehouse].push(pItem);
       allProductsList.push(pItem);
     });
 
@@ -240,7 +230,7 @@ async function loadSpreadsheetData() {
     document.getElementById('live-loading').style.display = 'none';
     document.getElementById('p-grid').style.display = 'grid';
   } catch (err) {
-    console.error("データ読み込み失敗", err);
+    console.error("マスタ同期エラー", err);
   }
 }
 
@@ -253,28 +243,21 @@ async function refreshTrackingPool() {
       const cols = row.split(',').map(c => c.replace(/^"(.*)"$/, '$1').trim());
       return { code: cols[0], step: parseInt(cols[1]) || 0, memo: cols[2] || "" };
     }).filter(Boolean);
-  } catch(e){
-    console.error("プール更新失敗", e);
-  }
+  } catch(e){}
 }
 
-// 商品レンダリング
 function renderProducts() {
   const grid = document.getElementById('p-grid');
   grid.innerHTML = "";
   let list = products[currentWH] || [];
 
-  if(selectedCategory !== "ALL") {
-    list = list.filter(p => p.category === selectedCategory);
-  }
+  if(selectedCategory !== "ALL") list = list.filter(p => p.category === selectedCategory);
 
   const query = document.getElementById('search-box').value.trim().toLowerCase();
-  if(query) {
-    list = list.filter(p => p.name.toLowerCase().includes(query));
-  }
+  if(query) list = list.filter(p => p.name.toLowerCase().includes(query));
 
   if(list.length === 0) {
-    grid.innerHTML = `<div style="grid-column:1/3;text-align:center;padding:20px;color:#999;">該当する商品がありません。</div>`;
+    grid.innerHTML = `<div style="grid-column:1/3;text-align:center;padding:20px;color:#999;">指定された条件に合致する製品はございません。</div>`;
     return;
   }
 
@@ -304,9 +287,7 @@ function filterByCategory(cat, el) {
   renderProducts();
 }
 
-function filterBySearch() {
-  renderProducts();
-}
+function filterBySearch() { renderProducts(); }
 
 function switchWarehouse(wh) {
   currentWH = wh;
@@ -319,7 +300,18 @@ function addToCart(pid) {
   const p = allProductsList.find(x => x.id === pid);
   if(!p) return;
   const optSign = document.getElementById(`opt-${pid}`).value;
-  cart = [{ ...p, selectedOpt: optSign }]; // 仕様上、カートは上書き型
+  
+  cart.push({
+    ...p,
+    selectedOpt: optSign,
+    cartItemId: new Date().getTime() + Math.random()
+  });
+  
+  updateCartUI();
+}
+
+function removeFromCart(cartItemId) {
+  cart = cart.filter(item => item.cartItemId !== cartItemId);
   updateCartUI();
 }
 
@@ -327,66 +319,96 @@ function updateCartUI() {
   const list = document.getElementById('cart-list');
   if(cart.length === 0) {
     list.innerHTML = "カートは空です。";
-    document.getElementById('subtotal-val').innerText = "0円";
     document.getElementById('total').innerText = "0円";
     return;
   }
-  let p = cart[0];
-  list.innerHTML = `<strong>${p.icon} ${p.name}</strong><br><span style="color:#666;font-size:10px;">仕様: ${p.selectedOpt} (発送元: ${p.warehouse === 'CHINA' ? '海外倉庫' : '国内倉庫'})</span>`;
-  document.getElementById('subtotal-val').innerText = `¥${p.price.toLocaleString()}`;
-  document.getElementById('total').innerText = `¥${p.price.toLocaleString()}`;
+  
+  let totalCost = 0;
+  let html = "";
+  
+  cart.forEach(item => {
+    totalCost += item.price;
+    const whBadge = item.warehouse === 'JAPAN' ? '🇯🇵国内' : '🇨🇳海外';
+    html += `
+      <div class="cart-item-row">
+        <div>
+          <strong>${item.icon} ${item.name}</strong> (${item.selectedOpt}) 
+          <span style="color:#777; font-size:9px;">[${whBadge}]</span>
+        </div>
+        <div>
+          <span>¥${item.price.toLocaleString()}</span>
+          <span class="cart-item-delete" onclick="removeFromCart(${item.cartItemId})">✕</span>
+        </div>
+      </div>
+    `;
+  });
+  
+  list.innerHTML = html;
+  document.getElementById('total').innerText = `¥${totalCost.toLocaleString()}`;
 }
 
-// 注文確定処理
+// 📦 注文実行（LP, CJ, JPコードを識別割当 ＆ 住所を画面に残す）
 async function order(e) {
   e.preventDefault();
-  if(cart.length === 0) return alert("カートが空です");
+  if(cart.length === 0) return alert("カート内に製品がありません。");
 
   const name = document.getElementById('name').value;
   const addr = document.getElementById('addr').value;
-  const p = cart[0];
 
-  let prefix = p.warehouse === "JAPAN" ? "JP" : "LP"; 
-  // 待機中オーダーからそのprefixの最大番号を取得して+1
-  let currentWaiting = orders.filter(o => o.isPending && o.prefixGroup === prefix);
-  let nextWaitNo = currentWaiting.length > 0 ? Math.max(...currentWaiting.map(o=>o.waitNumber)) + 1 : 1;
+  await refreshTrackingPool();
+  let assignedCodesLog = [];
 
-  const newOrder = {
-    id: "ORD-" + new Date().getTime(),
-    name: name,
-    addr: addr,
-    pName: p.name,
-    pIcon: p.icon,
-    opt: p.selectedOpt,
-    price: p.price,
-    prefixGroup: prefix,
-    isPending: true,      // 最初は待機状態
-    waitNumber: nextWaitNo, // 待機番号
-    foundCode: null,      // マッチングしたコードが入る
-    tn: null,             // ユーザーが「コード取得」を押すまでnull
-    step: 0,
-    isCancelled: false,
-    isClosed: false
-  };
+  cart.forEach(item => {
+    let finalCode = "ERR-" + Math.floor(Math.random()*90000+10000);
+    let freeCodeObj = null;
 
-  orders.push(newOrder);
+    if (item.warehouse === "JAPAN") {
+      // 🇯🇵 国内便なら「JP」コードを探す
+      freeCodeObj = availableTrackingPool.find(p => p.step === 0 && p.code.startsWith("JP") && !orders.some(o => o.tn === p.code));
+    } else {
+      // 🇨🇳 海外便（グローバルハブ便）の場合：LPコードとCJコードを順に探索して切り分ける
+      freeCodeObj = availableTrackingPool.find(p => p.step === 0 && p.code.startsWith("LP") && !orders.some(o => o.tn === p.code));
+      if (!freeCodeObj) {
+        freeCodeObj = availableTrackingPool.find(p => p.step === 0 && p.code.startsWith("CJ") && !orders.some(o => o.tn === p.code));
+      }
+    }
+
+    if (freeCodeObj) finalCode = freeCodeObj.code;
+
+    const newOrder = {
+      id: "ORD-" + new Date().getTime() + "-" + Math.random().toString(36).substr(2, 4),
+      name: name,
+      addr: addr,
+      pName: item.name,
+      pIcon: item.icon,
+      opt: item.selectedOpt,
+      price: item.price,
+      tn: finalCode,
+      step: freeCodeObj ? 1 : 0,
+      isCancelled: false,
+      isClosed: false
+    };
+
+    orders.push(newOrder);
+    assignedCodesLog.push(`${item.icon} ${item.name} ➔ ${finalCode}`);
+  });
+
   localStorage.setItem('ali_orders', JSON.stringify(orders));
 
-  // Formspree送信
   try {
     await fetch(FORMSPREE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: name, address: addr, product: p.name, option: p.selectedOpt, waitNo: prefix + "-" + nextWaitNo })
+      body: JSON.stringify({ name: name, address: addr, summary: assignedCodesLog.join(" | ") })
     });
   } catch(err){}
 
   cart = [];
   updateCartUI();
-  document.getElementById('name').value = "";
-  document.getElementById('addr').value = "";
+  
+  // 【住所入力残し対応】 document.getElementById('name').value = ""; 等のクリア処理を削除し、入力を維持
 
-  document.getElementById('modal-desc').innerText = `待機番号 [ ${prefix}-${nextWaitNo} ] で待機行列に入りました。`;
+  document.getElementById('modal-desc').innerHTML = `以下の通りフルフィルメントコードが即時発行されました。<br><br>${assignedCodesLog.join("<br>")}`;
   document.getElementById('success-modal').style.display = 'flex';
 }
 
@@ -395,7 +417,6 @@ function closeSuccess() {
   switchTab('my');
 }
 
-// 追跡画面レンダリング
 function renderTrackers() {
   const container = document.getElementById('multi-track-container');
   const noOrd = document.getElementById('no-ord');
@@ -408,90 +429,52 @@ function renderTrackers() {
   noOrd.style.display = 'none';
 
   orders.forEach(ord => {
-    let html = "";
-    if(ord.isPending) {
-      // ■ 待機状態の表示
-      html = `
-        <div class="track-card">
-          <div class="track-header">
-            <span>⌛ 注文処理保留中 (出荷待ち行列)</span>
-            <button class="btn-delete-history" onclick="deleteHistory('${ord.id}')">削除</button>
-          </div>
-          <div style="padding:4px 0; font-size:12px;">
-            商品: <strong>${ord.pIcon} ${ord.pName}</strong> (${ord.opt})
-          </div>
-          <div class="no-code-alert" style="margin-top:6px;">
-            現在、出荷ラインが大変混雑しています。<br>
-            あなたの待機番号: <strong>${ord.prefixGroup}-${ord.waitNumber}</strong><br>
-            ${ord.foundCode ? 
-              `<span style="color:#2E7D32; font-weight:bold;">🎉 出荷枠が空きました！以下のボタンを押してコードを取得してください。</span>
-               <button class="btn-lock-confirm" onclick="unlockCode('${ord.id}')">🔑 トラッキングコードを取得する</button>` 
-              : `⏳ 前の枠が空くまでしばらくお待ちください。（自動で進みます）`}
-          </div>
+    const steps = ["処理中", "倉庫引き渡し", "国際交換局", "航空会社渡", "日本到着", "通関手続き", "国内配送網", "配達中", "完了"];
+    let dotsHtml = "";
+    steps.forEach((st, i) => {
+      let activeClass = (i <= ord.step) ? "active" : "";
+      dotsHtml += `<div class="progress-dot ${activeClass}"><span>${st}</span></div>`;
+    });
+    let fillWidth = Math.min(100, (ord.step / (steps.length - 1)) * 100);
+
+    let matchPool = availableTrackingPool.find(p => p.code === ord.tn) || {};
+    let memoText = matchPool.memo || "国際物流センターにて発送準備中。";
+
+    let html = `
+      <div class="track-card ${ord.isCancelled ? 'cancelled' : ''}">
+        <div class="track-header">
+          <span class="carrier-badge">物流管理コード: CAINIAO NETWORK</span>
+          <span style="font-size:10px; color:#111; font-weight:bold;">${ord.tn}</span>
+          <button class="btn-delete-history" onclick="deleteHistory('${ord.id}')">削除</button>
         </div>
-      `;
-    } else {
-      // ■ 通常の追跡状態の表示
-      const steps = ["注文受付", "倉庫引き渡し", "国際交換局", "航空会社渡", "日本到着", "通関中", "国内搬送", "配達中", "完了"];
-      let dotsHtml = "";
-      steps.forEach((st, i) => {
-        let activeClass = (i <= ord.step) ? "active" : "";
-        dotsHtml += `<div class="progress-dot ${activeClass}"><span>${st}</span></div>`;
-      });
-      let fillWidth = Math.min(100, (ord.step / (steps.length - 1)) * 100);
-
-      let matchPool = availableTrackingPool.find(p => p.code === ord.tn) || {};
-      let memoText = matchPool.memo || "荷物を準備中、まもなく発送されます。";
-
-      html = `
-        <div class="track-card ${ord.isCancelled ? 'cancelled' : ''}">
-          <div class="track-header">
-            <span class="carrier-badge">CAINIAO 菜鳥裹裹</span>
-            <span style="font-size:10px; color:#666;">ID: ${ord.tn}</span>
-            <button class="btn-delete-history" onclick="deleteHistory('${ord.id}')">削除</button>
-          </div>
-          <div style="margin:4px 0;">
-            商品: <strong>${ord.pIcon} ${ord.pName}</strong> (${ord.opt})
-          </div>
-          
-          <div class="progress-container">
-            <div class="progress-line"></div>
-            <div class="progress-line-fill" style="width: ${fillWidth}%"></div>
-            ${dotsHtml}
-          </div>
-
-          <div class="log-box">
-            <div class="carrier-memo-log">【最新の配送状況】<br>${memoText}</div>
-            <div style="color:#999; margin-top:4px;">・タイムスタンプ: ${new Date().toLocaleTimeString()} (自動同期中)</div>
-          </div>
+        <div style="margin:4px 0; font-size:12px;">
+          製品情報: <strong>${ord.pIcon} ${ord.pName}</strong> (${ord.opt})
         </div>
-      `;
-    }
+        
+        <div class="progress-container">
+          <div class="progress-line"></div>
+          <div class="progress-line-fill" style="width: ${fillWidth}%"></div>
+          ${dotsHtml}
+        </div>
+
+        <div class="log-box">
+          <div class="carrier-memo-log">【最新ステータス情報】<br>${memoText}</div>
+          <div style="color:#999; margin-top:4px;">・同期時刻: ${new Date().toLocaleTimeString()} (自動データ同期)</div>
+        </div>
+      </div>
+    `;
     container.innerHTML += html;
   });
 }
 
-// ユーザーが手動で「コードを取得する」を押した時
-function unlockCode(orderId) {
-  let ord = orders.find(o => o.id === orderId);
-  if(ord && ord.foundCode) {
-    ord.tn = ord.foundCode; // 正式にトラッキングコードを確定
-    ord.isPending = false;  // 待機状態を解除
-    ord.step = 1;
-    localStorage.setItem('ali_orders', JSON.stringify(orders));
-    renderTrackers();
-  }
-}
-
 function deleteHistory(orderId) {
-  if(confirm("この履歴を削除しますか？")) {
+  if(confirm("この注文履歴を一覧から削除しますか？")) {
     orders = orders.filter(o => o.id !== orderId);
     localStorage.setItem('ali_orders', JSON.stringify(orders));
     renderTrackers();
   }
 }
 
-// ⚙️ バックグラウンド同期ルーパー (FIFO一括解放ロジック内蔵)
 let loopTimer = null;
 function startLoop() {
   if(loopTimer) return;
@@ -499,37 +482,13 @@ function startLoop() {
     await refreshTrackingPool();
     let isChanged = false;
     
-    // 各配送グループごとに「待機番号の順」に処理
-    ["JP", "LP", "CJ"].forEach(prefix => {
-      // 1. このグループで「待機中」の人たちを番号の若い順に並べる
-      let waitingOrders = orders.filter(o => o.isPending && o.prefixGroup === prefix)
-                                .sort((a, b) => a.waitNumber - b.waitNumber);
-
-      // 2. まだ誰にも割り当てられていない空きコード (step: 0) を探す
-      let usableZeroPool = availableTrackingPool.filter(p => 
-        p.step === 0 && 
-        p.code.startsWith(prefix) &&
-        !orders.some(o => o.tn === p.code || o.foundCode === p.code)
-      );
-
-      // 3. 【最重要】空きコードの個数（N個）だけ、先頭から順番にマッチング！
-      // 前の人がボタンを押していなくても、foundCode にキープされて後ろは詰まりません。
-      waitingOrders.forEach((ord, index) => {
-        if (usableZeroPool[index] && ord.foundCode !== usableZeroPool[index].code) {
-          ord.foundCode = usableZeroPool[index].code; // 枠をこの人に予約
-          isChanged = true;
-        }
-      });
-    });
-
-    // 通常のステップ進行同期
     orders.forEach(ord => {
-      if(ord.isCancelled || ord.isClosed || ord.isPending) return; 
+      if(ord.isCancelled || ord.isClosed) return; 
       let match = availableTrackingPool.find(p => p.code === ord.tn);
       if(match && match.step !== ord.step) {
         ord.step = match.step;
         isChanged = true;
-        if(ord.step === 11) ord.isClosed = true;
+        if(ord.step === 8) ord.isClosed = true; 
       }
     });
     
@@ -537,10 +496,9 @@ function startLoop() {
       localStorage.setItem('ali_orders', JSON.stringify(orders));
       renderTrackers();
     }
-  }, 2000);
+  }, 3000);
 }
 
-// チャット機能用ロジック
 function sendUserMessage() {
   const input = document.getElementById('chat-input-field');
   const text = input.value.trim();
@@ -550,17 +508,12 @@ function sendUserMessage() {
   input.value = "";
 
   setTimeout(() => {
-    // 簡易AI応答
-    let matchOrder = orders.find(o => o.tn === text || o.id === text);
+    let matchOrder = orders.find(o => o.tn === text);
     if(matchOrder) {
-      if(matchOrder.isPending) {
-        appendMessage(`ID「${text}」は現在発送ラインの待機状態です。待機番号は ${matchOrder.prefixGroup}-${matchOrder.waitNumber} です。枠が空き次第ボタンが出現します。`, 'seller');
-      } else {
-        let pool = availableTrackingPool.find(p => p.code === matchOrder.tn) || {};
-        appendMessage(`追跡番号 [ ${matchOrder.tn} ] の現在のステータスはステップ [ ${matchOrder.step} ] です。<br>状況: ${pool.memo || '調整中'}`, 'seller');
-      }
+      let pool = availableTrackingPool.find(p => p.code === matchOrder.tn) || {};
+      appendMessage(`【照会結果通知】<br>ご入力いただきました追跡番号［${matchOrder.tn}］の輸送ステータスを照会いたしました。<br><br>■ 対象商品: ${matchOrder.pName}<br>■ 現在の位置付け: ステージ [ ${matchOrder.step} ]<br>■ 輸送状況詳細: ${pool.memo || '国際交換局にて通関審査中、または配送網への引き継ぎ処理中となっております。'}<br><br>データはリアルタイムで更新されております。今しばらくお待ちいただきますようお願い申し上げます。`, 'seller');
     } else {
-      appendMessage("お入力いただいたIDが見つからないか、処理中の可能性があります。追跡画面をご確認いただくか、正しい番号を入力してください。", 'seller');
+      appendMessage(`【カスタマーセンター自動総合返信】<br>ご提示いただきました文字列［${text}］に該当する有効なフルフィルメントコード（追跡番号）が当システム上で確認できませんでした。<br><br>お手数ではございますが、「📦追跡」タブより正確な番号（例: LPから始まる番号、またはJPから始まる番号）をご確認の上、再度ご照会いただけますようお願い申し上げます。その他のお問い合わせにつきましては、順次オペレーターが確認いたします。`, 'seller');
     }
   }, 800);
 }
@@ -576,7 +529,6 @@ function appendMessage(text, sender) {
   box.scrollTop = box.scrollHeight;
 }
 
-// タブ切り替え機能
 function switchTab(tab) {
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -594,7 +546,6 @@ function switchTab(tab) {
   }
 }
 
-// 初期化実行
 initApp();
 </script>
 </body>
