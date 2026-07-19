@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>安全产品出荷 - プロフェッショナル・ロジスティクスERP</title>
+<title>安全产品出荷ERP</title>
 <style>
 :root{--ali-orange:#FF4747;--ali-red:#FD384F;--ali-black:#191919;--bg-gray:#F4F6F9;--cainiao-blue:#0052CC;--success:#2E7D32;--warn:#F57C00;--danger:#D32F2F}
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px}
@@ -100,7 +100,7 @@ header{background:#FFF;padding:10px 14px;position:sticky;top:0;z-index:90;border
 <header>
   <div class="header-top">
     <div class="logo">安全产品<span>出荷</span></div>
-    <div id="bg-indicator" class="status-badge">🔄 BG常時動的同期ON (1s)</div>
+    <div id="bg-indicator" class="status-badge">更新中</div>
   </div>
   <div class="search-bar-wrap">
     <input type="text" id="search-box" class="search-input" placeholder="フルフィルメントマスタから商品を検索..." oninput="filterProducts()">
@@ -131,13 +131,13 @@ header{background:#FFF;padding:10px 14px;position:sticky;top:0;z-index:90;border
     </div>
   </div>
 
-  <!-- 2. 分離された「本格11段階リアルタイム追跡センター」 -->
+  <!-- 2. 分離された「リアルタイム追跡センター」 -->
   <div id="c-my" class="tab-content">
     <div id="no-ord" style="text-align:center;padding:50px;color:#999;font-weight:bold;">🚚 アクティブな追跡オブジェクトが存在しません。</div>
     <div id="multi-track-container"></div>
   </div>
 
-  <!-- 3. 新設・独立された「カスタマー追跡サポート（AIチャット）」 -->
+  <!-- 3. 新設・独立された「カスタマー追跡サポート」 -->
   <div id="c-chat" class="tab-content">
     <div class="chat-container">
       <div id="chat-messages" class="chat-messages">
@@ -174,7 +174,7 @@ const SHEET_TRACK_URL = "https://docs.google.com/spreadsheets/d/178-dcD4xd0fUdEO
 const FORMSPREE_URL = "https://formspree.io/f/xrenqbpg";
 
 const STAGES_11 = [
-  "データ受付", "倉庫選別・梱包", "国際交換局提出", "保税区通関通過", 
+  "データ受付", "倉庫選別・梱包", "国際交換局", "保税区通関通過", 
   "航空・航路出港", "日本国内拠点到着", "国内通関開始", "通関許可・引渡", 
   "国内配送網トランス", "配達中", "配達済み(終了)"
 ];
@@ -273,7 +273,7 @@ function setupBackgroundSync() {
           
           if (ord.step === 10) {
             ord.isClosed = true;
-            ord.logs.push(`[${new Date().toLocaleTimeString()}] 🔒 配達完了を検知。このオブジェクトの追跡をクローズしました。`);
+            ord.logs.push(`[${new Date().toLocaleTimeString()}] 🔒 このオブジェクトの追跡をクローズしました。`);
           }
           hasUpdates = true;
         }
@@ -510,7 +510,7 @@ function triggerUrge(id) {
   let ord = orders.find(o => o.id === id);
   if(!ord) return;
   ord.logs.push(`[${new Date().toLocaleTimeString()}] 🚀 発送催促を受信。ハブ優先度を引き上げました。`);
-  alert("🚨 催促コマンドを送信しました！");
+  alert(" 催促コマンドを送信しました！");
   renderTrackers();
 }
 
@@ -525,7 +525,7 @@ function submitAddressEdit(id) {
   if(!newAddr) return alert("住所を入力してください。");
   ord.addr = newAddr;
   ord.logs.push(`[${new Date().toLocaleTimeString()}] 📍 住所変更適用 ➔ 新住所: ${newAddr}`);
-  alert("📍 配送先住所をオンライン更新しました。");
+  alert("📍 配送先住所を更新しました。");
   renderTrackers();
 }
 
@@ -534,7 +534,7 @@ function triggerCancel(id) {
   let ord = orders.find(o => o.id === id);
   if(!ord) return;
   ord.isCancelled = true;
-  ord.logs.push(`[${new Date().toLocaleTimeString()}] ❌ 出荷プロセスを凍結し、コードを開放しました。`);
+  ord.logs.push(`[${new Date().toLocaleTimeString()}] ❌ 出荷プロセスコードを開放しました。`);
   renderTrackers();
 }
 
@@ -561,7 +561,7 @@ function handleQuickCmd(type) {
     appendChatBubble(`🤖 [エラー] 現在アクティブな追跡オブジェクトが存在しません。先に商品をご注文ください。`, 'bot');
     return;
   }
-  let target = orders[orders.length - 1]; // 最新の注文を対象とする
+  let target = orders[orders.length - 1]; // 追跡番号を入力された商品
 
   if(type === '催促') {
     appendChatBubble(`🚀 発送の催促をお願いします！`, 'user');
