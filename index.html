@@ -5,36 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>日本产品安全出荷</title>
 <style>
-:root{--ali-red:#FD384F;--ali-orange:#FF6A00;--bg-gray:#F4F4F4;--text-main:#191919;--text-sub:#666;--border-color:#EAEAEA;--choice-yellow:#FFF5CC}
+:root{--ali-red:#E53935;--ali-orange:#FF6A00;--bg-gray:#F4F4F4;--text-main:#191919;--text-sub:#666;--border-color:#EAEAEA;--choice-yellow:#FFF5CC;--green-text:#008A00}
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:12px}
 body{background:var(--bg-gray);color:var(--text-main);max-width:440px;margin:0 auto;min-height:100vh;position:relative;box-shadow:0 0 20px rgba(0,0,0,0.1);padding-bottom:65px}
 
-/* ヘッダー */
+/* ヘッダー＆タブ */
 header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90;border-bottom:1px solid var(--border-color)}
 .hdr-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .back-arrow{font-size:16px;cursor:pointer;padding-right:4px}
 .search-container{flex:1;display:flex;align-items:center;background:#F5F5F5;border-radius:20px;padding:6px 12px}
 .search-input{border:none;background:none;outline:none;width:100%;font-size:12px;color:#333}
-
-/* タブ */
 .tabs-container{display:flex;background:#FFF;border-bottom:1px solid var(--border-color);overflow-x:auto;scrollbar-width:none;}
 .tabs-container::-webkit-scrollbar{display:none;}
 .tab-item{padding:10px 14px;color:var(--text-sub);cursor:pointer;white-space:nowrap;position:relative}
 .tab-item.active{color:var(--text-main);font-size:13px;font-weight:bold;}
 .tab-item.active::after{content:'';position:absolute;bottom:0;left:15%;width:70%;height:3px;background:var(--text-main);border-radius:2px}
-.container{padding:0}
 .tab-content{display:none}
 .tab-content.active{display:block}
 
 /* カタログ */
 .p-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px}
-.p-card{background:#FFF;border-radius:10px;padding:8px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid #EEE}
+.p-card{background:#FFF;border-radius:10px;padding:8px;display:flex;flex-direction:column;border:1px solid #EEE}
 .img-box{background:#F8F8F8;height:120px;border-radius:6px;display:flex;justify-content:center;align-items:center;font-size:48px;position:relative}
-.choice-badge{position:absolute;top:4px;left:4px;background:#FFD600;color:#000;font-weight:900;font-size:9px;padding:2px 5px;border-radius:4px}
 .wh-badge{position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.6);color:#FFF;font-size:9px;padding:2px 4px;border-radius:4px}
 .price-line{color:var(--ali-red);font-size:15px;font-weight:900;margin-top:6px}
-.btn-add-cart{background:#FFF;border:1px solid var(--ali-red);color:var(--ali-red);border-radius:15px;padding:6px;font-weight:bold;cursor:pointer;width:100%;margin-top:6px;transition:all 0.2s}
-.btn-add-cart:active{background:var(--ali-red);color:#FFF}
+.btn-add-cart{background:#FFF;border:1px solid var(--ali-red);color:var(--ali-red);border-radius:15px;padding:6px;font-weight:bold;cursor:pointer;width:100%;margin-top:6px}
 
 /* カート & 決済 */
 .checkout-header{background:#FFF;padding:12px;display:flex;align-items:center;gap:10px;font-size:16px;font-weight:bold;border-bottom:1px solid #EEE}
@@ -42,62 +37,85 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90;border-
 .mail-border{height:4px;background:repeating-linear-gradient(to right, #E53935 0, #E53935 12px, transparent 12px, transparent 16px, #1E88E5 16px, #1E88E5 28px, transparent 28px, transparent 32px);margin:10px -14px -14px -14px}
 .co-prod-row{display:flex;gap:12px;margin-bottom:14px}
 .co-img{width:64px;height:64px;background:#F5F5F5;border-radius:6px;display:flex;justify-content:center;align-items:center;font-size:32px;border:1px solid #EEE}
-.qty-ctrl{display:inline-flex;align-items:center;border:1px solid #DDD;border-radius:15px;overflow:hidden;margin-top:6px}
-.qty-btn{background:#FFF;border:none;padding:2px 10px;font-size:16px;cursor:pointer;color:#555}
-.qty-val{padding:0 12px;font-weight:bold;font-size:13px;border-left:1px solid #DDD;border-right:1px solid #DDD}
-.shipping-info{border-top:1px dashed #EEE;padding-top:10px;font-size:11px;color:#555;line-height:1.6}
-
-/* 新しい支払いUI */
 .pay-method-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #F5F5F5;cursor:pointer;}
 .pay-method-row.disabled{opacity:0.5;pointer-events:none;}
 .radio-circle{width:18px;height:18px;border:1px solid #CCC;border-radius:50%;display:flex;justify-content:center;align-items:center;flex-shrink:0;}
 .radio-circle.selected{border-color:var(--ali-red);background:var(--ali-red)}
 .radio-circle.selected::after{content:'';width:6px;height:6px;background:#FFF;border-radius:50%}
 .pay-detail{background:#FAFAFA;border:1px solid #EEE;border-radius:8px;padding:12px;margin:0 0 12px 28px;display:none;}
-.pay-input{width:100%;padding:10px;margin-bottom:8px;border:1px solid #CCC;border-radius:6px;font-size:12px;outline:none;}
-.pay-input:focus{border-color:var(--text-main);}
-
+.pay-input{width:100%;padding:10px;margin-bottom:8px;border:1px solid #CCC;border-radius:6px;outline:none;}
 .checkout-footer{position:fixed;bottom:55px;left:50%;transform:translateX(-50%);width:100%;max-width:440px;background:#FFF;border-top:1px solid #EEE;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;z-index:95}
 .btn-pay-now{background:var(--ali-red);color:#FFF;border:none;border-radius:20px;padding:10px 24px;font-size:14px;font-weight:bold;cursor:pointer}
 
-/* 追跡カード */
-.track-card{background:#FFF;margin-bottom:8px;}
-.track-store-name{padding:12px 12px 8px 12px;font-weight:bold;font-size:13px;display:flex;align-items:center;gap:6px;}
-.track-store-name .choice{background:var(--choice-yellow);color:#996600;font-size:10px;padding:2px 4px;border-radius:2px;}
+/* 追跡リスト */
+.track-card{background:#FFF;margin-bottom:8px;cursor:pointer;transition:background 0.2s}
+.track-card:active{background:#F9F9F9}
+.track-store-name{padding:12px 12px 8px 12px;font-weight:bold;font-size:13px;display:flex;justify-content:space-between;align-items:center;}
+.track-num-badge{background:#F0F0F0;padding:2px 6px;border-radius:4px;font-size:10px;color:#555;font-weight:normal;}
 .track-item-row{display:flex;padding:0 12px 12px 12px;gap:10px;}
-.track-item-img{width:70px;height:70px;background:#F9F9F9;border-radius:8px;display:flex;justify-content:center;align-items:center;font-size:32px;border:1px solid #EEE;flex-shrink:0;}
-.track-item-info{flex:1;display:flex;flex-direction:column;justify-content:space-between;}
+.track-item-img{width:70px;height:70px;background:#F9F9F9;border-radius:8px;display:flex;justify-content:center;align-items:center;font-size:32px;border:1px solid #EEE;}
 .track-item-title{font-size:12px;color:#333;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.track-item-spec{font-size:11px;color:#888;margin-top:2px;}
-.track-item-price-row{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
-.track-item-price{font-weight:bold;font-size:13px;}
-.track-coupon{color:#009688;font-size:11px;margin-top:2px;}
-.track-status-box{margin:0 12px 12px 12px;background:#F9F9F9;border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;border:1px solid #F0F0F0;}
-.track-status-icon{font-size:18px;}
-.track-status-text{flex:1;}
-.track-status-main{font-size:13px;font-weight:bold;color:#111;margin-bottom:4px;}
-.track-status-date{font-size:11px;color:#888;}
-.track-total-row{padding:10px 12px;text-align:right;font-size:12px;font-weight:bold;border-bottom:1px solid #F5F5F5;}
+.track-item-price{font-weight:bold;font-size:13px;margin-top:4px;}
+.track-status-box{margin:0 12px 12px 12px;background:#F9F9F9;border-radius:8px;padding:12px;border:1px solid #F0F0F0;}
+.track-status-main{font-size:13px;font-weight:bold;color:#111;}
 
-/* チャット UI */
+/* ★ 新規：追跡詳細画面 (画像の完全再現) ★ */
+#sec-track-detail{background:#F4F4F4;min-height:100vh;padding-bottom:80px;display:none;position:absolute;top:0;left:0;width:100%;z-index:150;}
+.td-header{background:#FFF;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;font-size:16px;font-weight:bold;border-bottom:1px solid #EEE;position:sticky;top:0;z-index:160;}
+.td-period{padding:16px;font-size:15px;font-weight:bold;background:#FFF;}
+.td-card{background:#FFF;margin-bottom:8px;padding:16px;}
+.td-title{font-weight:bold;font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.td-link{color:#0066CC;font-size:12px;font-weight:normal;float:right;cursor:pointer;}
+
+/* タイムラインUI */
+.timeline{position:relative;padding-left:16px;margin-top:12px;}
+.timeline::before{content:'';position:absolute;left:3px;top:8px;bottom:0;width:2px;background:#E0E0E0;}
+.tl-item{position:relative;margin-bottom:20px;}
+.tl-item::before{content:'';position:absolute;left:-16px;top:4px;width:8px;height:8px;border-radius:50%;background:#CCC;}
+.tl-item.active::before{background:#111;box-shadow:0 0 0 3px rgba(0,0,0,0.1);}
+.tl-text{font-size:13px;color:#333;margin-bottom:4px;}
+.tl-item.active .tl-text{font-weight:bold;background:#F9F9F9;padding:8px;border-radius:6px;display:inline-block;width:100%;}
+.tl-date{font-size:11px;color:#999;}
+
+/* 住所＆確約UI */
+.td-address-text{font-size:12px;color:#333;line-height:1.6;}
+.td-guarantee-text{font-size:11px;color:#666;line-height:1.4;margin-bottom:12px;}
+.td-progress{display:flex;justify-content:space-between;align-items:center;position:relative;margin-top:16px;padding:0 10px;}
+.td-progress::before{content:'';position:absolute;top:6px;left:20px;right:20px;height:2px;background:#E0E0E0;z-index:1;}
+.td-step{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.td-dot{width:12px;height:12px;border-radius:50%;background:#E0E0E0;}
+.td-dot.done{background:#111;}
+.td-step-date{font-size:10px;color:#999;}
+.td-step-label{font-size:11px;color:#333;}
+.td-coupon-icon{background:#FFF1F1;color:var(--ali-red);padding:2px 4px;border-radius:4px;font-size:10px;font-weight:bold;z-index:2;}
+
+/* 領収書＆ストア */
+.td-receipt{display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:14px;padding:16px;background:#FFF;margin-bottom:8px;cursor:pointer;}
+.td-store-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.td-store-name{font-weight:bold;font-size:13px;}
+.td-contact{color:#0066CC;font-size:12px;}
+
+/* 詳細画面の固定フッター */
+.td-footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;background:#FFF;border-top:1px solid #EEE;padding:12px 16px;display:flex;justify-content:flex-end;gap:10px;z-index:160;}
+.td-btn{padding:8px 16px;border-radius:20px;font-size:13px;font-weight:bold;cursor:pointer;background:#FFF;}
+.td-btn-outline{border:1px solid #CCC;color:#333;}
+.td-btn-red{border:1px solid var(--ali-red);color:var(--ali-red);}
+
+/* チャット・ボトムナビ等（省略せず維持） */
 .chat-window{display:flex;flex-direction:column;height:calc(100vh - 120px);background:#F4F4F4;}
 .chat-messages{flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;}
 .bubble{max-width:80%;padding:10px 14px;border-radius:15px;font-size:13px;line-height:1.4;word-break:break-all;}
-.bubble.bot{background:#FFF;align-self:flex-start;border-bottom-left-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,0.05);}
+.bubble.bot{background:#FFF;align-self:flex-start;border-bottom-left-radius:2px;}
 .bubble.user{background:var(--ali-red);color:#FFF;align-self:flex-end;border-bottom-right-radius:2px;}
 .chat-quick-actions{display:flex;gap:8px;padding:10px 12px;background:#FFF;overflow-x:auto;border-top:1px solid #EEE;scrollbar-width:none;}
-.chat-quick-actions::-webkit-scrollbar{display:none;}
-.btn-quick{white-space:nowrap;background:#F4F4F4;border:1px solid #DDD;padding:6px 14px;border-radius:15px;font-size:12px;font-weight:bold;cursor:pointer;color:#333;}
 .chat-input-area{padding:8px 12px;background:#FFF;border-top:1px solid #F0F0F0;display:flex;gap:8px;align-items:center;}
 .chat-input{flex:1;background:#F5F5F5;border:none;padding:10px 14px;border-radius:20px;outline:none;}
-.btn-send{background:none;border:none;color:var(--text-main);font-weight:bold;font-size:14px;padding:0 8px;cursor:pointer;}
+.btn-send{background:none;border:none;color:var(--text-main);font-weight:bold;font-size:14px;}
 
-/* ボトムナビ */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;background:#FFF;border-top:1px solid var(--border-color);display:flex;justify-content:space-around;padding:6px 0;z-index:100}
 .nav-item{background:none;border:none;color:#666;display:flex;flex-direction:column;align-items:center;flex:1;cursor:pointer;font-weight:bold;font-size:10px;position:relative}
 .nav-item.active{color:var(--ali-red)}
 .cart-badge{position:absolute;top:-2px;right:18px;background:var(--ali-red);color:#FFF;font-size:9px;width:14px;height:14px;border-radius:50%;display:flex;justify-content:center;align-items:center}
-
 #success-pop{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.8);color:#FFF;padding:12px 20px;border-radius:20px;z-index:300;text-align:center;font-weight:bold}
 </style>
 </head>
@@ -113,20 +131,15 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90;border-
       <input type="text" id="search-box" class="search-input" placeholder="注文 ID、商品名、または..." oninput="renderCatalog()">
     </div>
   </div>
-  
-  <!-- カタログ用タブ -->
   <div class="tabs-container" id="shop-tabs">
     <div class="tab-item active" onclick="filterRegion('ALL', this)">すべて</div>
     <div class="tab-item" onclick="filterRegion('JAPAN', this)">国内(日本)</div>
     <div class="tab-item" onclick="filterRegion('CHINA', this)">海外</div>
   </div>
-
-  <!-- 追跡用タブ -->
   <div class="tabs-container" id="track-tabs" style="display:none;">
     <div class="tab-item active" onclick="filterOrders('すべて', this)">すべて</div>
     <div class="tab-item" onclick="filterOrders('支払い待ち', this)">支払い待ち</div>
-    <div class="tab-item" onclick="filterOrders('処理中', this)">処理中</div>
-    <div class="tab-item" onclick="filterOrders('処理済み', this)">処理済み</div>
+    <div class="tab-item" onclick="filterOrders('処理中', this)">輸送中</div>
   </div>
 </header>
 
@@ -139,13 +152,8 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90;border-
 
   <!-- 2. カート＆決済 -->
   <div id="sec-cart" class="tab-content" style="padding-bottom: 60px;">
-    <div class="checkout-header">
-      <span class="back-arrow" onclick="switchTab('shop')">❮</span> 
-      <div>注文確認</div>
-    </div>
-    
+    <div class="checkout-header"><span class="back-arrow" onclick="switchTab('shop')">❮</span><div>注文確認</div></div>
     <div id="cart-empty" style="text-align:center;padding:40px;color:#999;font-weight:bold;">カートに商品がありません。</div>
-
     <div id="cart-content" style="display:none;">
       <div class="checkout-section">
         <div style="font-weight:bold;margin-bottom:8px;">配送先住所</div>
@@ -153,52 +161,22 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90;border-
         <div style="color:#666;font-size:11px;line-height:1.4;">西町, 12-22 ダイヤモンドマンション613<br>横浜市 磯子区, 神奈川県, Japan, 2350007</div>
         <div class="mail-border"></div>
       </div>
-
       <div class="checkout-section" id="checkout-items"></div>
-
-      <!-- 支払い方法の詳細分岐 -->
+      
+      <!-- 支払い方法 (前回と同じ詳細分岐) -->
       <div class="checkout-section">
         <div style="font-weight:bold;font-size:14px;margin-bottom:8px;">支払い方法</div>
-        
-        <!-- カード -->
-        <div class="pay-method-row" onclick="selectPay('card')">
-          <div class="radio-circle selected" id="rad-card"></div>
-          <span style="font-weight:bold;font-size:13px;">💳 クレジットカード</span>
-        </div>
+        <div class="pay-method-row" onclick="selectPay('card')"><div class="radio-circle selected" id="rad-card"></div><span style="font-weight:bold;">💳 クレジットカード</span></div>
         <div id="pay-detail-card" class="pay-detail" style="display:block;">
-          <input type="text" placeholder="カード番号" class="pay-input">
-          <input type="text" placeholder="機嫌 (MM/YY)" class="pay-input">
-          <input type="text" placeholder="名前" class="pay-input">
-          <input type="text" placeholder="セキュリティコード" class="pay-input">
+          <input type="text" placeholder="カード番号" class="pay-input"><input type="text" placeholder="機嫌 (MM/YY)" class="pay-input">
+          <input type="text" placeholder="名前" class="pay-input"><input type="text" placeholder="セキュリティコード" class="pay-input">
         </div>
-
-        <!-- 現金 -->
-        <div class="pay-method-row" onclick="selectPay('cash')">
-          <div class="radio-circle" id="rad-cash"></div>
-          <span style="font-weight:bold;font-size:13px;">💴 現金書留</span>
-        </div>
-        <div id="pay-detail-cash" class="pay-detail">
-          <p style="color:var(--ali-red); font-weight:bold; font-size:12px;">以下の住所に封筒等で送金して下さい。</p>
-          <p style="font-size:12px; margin-top:6px; line-height:1.5;">〒235-0007<br>神奈川県横浜市磯子区西町12-22-613</p>
-        </div>
-
-        <!-- PayPay -->
-        <div class="pay-method-row" onclick="selectPay('paypay')">
-          <div class="radio-circle" id="rad-paypay"></div>
-          <span style="font-weight:bold;font-size:13px;">📱 PayPay</span>
-        </div>
-        <div id="pay-detail-paypay" class="pay-detail">
-          <p style="font-size:12px;">以下の電話番号に送金して下さい。</p>
-          <p style="font-weight:bold; font-size:16px; margin-top:6px; color:#333;">090-3680-9495</p>
-        </div>
-
-        <!-- 代引き（使用不可） -->
-        <div class="pay-method-row disabled">
-          <div class="radio-circle" style="background:#EEE;border-color:#CCC;"></div>
-          <span style="font-weight:bold;font-size:13px;color:#999;">📦 代引き (使用不可)</span>
-        </div>
+        <div class="pay-method-row" onclick="selectPay('cash')"><div class="radio-circle" id="rad-cash"></div><span style="font-weight:bold;">💴 現金書留</span></div>
+        <div id="pay-detail-cash" class="pay-detail"><p style="color:var(--ali-red); font-weight:bold;">以下の住所に封筒等で送金して下さい。</p><p style="margin-top:6px;">〒235-0007<br>神奈川県横浜市磯子区西町12-22-613</p></div>
+        <div class="pay-method-row" onclick="selectPay('paypay')"><div class="radio-circle" id="rad-paypay"></div><span style="font-weight:bold;">📱 PayPay</span></div>
+        <div id="pay-detail-paypay" class="pay-detail"><p>以下の電話番号に送金して下さい。</p><p style="font-weight:bold; font-size:16px; margin-top:6px;">090-3680-9495</p></div>
+        <div class="pay-method-row disabled"><div class="radio-circle" style="background:#EEE;"></div><span style="font-weight:bold;color:#999;">📦 代引き (使用不可)</span></div>
       </div>
-
       <div class="checkout-footer">
         <div style="font-weight:bold;font-size:14px;">合計: <span id="co-total-price">0円</span></div>
         <button class="btn-pay-now" onclick="executePayment()">今支払います</button>
@@ -206,23 +184,22 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90;border-
     </div>
   </div>
 
-  <!-- 3. 追跡センター -->
+  <!-- 3. 追跡リスト -->
   <div id="sec-track" class="tab-content">
     <div id="empty-notice" style="text-align:center;padding:40px;color:#999;font-weight:bold;">該当する注文はありません。</div>
     <div id="orders-list-container"></div>
   </div>
 
-  <!-- 4. カスタマーサポートチャット -->
+  <!-- 4. チャット -->
   <div id="sec-chat" class="tab-content">
     <div class="chat-window">
       <div id="chat-messages" class="chat-messages">
         <div class="bubble bot">🤖 チャットサポートへようこそ！商品の入金確認や、追跡の催促など何でもお申し付けください。</div>
       </div>
-      <!-- 追加：クイックアクションボタン -->
       <div class="chat-quick-actions">
-        <button class="btn-quick" onclick="sendQuickChat('発送催促')">発送催促</button>
-        <button class="btn-quick" onclick="sendQuickChat('返品返金')">返品返金</button>
-        <button class="btn-quick" onclick="sendQuickChat('キャンセル✖️')">キャンセル✖️</button>
+        <button class="btn-quick" style="padding:6px 14px;border-radius:15px;border:1px solid #DDD;background:#FFF;" onclick="sendQuickChat('発送催促')">発送催促</button>
+        <button class="btn-quick" style="padding:6px 14px;border-radius:15px;border:1px solid #DDD;background:#FFF;" onclick="sendQuickChat('返品返金')">返品返金</button>
+        <button class="btn-quick" style="padding:6px 14px;border-radius:15px;border:1px solid #DDD;background:#FFF;" onclick="sendQuickChat('キャンセル✖️')">キャンセル✖️</button>
       </div>
       <div class="chat-input-area">
         <input type="text" id="chat-input-text" class="chat-input" placeholder="メッセージを入力...">
@@ -232,14 +209,68 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90;border-
   </div>
 </div>
 
+<!-- ★ 新規追加：追跡詳細画面 (画像完全再現) ★ -->
+<div id="sec-track-detail">
+  <div class="td-header">
+    <span onclick="closeTrackDetail()" style="cursor:pointer;padding-right:10px;">❮ &nbsp;&nbsp;配送待ち</span>
+    <span style="font-size:18px;">🎧</span>
+  </div>
+  <div class="td-period">配達期間：7月22日-25日</div>
+  
+  <!-- タイムラインカード -->
+  <div class="td-card">
+    <div class="td-title">
+      <span style="font-size:16px;">⏱</span> 輸送中 <span id="td-track-code" style="color:#666;font-weight:normal;margin-left:4px;"></span>
+      <span style="margin-left:auto;" class="td-link">すべて ＞</span>
+    </div>
+    <div class="timeline" id="td-timeline-box">
+      <!-- JSで動的にタイムラインを生成 -->
+    </div>
+  </div>
+
+  <!-- 配送先住所カード -->
+  <div class="td-card">
+    <div class="td-title"><span style="font-size:16px;">🏠</span> 配送先住所</div>
+    <div class="td-address-text">
+      西町, 12-22 ダイヤモンドマンション613, 横浜市 磯子区, 神奈川県, Japan, 2350007<br>
+      しゃーる かん (シャミール かん) +81 08053536387
+    </div>
+  </div>
+
+  <!-- 配達確約カード -->
+  <div class="td-card">
+    <div class="td-title" style="color:var(--green-text);">配達確約：適用</div>
+    <div class="td-guarantee-text">2026/7/25以降に配達された場合は、当日から48時間後に150円クーポンを収集してください。</div>
+    <div class="td-progress">
+      <div class="td-step"><div class="td-dot done"></div><div class="td-step-date">2026/7/15</div><div class="td-step-label">支払い済</div></div>
+      <div class="td-step"><div class="td-coupon-icon">券</div><div class="td-step-date">2026/7/27</div><div class="td-step-label">150円</div></div>
+      <div class="td-step"><div class="td-dot"></div><div class="td-step-date">2026/8/14</div><div class="td-step-label">返金</div></div>
+    </div>
+  </div>
+
+  <!-- 領収書ダウンロード -->
+  <div class="td-receipt">
+    <div><span style="font-size:16px;margin-right:8px;">🧾</span> 領収書のダウンロード</div>
+    <div>＞</div>
+  </div>
+
+  <!-- 商品＆ストア情報 -->
+  <div class="td-card" style="margin-bottom:0;" id="td-product-box"></div>
+
+  <!-- 固定フッターボタン -->
+  <div class="td-footer">
+    <button class="td-btn td-btn-outline">ステータスを追跡する</button>
+    <button class="td-btn td-btn-red" onclick="alert('受取確認を送信しました！')">受取確認</button>
+  </div>
+</div>
+
 <!-- ボトムナビ -->
-<div class="bottom-nav">
+<div class="bottom-nav" id="main-bottom-nav">
   <button id="nav-item-shop" class="nav-item active" onclick="switchTab('shop')"><span style="font-size:18px;">🏠</span>カタログ</button>
   <button id="nav-item-track" class="nav-item" onclick="switchTab('track')"><span style="font-size:18px;">📦</span>注文・追跡</button>
   <button id="nav-item-chat" class="nav-item" onclick="switchTab('chat')"><span style="font-size:18px;">💬</span>チャット</button>
   <button id="nav-item-cart" class="nav-item" onclick="switchTab('cart')">
-    <span style="font-size:18px;">🛒</span>カート
-    <div id="cart-badge" class="cart-badge" style="display:none;">0</div>
+    <span style="font-size:18px;">🛒</span>カート<div id="cart-badge" class="cart-badge" style="display:none;">0</div>
   </button>
 </div>
 
@@ -250,45 +281,35 @@ const SHIPPING_FEE = 300;
 
 let catalogList = [];
 let cart = [];
-let orders = JSON.parse(localStorage.getItem('myOrdersV2')) || [];
+let orders = JSON.parse(localStorage.getItem('myOrdersV3')) || [];
 let trackingPool = [];
 let currentRegion = 'ALL';
 let currentTrackFilter = 'すべて';
 let selectedPay = 'card';
 
-async function initApp() {
-  await loadCatalog();
-  renderCatalog();
-  setupBgSync();
-}
+async function initApp() { await loadCatalog(); renderCatalog(); setupBgSync(); updateCartBadge(); }
 
 async function loadCatalog() {
   try {
-    const res = await fetch(SHEET_PROD_URL);
-    const text = await res.text();
-    const rows = text.split('\n').slice(1);
-    catalogList = rows.map((row, i) => {
+    const res = await fetch(SHEET_PROD_URL); const text = await res.text();
+    catalogList = text.split('\n').slice(1).map((row, i) => {
       if (!row.trim()) return null;
       const cols = row.split(',').map(c => c.replace(/^"(.*)"$/, '$1').trim());
-      return { id: i+1, wh: cols[0] ? cols[0].toUpperCase() : "CHINA", name: cols[1], price: parseInt(cols[2])||0, icon: cols[4]||"📦", store: "Choice Store" };
+      return { id: i+1, wh: cols[0] ? cols[0].toUpperCase() : "CHINA", name: cols[1], price: parseInt(cols[2])||0, icon: cols[4]||"📦" };
     }).filter(Boolean);
   } catch(e) {
-    catalogList = [
-      { id: 1, name: "ポータブルスピーカー", price: 395, icon: "🔊", store: "Choice Store", wh:"CHINA" }
-    ];
+    catalogList = [ { id:1, name:"ターボハンドヘルド小型ファン USB 充電ミニ屋外ポー...", price:395, icon:"🪭", wh:"CHINA" } ];
   }
 }
 
 function filterRegion(region, el) {
   currentRegion = region;
   document.querySelectorAll('#shop-tabs .tab-item').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  renderCatalog();
+  el.classList.add('active'); renderCatalog();
 }
 
 function renderCatalog() {
-  const grid = document.getElementById('catalog-grid');
-  grid.innerHTML = "";
+  const grid = document.getElementById('catalog-grid'); grid.innerHTML = "";
   catalogList.forEach(p => {
     if(currentRegion !== 'ALL' && p.wh !== currentRegion) return;
     grid.innerHTML += `
@@ -297,8 +318,7 @@ function renderCatalog() {
         <div style="font-weight:500;margin-top:6px;">${p.name}</div>
         <div class="price-line">¥${p.price.toLocaleString()}</div>
         <button class="btn-add-cart" onclick="addToCart(${p.id})">カートに追加</button>
-      </div>
-    `;
+      </div>`;
   });
 }
 
@@ -306,43 +326,26 @@ function addToCart(id) {
   const p = catalogList.find(x => x.id === id);
   cart.push({...p, qty: 1, cartId: new Date().getTime()});
   updateCartBadge();
-  const pop = document.getElementById('success-pop');
-  pop.style.display = 'block'; setTimeout(() => pop.style.display='none', 1000);
+  const pop = document.getElementById('success-pop'); pop.style.display = 'block'; setTimeout(() => pop.style.display='none', 1000);
 }
-
 function updateCartBadge() {
-  const b = document.getElementById('cart-badge');
-  const q = cart.reduce((s, i) => s + i.qty, 0);
+  const b = document.getElementById('cart-badge'); const q = cart.length;
   if(q > 0){ b.style.display='flex'; b.innerText=q; } else b.style.display='none';
 }
 
 function renderCart() {
-  const empty = document.getElementById('cart-empty');
-  const content = document.getElementById('cart-content');
+  const empty = document.getElementById('cart-empty'); const content = document.getElementById('cart-content');
   if(cart.length === 0) { empty.style.display='block'; content.style.display='none'; return; }
   empty.style.display='none'; content.style.display='block';
-  
   let html = "", sub = 0;
-  cart.forEach(item => {
-    sub += item.price;
-    html += `
-      <div class="co-prod-row">
-        <div class="co-img">${item.icon}</div>
-        <div>
-          <div style="font-weight:500;">${item.name}</div>
-          <div style="font-weight:900;font-size:14px;">${item.price}円</div>
-        </div>
-      </div>
-    `;
-  });
-  html += `<div class="shipping-info">発送: ${SHIPPING_FEE}円 (おまとめ配送)</div>`;
+  cart.forEach(item => { sub += item.price; html += `<div class="co-prod-row"><div class="co-img">${item.icon}</div><div><div style="font-weight:500;">${item.name}</div><div style="font-weight:900;font-size:14px;">${item.price}円</div></div></div>`; });
+  html += `<div style="border-top:1px dashed #EEE;padding-top:10px;font-size:11px;color:#555;">発送: ${SHIPPING_FEE}円</div>`;
   document.getElementById('checkout-items').innerHTML = html;
   document.getElementById('co-total-price').innerText = `${(sub + SHIPPING_FEE).toLocaleString()}円`;
 }
 
-// 支払い方法選択ロジック
 function selectPay(type) {
-  if (type === 'cod') return; // 代引きは無効化
+  if (type === 'cod') return;
   selectedPay = type;
   ['card', 'cash', 'paypay'].forEach(t => {
     document.getElementById(`rad-${t}`).className = (t === type) ? 'radio-circle selected' : 'radio-circle';
@@ -353,46 +356,17 @@ function selectPay(type) {
 function executePayment() {
   if(cart.length === 0) return;
   const sub = cart.reduce((s, i) => s + i.price, 0);
-  const newOrd = {
-    id: "AX-" + new Date().getTime(), tn: "発番待機中", items: [...cart], totalPrice: sub + SHIPPING_FEE,
-    step: 0, paymentStatus: 'waiting', prefixType: cart[0].wh === "JAPAN" ? "JP" : "LP"
-  };
-  orders.unshift(newOrd);
-  localStorage.setItem('myOrdersV2', JSON.stringify(orders));
-  cart = []; updateCartBadge();
-  switchTab('track'); renderOrders();
+  const newOrd = { id: "ORD-" + new Date().getTime(), tn: "発番待機中", items: [...cart], totalPrice: sub + SHIPPING_FEE, step: 0, prefixType: cart[0].wh === "JAPAN" ? "JP" : "LP" };
+  orders.unshift(newOrd); localStorage.setItem('myOrdersV3', JSON.stringify(orders));
+  cart = []; updateCartBadge(); switchTab('track'); renderOrders();
 }
 
-// チャットロジック
-function sendQuickChat(text) {
-  appendChat(text, 'user');
-  setTimeout(() => {
-    let reply = "ご連絡ありがとうございます。システムとスプレッドシートへの連携を確認いたします。";
-    if(text === '発送催促') reply = "かしこまりました。担当部署に至急発送するよう手配いたします。";
-    if(text === 'キャンセル✖️') reply = "キャンセルのリクエストを受け付けました。処理状況を確認いたします。";
-    appendChat(reply, 'bot');
-  }, 1000);
-}
-function sendManualChat() {
-  const input = document.getElementById('chat-input-text');
-  if(!input.value.trim()) return;
-  appendChat(input.value, 'user');
-  input.value = "";
-  setTimeout(() => appendChat("ご連絡ありがとうございます。確認いたします。", 'bot'), 1000);
-}
-function appendChat(text, type) {
-  const box = document.getElementById('chat-messages');
-  box.innerHTML += `<div class="bubble ${type}">${text}</div>`;
-  box.scrollTop = box.scrollHeight;
-}
-
-// 追跡同期
+// バックグラウンド追跡同期
 function setupBgSync() {
   setInterval(async () => {
     if(orders.length === 0) return;
     try {
-      const res = await fetch(SHEET_TRACK_URL + "&t=" + new Date().getTime());
-      const text = await res.text();
+      const res = await fetch(SHEET_TRACK_URL + "&t=" + new Date().getTime()); const text = await res.text();
       trackingPool = text.split('\n').slice(1).map(row => {
         const c = row.split(',').map(x => x.replace(/^"(.*)"$/, '$1').trim());
         return { code: c[0], step: parseInt(c[1]) || 0, colD: c[3] || "" };
@@ -404,49 +378,118 @@ function setupBgSync() {
           if(f) { ord.tn = f.code; updated = true; }
         } else {
           let m = trackingPool.find(p => p.code === ord.tn);
-          if(m) {
-            let n = m.colD.includes("支払い待ち") ? 'waiting' : 'paid';
-            if(ord.paymentStatus !== n || ord.step !== m.step) { ord.paymentStatus = n; ord.step = m.step; updated = true; }
-          }
+          if(m && ord.step !== m.step) { ord.step = m.step; updated = true; }
         }
       });
-      if(updated) { localStorage.setItem('myOrdersV2', JSON.stringify(orders)); if(document.getElementById('sec-track').classList.contains('active')) renderOrders(); }
+      if(updated) { localStorage.setItem('myOrdersV3', JSON.stringify(orders)); if(document.getElementById('sec-track').classList.contains('active')) renderOrders(); }
     } catch(e){}
-  }, 1000);
+  }, 2000);
 }
 
 function filterOrders(status, el) {
   currentTrackFilter = status;
   document.querySelectorAll('#track-tabs .tab-item').forEach(t => t.classList.remove('active'));
-  if(el) el.classList.add('active');
-  renderOrders();
+  if(el) el.classList.add('active'); renderOrders();
 }
 
 function renderOrders() {
-  const con = document.getElementById('orders-list-container');
-  con.innerHTML = "";
+  const con = document.getElementById('orders-list-container'); con.innerHTML = "";
   let f = orders.filter(o => {
-    if(currentTrackFilter === 'すべて') return true;
-    if(currentTrackFilter === '支払い待ち') return o.paymentStatus === 'waiting';
-    if(currentTrackFilter === '処理中') return o.paymentStatus === 'paid' && o.step < 10;
-    if(currentTrackFilter === '処理済み') return o.paymentStatus === 'paid' && o.step >= 10;
+    if(currentTrackFilter === '支払い待ち') return o.step === 0;
+    if(currentTrackFilter === '処理中') return o.step > 0;
     return true;
   });
   if(f.length === 0) { document.getElementById('empty-notice').style.display='block'; return; }
   document.getElementById('empty-notice').style.display='none';
 
   f.forEach(ord => {
-    let stat = ord.paymentStatus === 'waiting' ? "お支払いの確認をお待ちしています" : "お客様のお荷物は地元の空港に到着しました";
-    let html = `<div class="track-card"><div class="track-store-name">Choice Store</div>`;
-    ord.items.forEach(item => {
-      html += `<div class="track-item-row"><div class="track-item-img">${item.icon}</div><div><div class="track-item-title">${item.name}</div><div class="track-item-price">${item.price}円</div></div></div>`;
-    });
+    let stat = ord.step === 0 ? "お支払いの確認をお待ちしています" : (ord.step >= 3 ? "お客様のお荷物は地元の空港に到着しました" : "輸送中");
+    let html = `<div class="track-card" onclick="openTrackDetail('${ord.id}')"><div class="track-store-name"><span>Choice Store</span><span class="track-num-badge">追跡番号: ${ord.tn}</span></div>`;
+    ord.items.forEach(item => { html += `<div class="track-item-row"><div class="track-item-img">${item.icon}</div><div><div class="track-item-title">${item.name}</div><div class="track-item-price">${item.price}円</div></div></div>`; });
     html += `<div class="track-status-box"><div class="track-status-main">${stat}</div></div></div>`;
     con.innerHTML += html;
   });
 }
 
+// ★ 新機能：追跡詳細画面を開く・閉じる ★
+function openTrackDetail(orderId) {
+  const ord = orders.find(o => o.id === orderId);
+  if(!ord) return;
+  
+  // 追跡番号をセット
+  document.getElementById('td-track-code').innerText = `(${ord.tn})`;
+
+  // タイムラインの生成 (stepに応じて画像を再現)
+  const tlBox = document.getElementById('td-timeline-box');
+  let tlHtml = "";
+  if (ord.step >= 3) {
+    tlHtml += `<div class="tl-item active"><div class="tl-text">お客様のお荷物は地元の空港に到着しました</div><div class="tl-date">7月19日 10:14 日本時間</div></div>`;
+    tlHtml += `<div class="tl-item"><div class="tl-text">発送国/地域を出国しました。</div><div class="tl-date">7月19日 09:01 日本時間</div></div>`;
+  } else if (ord.step >= 1) {
+    tlHtml += `<div class="tl-item active"><div class="tl-text">発送国/地域を出国しました。</div><div class="tl-date">本日 09:01 日本時間</div></div>`;
+    tlHtml += `<div class="tl-item"><div class="tl-text">荷物は物流センターを出発しました</div><div class="tl-date">昨日 18:30 日本時間</div></div>`;
+  } else {
+    tlHtml += `<div class="tl-item active"><div class="tl-text">お支払いの確認をお待ちしています</div><div class="tl-date">--:--</div></div>`;
+  }
+  tlBox.innerHTML = tlHtml;
+
+  // 商品情報カードの生成
+  const prodBox = document.getElementById('td-product-box');
+  let p = ord.items[0]; // 代表1つ
+  prodBox.innerHTML = `
+    <div class="td-store-hdr">
+      <div class="td-store-name"><span style="background:var(--choice-yellow);padding:2px 4px;font-size:10px;border-radius:2px;margin-right:6px;">Choice</span>Shop1103753228 Store ＞</div>
+      <div class="td-contact">💬 販売者に連絡</div>
+    </div>
+    <div style="display:flex;gap:12px;">
+      <div style="width:60px;height:60px;background:#F9F9F9;display:flex;justify-content:center;align-items:center;font-size:28px;border-radius:6px;border:1px solid #EEE;">${p.icon}</div>
+      <div style="flex:1;">
+        <div style="font-size:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:4px;">${p.name}</div>
+        <div style="color:#888;font-size:11px;">T10 Blue Fan, China Mainland</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-weight:bold;"><span>${p.price}円</span><span>x${p.qty}</span></div>
+      </div>
+    </div>
+  `;
+
+  // 画面の切り替え
+  document.getElementById('main-header').style.display = 'none';
+  document.querySelector('.container').style.display = 'none';
+  document.getElementById('main-bottom-nav').style.display = 'none';
+  document.getElementById('sec-track-detail').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+function closeTrackDetail() {
+  document.getElementById('sec-track-detail').style.display = 'none';
+  document.getElementById('main-header').style.display = 'block';
+  document.querySelector('.container').style.display = 'block';
+  document.getElementById('main-bottom-nav').style.display = 'flex';
+}
+
+// チャット
+function sendQuickChat(text) {
+  appendChat(text, 'user');
+  setTimeout(() => {
+    let reply = "ご連絡ありがとうございます。システムと連携を確認いたします。";
+    if(text === '発送催促') reply = "かしこまりました。担当部署に至急発送するよう手配いたします。";
+    if(text === 'キャンセル✖️') reply = "キャンセルのリクエストを受け付けました。処理状況を確認いたします。";
+    appendChat(reply, 'bot');
+  }, 1000);
+}
+function sendManualChat() {
+  const input = document.getElementById('chat-input-text');
+  if(!input.value.trim()) return;
+  appendChat(input.value, 'user'); input.value = "";
+  setTimeout(() => appendChat("ご連絡ありがとうございます。確認いたします。", 'bot'), 1000);
+}
+function appendChat(text, type) {
+  const box = document.getElementById('chat-messages');
+  box.innerHTML += `<div class="bubble ${type}">${text}</div>`;
+  box.scrollTop = box.scrollHeight;
+}
+
 function switchTab(tab) {
+  if(document.getElementById('sec-track-detail').style.display === 'block') closeTrackDetail();
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   document.getElementById('shop-tabs').style.display = 'none';
