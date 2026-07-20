@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>安全产品出荷 - 修正版</title>
+<title>安全产品出荷</title>
 <style>
 :root{--ali-red:#FD384F;--ali-black:#191919;--bg-gray:#F2F2F7;--cainiao-blue:#0052CC;--success:#2E7D32;--ali-orange:#FF8800}
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px}
@@ -157,15 +157,15 @@ header{background:#FFF;padding:8px 12px;position:sticky;top:0;z-index:90;border-
 </div>
 
 <script>
-const SHEET_PROD_URL = "https://docs.google.com/spreadsheets/d/1LK09yYcLi63EW9-xhXIENfszwyFLC4Jmz_-tO69ab94/export?format=csv&gid=0";
-const SHEET_TRACK_URL = "https://docs.google.com/spreadsheets/d/1LK09yYcLi63EW9-xhXIENfszwyFLC4Jmz_-tO69ab94/export?format=csv&gid=0"; 
+const SHEET_PROD_URL = "https://docs.google.com/spreadsheets/d/178-dcD4xd0fUdEORnoC9haQrKmfGiKTaY0OxiOKBRrQ/export?format=csv&gid=0";
+const SHEET_TRACK_URL = "https://docs.google.com/spreadsheets/d/178-dcD4xd0fUdEORnoC9haQrKmfGiKTaY0OxiOKBRrQ/export?format=csv&gid=0"; 
 const FORMSPREE_URL = "https://formspree.io/f/xrenqbpg";
 const TRACK_BASE_URL = "https://sixyami1206-commitis.github.io/rabbitwj/";
 
 let products = { CHINA: [], JAPAN: [] }, cart = [], orders = [], currentWH = "CHINA";
 
-if (localStorage.getItem('ali_orders_v5')) {
-  try { orders = JSON.parse(localStorage.getItem('ali_orders_v5')); } catch(e) { orders = []; }
+if (localStorage.getItem('ali_orders_v6')) {
+  try { orders = JSON.parse(localStorage.getItem('ali_orders_v6')); } catch(e) { orders = []; }
 }
 
 function parseCSVRow(text) {
@@ -264,7 +264,7 @@ function updateCart(){
   document.getElementById('cart-total').innerText = `${total}円`;
 }
 
-// B欄が「空欄」の行を探し、その行のA欄の追跡コードを取得する処理
+// 該当する接頭辞（JP/LP/CJ）に適合する空きコードのみを厳密に取得する関数
 async function fetchAvailableTrackCode(hasJapan, hasChina) {
   try {
     const res = await fetch(SHEET_TRACK_URL + "&t=" + new Date().getTime());
@@ -278,13 +278,15 @@ async function fetchAvailableTrackCode(hasJapan, hasChina) {
     for (let row of rows) {
       if(!row.trim()) continue;
       let cols = parseCSVRow(row);
-      let aCode = cols[0] ? cols[0].trim() : ""; // A欄: 追跡コード
-      let bVal  = cols[1] ? cols[1].trim() : ""; // B欄: 使用状況（空欄なら未使用）
+      let aCode = cols[0] ? cols[0].trim() : ""; 
+      let bVal  = cols[1] ? cols[1].trim() : ""; 
 
-      // B欄が空欄、かつA欄コードが存在し指定の接頭辞に一致するもの
-      if (bVal === "" && aCode && aCode.startsWith(prefix)) {
+      // B欄が空欄かつ、指定された接頭辞（JP/LP/CJ）から始まるコードのみを判定
+      if (bVal === "" && aCode !== "" && aCode.startsWith(prefix)) {
         let isUsedInApp = orders.some(o => o.trackCode === aCode && !o.isCancelled);
-        if (!isUsedInApp) return aCode; // 未使用のA欄コードを割り当て
+        if (!isUsedInApp) {
+          return aCode;
+        }
       }
     }
   } catch (e) {
@@ -307,7 +309,6 @@ async function handleOrder(e){
   let hasJapan = cart.some(i => i.origin === "JAPAN");
   let hasChina = cart.some(i => i.origin === "CHINA");
 
-  // B欄空欄のA欄コードを検索
   let assignedCode = await fetchAvailableTrackCode(hasJapan, hasChina);
 
   let fd = new FormData();
@@ -333,20 +334,19 @@ async function handleOrder(e){
   };
 
   orders.push(newOrder);
-  localStorage.setItem('ali_orders_v5', JSON.stringify(orders));
+  localStorage.setItem('ali_orders_v6', JSON.stringify(orders));
 
   cart = []; updateCart();
   alert("注文データを送信し、確定しました！");
   switchTab('my');
 }
 
-// 500ms(0.5秒)ごとにB欄・C欄含め全状態を更新・レンダリングする関数
 async function checkAndRenderTrackers(){
   let container = document.getElementById('track-list');
   if(!orders.length){ container.innerHTML = `<div style="text-align:center;padding:40px;color:#999">注文履歴はありません。</div>`; return; }
 
   let cStatusMap = {};
-  let emptyACodes = []; // 空き（B欄が空欄）のA欄コードリスト
+  let emptyACodesWithPrefix = { JP: [], LP: [], CJ: [] };
 
   try {
     const res = await fetch(SHEET_TRACK_URL + "&t=" + new Date().getTime());
@@ -362,7 +362,11 @@ async function checkAndRenderTrackers(){
 
       if(aCode) {
         cStatusMap[aCode] = cVal;
-        if(bVal === "") emptyACodes.push(aCode);
+        if(bVal === "") {
+          if(aCode.startsWith("JP")) emptyACodesWithPrefix.JP.push(aCode);
+          else if(aCode.startsWith("LP")) emptyACodesWithPrefix.LP.push(aCode);
+          else if(aCode.startsWith("CJ")) emptyACodesWithPrefix.CJ.push(aCode);
+        }
       }
     });
   } catch(e){}
@@ -370,21 +374,19 @@ async function checkAndRenderTrackers(){
   const NOW = new Date().getTime();
   const TWO_DAYS_MS = 2 * 24 * 60 * 60 * 1000;
 
-  // 各注文の自動割り当て再割り出し ＆ 承認判定
   for (let ord of orders) {
-    // 割り当て待ちの場合、500ms周期で空きができたか再チェック
     if (!ord.trackCode && !ord.isCancelled) {
       let prefix = "CJ";
       if (ord.hasJapan && !ord.hasChina) prefix = "JP";
       if (!ord.hasJapan && ord.hasChina) prefix = "LP";
 
-      let freeCode = emptyACodes.find(code => code.startsWith(prefix) && !orders.some(o => o.trackCode === code && !o.isCancelled));
+      let freeCode = emptyACodesWithPrefix[prefix].find(code => !orders.some(o => o.trackCode === code && !o.isCancelled));
+
       if (freeCode) {
         ord.trackCode = freeCode;
       }
     }
 
-    // 承諾判定 (C欄が入力されている場合)
     if (ord.trackCode && cStatusMap[ord.trackCode]) {
       let cVal = cStatusMap[ord.trackCode];
       if (cVal !== "" && cVal !== "未" && cVal !== "保留") {
@@ -392,7 +394,6 @@ async function checkAndRenderTrackers(){
       }
     }
 
-    // 2日間未承諾の自動キャンセル判定
     if (!ord.isApproved && !ord.isCancelled && (NOW - ord.date > TWO_DAYS_MS)) {
       ord.isCancelled = true;
     }
@@ -440,7 +441,7 @@ async function checkAndRenderTrackers(){
       </div>`;
   }).join('');
 
-  localStorage.setItem('ali_orders_v5', JSON.stringify(orders));
+  localStorage.setItem('ali_orders_v6', JSON.stringify(orders));
 }
 
 /* チャット機能 */
@@ -495,7 +496,6 @@ function sendChatMessage() {
   }, 600);
 }
 
-// 500ms (0.5秒)ごとのリアルタイム自動監視・更新ループ
 setInterval(() => {
   if (document.getElementById('c-my').classList.contains('active')) {
     checkAndRenderTrackers();
