@@ -77,8 +77,10 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
 /* 追跡カード */
 .track-card { background: var(--card-bg); border-radius: var(--radius-lg); padding: 14px; margin-bottom: 10px; border: 1px solid #EBEBEB; box-shadow: var(--shadow-sm); }
 .track-card.cancelled { background: #FFF5F5; border-color: #FFCDD2; }
+.track-card.busy { background: #FFF9E6; border-color: #FFE082; }
 .status-badge { background: #E8F5E9; color: var(--success-green); padding: 4px 10px; border-radius: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; }
 .status-badge.wait { background: #FFF3E0; color: #E65100; }
+.status-badge.busy-badge { background: #FFF8E1; color: #D77F00; border: 1px solid #FFE082; }
 
 .btn-link { background: linear-gradient(135deg, #2B7FFF, #0052CC); color: #FFF; border-radius: 10px; padding: 10px; text-align: center; font-weight: 800; text-decoration: none; display: block; margin-top: 10px; box-shadow: 0 2px 8px rgba(0,82,204,0.25); }
 
@@ -214,7 +216,8 @@ const SHEET_PROD_URL = "https://docs.google.com/spreadsheets/d/1LK09yYcLi63EW9-x
 const SHEET_TRACK_URL = "https://docs.google.com/spreadsheets/d/178-dcD4xd0fUdEORnoC9haQrKmfGiKTaY0OxiOKBRrQ/export?format=csv&gid=0"; 
 
 const FORMSPREE_URL = "https://formspree.io/f/xrenqbpg";
-const TRACK_BASE_URL = "https://sixyami1206-commitis.github.io/rabbitwj/";
+// 正しい配送追跡サイトのURL
+const TRACK_BASE_URL = "https://sixyami1206-commits.github.io/rabbitwj/";
 
 let products = { CHINA: [], JAPAN: [] }, cart = [], orders = [], currentWH = "CHINA";
 
@@ -473,13 +476,18 @@ async function checkAndRenderTrackers(){
         </div>`;
     }
 
+    // ★追跡コードがない場合の「物流混雑メッセージ」表示★
     if (!ord.trackCode) {
       return `
-        <div class="track-card">
-          <div style="font-weight:bold;color:var(--ali-red);font-size:12px;">⚠️ 追跡番号割り当て待ち</div>
-          <div style="margin:6px 0;font-weight:bold;color:#E65100;">現在空き追跡番号を調整中です。🈳が出次第自動割り当てされます。</div>
-          <div class="status-badge wait">配達予定: 1週間〜2週間</div>
-          <div style="font-size:10px;color:#666;margin-top:6px;">品名: ${ord.items} | 決済: ${ord.pay}</div>
+        <div class="track-card busy">
+          <div style="font-weight:800;font-size:13px;margin-bottom:4px;">📦 ご注文商品: ${ord.items}</div>
+          <div style="color:#666;margin-bottom:6px;">お支払い金額: ${ord.total} (${ord.pay})</div>
+          <div class="status-badge busy-badge">⚠️ 物流混雑のため発行遅延中</div>
+          <div style="margin:8px 0;line-height:1.5;color:#D77F00;font-weight:700;background:#FFF;padding:8px;border-radius:8px;border:1px solid #FFE082;">
+            ただいま国際・国内物流センターの注文が大変混雑しております。<br>
+            空き追跡番号が確保され次第、システムにて自動的に割り当てが行われますので、今しばらくお待ちください。
+          </div>
+          <div style="font-size:10px;color:#888;">※お届け予定：1週間〜2週間前後</div>
         </div>`;
     }
 
