@@ -161,7 +161,7 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
             <option value="PayPal">PayPal</option>
           </select>
         </div>
-        <button type="submit" class="btn-buy" style="padding:12px;font-size:12px;border-radius:24px;margin-top:4px;">注文を確定して即時発送手配</button>
+        <button type="submit" class="btn-buy" style="padding:12px;font-size:12px;border-radius:24px;margin-top:4px;">注文を確定してGoogleフォームへ移行</button>
       </form>
     </div>
   </div>
@@ -215,8 +215,9 @@ const SHEET_PROD_URL = "https://docs.google.com/spreadsheets/d/1LK09yYcLi63EW9-x
 // 追跡コード専用スプレッドシート
 const SHEET_TRACK_URL = "https://docs.google.com/spreadsheets/d/178-dcD4xd0fUdEORnoC9haQrKmfGiKTaY0OxiOKBRrQ/export?format=csv&gid=0"; 
 
-const FORMSPREE_URL = "https://formspree.io/f/xrenqbpg";
-// 正しい配送追跡サイトのURL
+// 送信先GoogleフォームURL
+const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/1XSyiFJ1t51vr0Pq57_jaeyENxvSRKHmPXBioOf_Q7Og/viewform";
+// 配送追跡サイトのURL
 const TRACK_BASE_URL = "https://sixyami1206-commits.github.io/rabbitwj/";
 
 let products = { CHINA: [], JAPAN: [] }, cart = [], orders = [], currentWH = "CHINA";
@@ -382,17 +383,6 @@ async function handleOrder(e){
 
   let assignedCode = await fetchAvailableTrackCode(hasJapan, hasChina);
 
-  let fd = new FormData();
-  fd.append("追跡コード", assignedCode || "満員（割り当て待ち）");
-  fd.append("お名前", name);
-  fd.append("メールアドレス", email);
-  fd.append("お届け先住所", addr);
-  fd.append("お支払い方法", pay);
-  fd.append("注文商品", itemsStr);
-  fd.append("合計金額", total);
-
-  fetch(FORMSPREE_URL, { method: "POST", body: fd, headers: {'Accept': 'application/json'} });
-
   let newOrder = {
     id: "ORD-" + Date.now(),
     date: new Date().getTime(),
@@ -407,7 +397,11 @@ async function handleOrder(e){
   localStorage.setItem('ali_orders_v6', JSON.stringify(orders));
 
   cart = []; updateCart();
-  alert("ご注文を確定しました！注文・追跡タブにて状況をご確認いただけます。");
+  alert("ご注文データを保存しました。続けてGoogleフォーム送信画面へジャンプします。");
+  
+  // Googleフォームへ送信（別タブで開く）
+  window.open(GOOGLE_FORM_URL, '_blank');
+  
   switchTab('my');
 }
 
@@ -476,7 +470,6 @@ async function checkAndRenderTrackers(){
         </div>`;
     }
 
-    // ★追跡コードがない場合の「物流混雑メッセージ」表示★
     if (!ord.trackCode) {
       return `
         <div class="track-card busy">
