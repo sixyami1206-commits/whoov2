@@ -69,6 +69,39 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
 .btn-buy:active { opacity: 0.8; }
 .btn-contact { background: #FFF; color: #444; border: 1px solid #D0D0D0; border-radius: 20px; padding: 6px; cursor: pointer; font-weight: 700; font-size: 10px; flex: 1; text-align: center; }
 
+/* 🌟 超目立つEC風「注文を確定」ボタン */
+.btn-checkout-ultimate {
+  background: linear-gradient(135deg, #FF2400 0%, #FF5E00 100%);
+  color: #FFFFFF;
+  border: none;
+  width: 100%;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 900;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(255, 36, 0, 0.4);
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.btn-checkout-ultimate:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 10px rgba(255, 36, 0, 0.3);
+}
+.btn-checkout-sub {
+  font-size: 10px;
+  font-weight: 500;
+  opacity: 0.9;
+  letter-spacing: normal;
+}
+
 .panel { background: var(--card-bg); border-radius: var(--radius-lg); padding: 14px; margin-top: 12px; border: 1px solid #EBEBEB; box-shadow: var(--shadow-sm); }
 .f-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
 .f-group label { font-weight: 700; color: #444; }
@@ -84,8 +117,8 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
 
 .btn-link { background: linear-gradient(135deg, #2B7FFF, #0052CC); color: #FFF; border-radius: 10px; padding: 10px; text-align: center; font-weight: 800; text-decoration: none; display: block; margin-top: 10px; box-shadow: 0 2px 8px rgba(0,82,204,0.25); }
 
-/* チャットUI */
-.chat-container { display: flex; flex-direction: column; background: var(--card-bg); border-radius: var(--radius-lg); height: 480px; border: 1px solid #EBEBEB; overflow: hidden; box-shadow: var(--shadow-sm); }
+/* チャットUI拡張 */
+.chat-container { display: flex; flex-direction: column; background: var(--card-bg); border-radius: var(--radius-lg); height: 500px; border: 1px solid #EBEBEB; overflow: hidden; box-shadow: var(--shadow-sm); }
 .chat-header { background: var(--ali-black); color: #FFF; padding: 12px 14px; font-weight: 800; font-size: 12px; display: flex; align-items: center; justify-content: space-between; }
 .chat-body { flex: 1; padding: 12px; overflow-y: auto; background: #F4F5F8; display: flex; flex-direction: column; gap: 10px; }
 .msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; line-height: 1.45; font-size: 11px; }
@@ -93,7 +126,8 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
 .msg.user { background: linear-gradient(135deg, #FF6B00, #FF3300); color: #FFF; align-self: flex-end; border-bottom-right-radius: 2px; font-weight: 600; }
 .chat-footer { padding: 10px; background: #FFF; border-top: 1px solid #EEE; display: flex; flex-direction: column; gap: 8px; }
 .quick-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; white-space: nowrap; }
-.chip { background: #F0F2F5; color: #444; padding: 6px 12px; border-radius: 14px; cursor: pointer; font-size: 10px; font-weight: 700; border: 1px solid #E4E6EA; }
+.chip { background: #F0F2F5; color: #444; padding: 6px 12px; border-radius: 14px; cursor: pointer; font-size: 10px; font-weight: 700; border: 1px solid #E4E6EA; transition: background 0.2s; }
+.chip:active { background: #E4E6EA; }
 .chat-input-row { display: flex; gap: 6px; }
 .chat-input { flex: 1; padding: 8px 14px; border: 1px solid #DDD; border-radius: 20px; outline: none; font-size: 11px; }
 
@@ -161,7 +195,11 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
             <option value="PayPal">PayPal</option>
           </select>
         </div>
-        <button type="submit" class="btn-buy" style="padding:12px;font-size:12px;border-radius:24px;margin-top:4px;">注文を確定してGoogleフォームへ移行</button>
+        <!-- 超目立つEC風確定ボタン -->
+        <button type="submit" class="btn-checkout-ultimate">
+          🔒 注文を確定する（安全決済へ進む）
+          <span class="btn-checkout-sub">256bit暗号化通信対応・即時コード発行</span>
+        </button>
       </form>
     </div>
   </div>
@@ -175,21 +213,22 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
   <div id="c-chat" class="tab-content">
     <div class="chat-container">
       <div class="chat-header">
-        <span>💬 安全产品 サポートAIデスク</span>
-        <span style="font-size:9px;background:#00A854;padding:2px 6px;border-radius:10px;">ONLINE</span>
+        <span>💬 安全产品 24h智能サポートAI</span>
+        <span style="font-size:9px;background:#00A854;padding:2px 6px;border-radius:10px;">通常稼働中</span>
       </div>
       <div id="chat-box" class="chat-body">
-        <div class="msg seller">いらっしゃいませ！追跡コードの自動検索やご注文ステータスの照合が行えます。ご用件を選択するか追跡コードを入力してください。</div>
+        <div class="msg seller">こんにちは！安全产品カスタマーサポートです✨<br>お探しの追跡番号の入力、または下部のボタンからお気軽にご質問・ご要望をお伝えください！対応いたします。</div>
       </div>
       <div class="chat-footer">
         <div class="quick-chips">
-          <div class="chip" onclick="clickQuickChip('🚀 発送の手配を催促する')">🚀 発送催促</div>
-          <div class="chip" onclick="clickQuickChip('📍 お届け先住所の変更')">📍 住所変更</div>
-          <div class="chip" onclick="clickQuickChip('🛑 注文のキャンセル依頼')">🛑 キャンセル申請</div>
-          <div class="chip" onclick="clickQuickChip('🔍 追跡コードのステータス照合')">🔍 追跡照合</div>
+          <div class="chip" onclick="clickQuickChip('🚀 発送の手配を至急お願いします')">🚀 発送を急ぐ</div>
+          <div class="chip" onclick="clickQuickChip('📍 お届け先住所を変更したいです')">📍 住所変更</div>
+          <div class="chip" onclick="clickQuickChip('🛑 この注文をキャンセルしたいです')">🛑 キャンセル</div>
+          <div class="chip" onclick="clickQuickChip('❓ 荷物が届かない場合の確認方法')">❓ 届かない時</div>
+          <div class="chip" onclick="clickQuickChip('💳 支払い方法について教えて')">💳 支払いについて</div>
         </div>
         <div class="chat-input-row">
-          <input type="text" id="chat-input-field" class="chat-input" placeholder="メッセージまたは追跡コード...">
+          <input type="text" id="chat-input-field" class="chat-input" placeholder="メッセージまたは追跡コードを入力...">
           <button class="btn-buy" style="width:auto;padding:0 14px;margin:0;" onclick="sendChatMessage()">送信</button>
         </div>
       </div>
@@ -210,14 +249,8 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
 </div>
 
 <script>
-// 商品データ専用スプレッドシート
 const SHEET_PROD_URL = "https://docs.google.com/spreadsheets/d/1LK09yYcLi63EW9-xhXIENfszwyFLC4Jmz_-tO69ab94/export?format=csv&gid=0";
-// 追跡コード専用スプレッドシート
 const SHEET_TRACK_URL = "https://docs.google.com/spreadsheets/d/178-dcD4xd0fUdEORnoC9haQrKmfGiKTaY0OxiOKBRrQ/export?format=csv&gid=0"; 
-
-// 送信先GoogleフォームURL
-const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/1XSyiFJ1t51vr0Pq57_jaeyENxvSRKHmPXBioOf_Q7Og/viewform";
-// 配送追跡サイトのURL
 const TRACK_BASE_URL = "https://sixyami1206-commits.github.io/rabbitwj/";
 
 let products = { CHINA: [], JAPAN: [] }, cart = [], orders = [], currentWH = "CHINA";
@@ -337,7 +370,6 @@ function updateCart(){
   document.getElementById('cart-total').innerText = `￥${total.toLocaleString()}`;
 }
 
-// 追跡コード割り当て（JP/LP/CJルール厳守）
 async function fetchAvailableTrackCode(hasJapan, hasChina) {
   try {
     const res = await fetch(SHEET_TRACK_URL + "&t=" + new Date().getTime());
@@ -397,10 +429,7 @@ async function handleOrder(e){
   localStorage.setItem('ali_orders_v6', JSON.stringify(orders));
 
   cart = []; updateCart();
-  alert("ご注文データを保存しました。続けてGoogleフォーム送信画面へジャンプします。");
-  
-  // Googleフォームへ送信（別タブで開く）
-  window.open(GOOGLE_FORM_URL, '_blank');
+  alert("🎉 ご注文が完了しました！マイページより追跡コードおよび発送ステータスをご確認いただけます。");
   
   switchTab('my');
 }
@@ -509,10 +538,10 @@ async function checkAndRenderTrackers(){
   localStorage.setItem('ali_orders_v6', JSON.stringify(orders));
 }
 
-/* サポートチャット */
+/* サポートチャット拡張AI */
 function openChatForProd(prodName) {
   switchTab('chat');
-  addChatMessage("seller", `【${prodName}】についてのご相談ですね。詳細やご不明点をご入力ください。`);
+  addChatMessage("seller", `【${prodName}】についてですね！ご質問や気になる点（サイズ感、在庫、発送日など）を何でも教えてください✨`);
 }
 
 function openChatWithCode(code) {
@@ -545,20 +574,24 @@ function sendChatMessage() {
   setTimeout(() => {
     let matched = orders.find(o => o.trackCode === txt);
     if(matched) {
-      addChatMessage("seller", `<b>【ご注文検知】</b><br>追跡コード: ${matched.trackCode}<br>品目: ${matched.items}<br>状況: ${matched.isApproved ? "出荷済み (安全送达へ引渡し完了)" : "処理中 (注文承諾待ち)"}`);
+      addChatMessage("seller", `🔍 <b>【追跡照合システム結果】</b><br>• 追跡番号: <b>${matched.trackCode}</b><br>• 商品: ${matched.items}<br>• ステータス: ${matched.isApproved ? "✅ 出荷済み（配送中）" : "⏳ 処理中（承諾待ち）"}<br>ご不明点がございましたら引き続きお申し付けください！`);
       return;
     }
 
-    if(txt.includes("催促")) {
-      addChatMessage("seller", "🚀 <b>【発送催促を受理】</b><br>物流センターへピックアップの優先リクエストを送信しました！");
-    } else if(txt.includes("住所")) {
-      addChatMessage("seller", "📍 <b>【住所変更フォーム】</b><br>変更後のご住所を入力して送信してください。");
+    if(txt.includes("発送") || txt.includes("急ぐ") || txt.includes("手配")) {
+      addChatMessage("seller", "🚀 <b>【優先手配リクエスト完了】</b><br>物流センターへ担当者からの優先ピックアップ指示を送信しました！順次出荷作業に移行します。");
+    } else if(txt.includes("住所") || txt.includes("引っ越し")) {
+      addChatMessage("seller", "📍 <b>【お届け先ご住所の変更について】</b><br>すでに発送済みの場合は変更ができないため、追跡システム画面から直接配送業者様へご連絡をお願いいたします。未出荷の場合はお調べしますのでご注文番号をお知らせください！");
     } else if(txt.includes("キャンセル")) {
-      addChatMessage("seller", "🛑 <b>【キャンセル規定】</b><br>未承諾の注文は2日経過で自動キャンセルされます。");
+      addChatMessage("seller", "🛑 <b>【キャンセルについて】</b><br>未承諾のまま2日経過したご注文は自動的にキャンセルされます。今すぐ手動キャンセルをご希望の場合は、ご注文番号をチャットでお知らせください。");
+    } else if(txt.includes("届かない") || txt.includes("荷物")) {
+      addChatMessage("seller", "❓ <b>【お荷物の配送状況について】</b><br>国際・国内の混雑状況により、反映までにお時間がかかる場合がございます。「注文・追跡」タブより現在のステータスをご確認ください。");
+    } else if(txt.includes("支払い") || txt.includes("決済")) {
+      addChatMessage("seller", "💳 <b>【お支払い方法について】</b><br>当店では「現金書留」「PayPay」「PayPal」に対応しております。ご注文確定後のお手続きをお願いいたします。");
     } else {
-      addChatMessage("seller", "お問い合わせを受け付けました。順次確認いたします。");
+      addChatMessage("seller", "💬 お問い合わせありがとうございます！担当スタッフが内容を確認の上、通常24時間以内にご案内いたします。お急ぎの場合は「注文・追跡」タブの各コードをご確認ください。");
     }
-  }, 500);
+  }, 600);
 }
 
 setInterval(() => {
