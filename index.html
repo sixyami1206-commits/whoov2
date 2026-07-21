@@ -70,7 +70,7 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
 .btn-buy:active { opacity: 0.8; }
 .btn-contact { background: #FFF; color: #444; border: 1px solid #D0D0D0; border-radius: 20px; padding: 6px; cursor: pointer; font-weight: 700; font-size: 10px; flex: 1; text-align: center; }
 
-/* 🌟 超目立つEC風「注文を確定」ボタン */
+/* 超目立つEC風「注文を確定」ボタン */
 .btn-checkout-ultimate {
   background: linear-gradient(135deg, #FF2400 0%, #FF5E00 100%);
   color: #FFFFFF;
@@ -212,7 +212,6 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
             <option value="PayPal">PayPal</option>
           </select>
         </div>
-        <!-- 超目立つEC風確定ボタン -->
         <button type="submit" id="submit-btn" class="btn-checkout-ultimate">
           🔒 注文を確定する（安全決済へ進む）
           <span class="btn-checkout-sub">256bit暗号化通信対応・即時コード発行</span>
@@ -238,11 +237,10 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
       </div>
       <div class="chat-footer">
         <div class="quick-chips">
-          <div class="chip" onclick="clickQuickChip('🚀 発送の手配を至急お願いします')">🚀 発送を急ぐ</div>
+          <div class="chip" onclick="clickQuickChip('🚀 発送の手配を至急お願いします')">🚀 発送を急ぐ（催促）</div>
+          <div class="chip" onclick="clickQuickChip('🛑 この注文をキャンセルしたいです（追跡番号あり）')">🛑 キャンセル申請</div>
           <div class="chip" onclick="clickQuickChip('📍 お届け先住所を変更したいです')">📍 住所変更</div>
-          <div class="chip" onclick="clickQuickChip('🛑 この注文をキャンセルしたいです')">🛑 キャンセル</div>
           <div class="chip" onclick="clickQuickChip('❓ 荷物が届かない場合の確認方法')">❓ 届かない時</div>
-          <div class="chip" onclick="clickQuickChip('💳 支払い方法について教えて')">💳 支払いについて</div>
         </div>
         <div class="chat-input-row">
           <input type="text" id="chat-input-field" class="chat-input" placeholder="メッセージまたは追跡コードを入力...">
@@ -273,8 +271,8 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/152898395321244070
 
 let products = { CHINA: [], JAPAN: [] }, cart = [], orders = [], currentWH = "CHINA";
 
-if (localStorage.getItem('ali_orders_v6')) {
-  try { orders = JSON.parse(localStorage.getItem('ali_orders_v6')); } catch(e) { orders = []; }
+if (localStorage.getItem('ali_orders_v7')) {
+  try { orders = JSON.parse(localStorage.getItem('ali_orders_v7')); } catch(e) { orders = []; }
 }
 
 function parseCSVRow(text) {
@@ -344,18 +342,11 @@ function renderProducts(){
   if(!list.length) { grid.innerHTML = `<div style="grid-column:1/3;text-align:center;color:#999;padding:30px;">該当する商品が見つかりません</div>`; return; }
 
   grid.innerHTML = list.map(p => {
-    // 画像URLか絵文字かを判定
-    let imageHTML = p.icon.startsWith('http') 
-      ? `<img src="${p.icon}" alt="${p.name}">` 
-      : p.icon;
-
+    let imageHTML = p.icon.startsWith('http') ? `<img src="${p.icon}" alt="${p.name}">` : p.icon;
     return `
     <div class="p-card">
       <div>
-        <div class="img-box">
-          ${imageHTML}
-          <div class="tag-discount">HOT</div>
-        </div>
+        <div class="img-box">${imageHTML}<div class="tag-discount">HOT</div></div>
         <div class="p-title">${p.name}</div>
         <div class="p-rating">★★★★★ <span>4.9 (120+)</span></div>
         <select id="opt-${p.id}" class="opt-select">${p.opt.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>
@@ -426,26 +417,17 @@ async function fetchAvailableTrackCode(hasJapan, hasChina) {
   return null;
 }
 
-// 🌟 Discordに注文通知を送る関数
-async function sendDiscordNotification(order) {
+// 🌟 Discord通知汎用関数
+async function sendDiscordNotification(title, color, fields) {
   try {
     const payload = {
       embeds: [{
-        title: "🚨 【新規注文が入りました！】",
-        color: 16723783, // アリレッド (#FF4747)
-        fields: [
-          { name: "👤 注文者名", value: order.name, inline: true },
-          { name: "📧 メール", value: order.email, inline: true },
-          { name: "💳 支払方法", value: order.pay, inline: true },
-          { name: "📍 配送先住所", value: order.addr },
-          { name: "📦 注文商品", value: order.items },
-          { name: "💰 合計金額", value: order.total, inline: true },
-          { name: "🚚 割り当て追跡コード", value: order.trackCode || "割り当て遅延中/無し", inline: true }
-        ],
+        title: title,
+        color: color,
+        fields: fields,
         timestamp: new Date().toISOString()
       }]
     };
-
     await fetch(DISCORD_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -487,10 +469,25 @@ async function handleOrder(e){
   };
 
   orders.push(newOrder);
-  localStorage.setItem('ali_orders_v6', JSON.stringify(orders));
+  localStorage.setItem('ali_orders_v7', JSON.stringify(orders));
 
-  // Discordへ通知送信！
-  await sendDiscordNotification(newOrder);
+  // 新規注文通知
+  await sendDiscordNotification("🚨 【新規注文が入りました！】", 16723783, [
+    { name: "👤 注文者名", value: name, inline: true },
+    { name: "💳 支払方法", value: pay, inline: true },
+    { name: "📦 注文商品", value: itemsStr },
+    { name: "💰 合計金額", value: total, inline: true },
+    { name: "🚚 割り当て追跡コード", value: assignedCode || "割り当て遅延中", inline: true }
+  ]);
+
+  // もし最初からコードが割り当てられたら通知
+  if(assignedCode) {
+    await sendDiscordNotification("📦 【追跡コード割り当て通知】", 3066993, [
+      { name: "👤 注文者名", value: name, inline: true },
+      { name: "🚚 追跡コード", value: assignedCode, inline: true },
+      { name: "📦 商品", value: itemsStr }
+    ]);
+  }
 
   cart = []; updateCart();
   btn.disabled = false;
@@ -540,12 +537,22 @@ async function checkAndRenderTrackers(){
       if (!ord.hasJapan && ord.hasChina) prefix = "LP";
 
       let freeCode = emptyACodesWithPrefix[prefix].find(code => !orders.some(o => o.trackCode === code && !o.isCancelled));
-      if (freeCode) ord.trackCode = freeCode;
+      if (freeCode) {
+        ord.trackCode = freeCode;
+        // 追跡コード割り当て時Discord通知
+        await sendDiscordNotification("📦 【追跡コード割り当て通知】", 3066993, [
+          { name: "👤 注文者名", value: ord.name, inline: true },
+          { name: "🚚 追跡コード", value: freeCode, inline: true },
+          { name: "📦 商品", value: ord.items }
+        ]);
+      }
     }
 
     if (ord.trackCode && cStatusMap[ord.trackCode]) {
       let cVal = cStatusMap[ord.trackCode];
-      if (cVal !== "" && cVal !== "未" && cVal !== "保留") {
+      if (cVal === "キャンセル済み") {
+        ord.isCancelled = true;
+      } else if (cVal !== "" && cVal !== "未" && cVal !== "保留") {
         ord.isApproved = true;
       }
     }
@@ -559,8 +566,8 @@ async function checkAndRenderTrackers(){
     if (ord.isCancelled) {
       return `
         <div class="track-card cancelled">
-          <div style="font-weight:bold;color:#C62828;font-size:12px;">🛑 注文自動キャンセル</div>
-          <div style="color:#666;margin-top:4px;">2日以内に「注文承諾」が完了しなかったため、自動的にキャンセル手続きが行われました。</div>
+          <div style="font-weight:bold;color:#C62828;font-size:12px;">🛑 キャンセル済み（または自動キャンセル）</div>
+          <div style="color:#666;margin-top:4px;">この注文はキャンセル処理が完了しました。</div>
           <div style="font-size:10px;color:#888;margin-top:6px;">注文品: ${ord.items}</div>
         </div>`;
     }
@@ -572,29 +579,23 @@ async function checkAndRenderTrackers(){
           <div style="color:#666;margin-bottom:6px;">お支払い金額: ${ord.total} (${ord.pay})</div>
           <div class="status-badge busy-badge">⚠️ 物流混雑のため発行遅延中</div>
           <div style="margin:8px 0;line-height:1.5;color:#D77F00;font-weight:700;background:#FFF;padding:8px;border-radius:8px;border:1px solid #FFE082;">
-            ただいま国際・国内物流センターの注文が大変混雑しております。<br>
-            空き追跡番号が確保され次第、システムにて自動的に割り当てが行われますので、今しばらくお待ちください。
+            ただいま空き追跡番号を確保中です。しばらくお待ちください。
           </div>
-          <div style="font-size:10px;color:#888;">※お届け予定：1週間〜2週間前後</div>
         </div>`;
     }
 
     let statusHTML = ord.isApproved ? `
       <div class="status-badge">✅ 注文承諾完了・出荷済み</div>
       <div style="margin-top:8px;font-size:11px;color:#333;line-height:1.5;">
-        配送事業者：<b>安全送达 GLOBAL</b><br>
         追跡コード：<b style="color:var(--cainiao-blue);font-size:12px;">${ord.trackCode}</b>
       </div>
       <a href="${TRACK_BASE_URL}" target="_blank" class="btn-link">🚚 配送追跡システムで荷物を追跡</a>
-      
-      <!-- 🌟 配達完了で注文をクローズ（消去）するボタン -->
       <button class="btn-close-order" onclick="closeOrder('${ord.id}')">
         📦 配達済みなったら注文はクローズします（注文を消去）
       </button>
     ` : `
       <div class="status-badge wait">注文データ送信済み（承諾待ち）</div>
       <div style="margin-top:6px;color:#444;font-size:11px;">割り当てコード: <b>${ord.trackCode}</b></div>
-      <div style="color:#888;font-size:9px;margin-top:2px;">※2日以内に承諾されない場合は自動キャンセルとなります。</div>
     `;
 
     return `
@@ -606,23 +607,21 @@ async function checkAndRenderTrackers(){
       </div>`;
   }).join('');
 
-  localStorage.setItem('ali_orders_v6', JSON.stringify(orders));
+  localStorage.setItem('ali_orders_v7', JSON.stringify(orders));
 }
 
-// 🌟 注文クローズ処理
 function closeOrder(orderId) {
   if (confirm("配達が完了しましたか？\nこの注文データをクローズして削除します。")) {
     orders = orders.filter(o => o.id !== orderId);
-    localStorage.setItem('ali_orders_v6', JSON.stringify(orders));
+    localStorage.setItem('ali_orders_v7', JSON.stringify(orders));
     alert("注文をクローズしました。");
     checkAndRenderTrackers();
   }
 }
 
-/* サポートチャット拡張AI */
 function openChatForProd(prodName) {
   switchTab('chat');
-  addChatMessage("seller", `【${prodName}】についてですね！ご質問や気になる点（サイズ感、在庫、発送日など）を何でも教えてください✨`);
+  addChatMessage("seller", `【${prodName}】についてですね！ご質問や気になる点を何でも教えてください✨`);
 }
 
 function openChatWithCode(code) {
@@ -645,32 +644,33 @@ function addChatMessage(sender, text) {
   box.scrollTop = box.scrollHeight;
 }
 
-function sendChatMessage() {
+async function sendChatMessage() {
   let input = document.getElementById('chat-input-field');
   let txt = input.value.trim();
   if(!txt) return;
   addChatMessage("user", txt);
   input.value = "";
 
-  setTimeout(() => {
-    let matched = orders.find(o => o.trackCode === txt);
-    if(matched) {
-      addChatMessage("seller", `🔍 <b>【追跡照合システム結果】</b><br>• 追跡番号: <b>${matched.trackCode}</b><br>• 商品: ${matched.items}<br>• ステータス: ${matched.isApproved ? "✅ 出荷済み（配送中）" : "⏳ 処理中（承諾待ち）"}<br>ご不明点がございましたら引き続きお申し付けください！`);
-      return;
-    }
+  setTimeout(async () => {
+    let matched = orders.find(o => o.trackCode === txt || txt.includes(o.trackCode));
+    let codeStr = matched ? matched.trackCode : "未指定/不明";
 
     if(txt.includes("発送") || txt.includes("急ぐ") || txt.includes("手配")) {
-      addChatMessage("seller", "🚀 <b>【優先手配リクエスト完了】</b><br>物流センターへ担当者からの優先ピックアップ指示を送信しました！順次出荷作業に移行します。");
-    } else if(txt.includes("住所") || txt.includes("引っ越し")) {
-      addChatMessage("seller", "📍 <b>【お届け先ご住所の変更について】</b><br>すでに発送済みの場合は変更ができないため、追跡システム画面から直接配送業者様へご連絡をお願いいたします。未出荷の場合はお調べしますのでご注文番号をお知らせください！");
-    } else if(txt.includes("キャンセル")) {
-      addChatMessage("seller", "🛑 <b>【キャンセルについて】</b><br>未承諾のまま2日経過したご注文は自動的にキャンセルされます。今すぐ手動キャンセルをご希望の場合は、ご注文番号をチャットでお知らせください。");
-    } else if(txt.includes("届かない") || txt.includes("荷物")) {
-      addChatMessage("seller", "❓ <b>【お荷物の配送状況について】</b><br>国際・国内の混雑状況により、反映までにお時間がかかる場合がございます。「注文・追跡」タブより現在のステータスをご確認ください。");
-    } else if(txt.includes("支払い") || txt.includes("決済")) {
-      addChatMessage("seller", "💳 <b>【お支払い方法について】</b><br>当店では「現金書留」「PayPay」「PayPal」に対応しております。ご注文確定後のお手続きをお願いいたします。");
+      addChatMessage("seller", "🚀 倉庫に発送催促済み");
+      await sendDiscordNotification("🚀 【発送催促の連絡】", 15105570, [
+        { name: "👤 顧客からの要求", value: "発送の催促が行われました。" },
+        { name: "📦 対象追跡番号", value: codeStr }
+      ]);
+    } else if(txt.includes("キャンセル") || txt.includes("取り消し")) {
+      addChatMessage("seller", "🛑 出品者にキャンセル申請しました。キャンセル成功した場合手続きに入ります。");
+      await sendDiscordNotification("🛑 【キャンセル申請の連絡】", 10038562, [
+        { name: "👤 顧客からの要求", value: "キャンセル申請が行われました。スプレッドシートの「C」欄を確認してください。" },
+        { name: "📦 対象追跡番号", value: codeStr }
+      ]);
+    } else if(matched) {
+      addChatMessage("seller", `🔍 <b>【追跡照合】</b><br>• 追跡番号: <b>${matched.trackCode}</b><br>• ステータス: ${matched.isApproved ? "✅ 出荷済み" : "⏳ 承諾待ち"}`);
     } else {
-      addChatMessage("seller", "💬 お問い合わせありがとうございます！担当スタッフが内容を確認の上、通常24時間以内にご案内いたします。お急ぎの場合は「注文・追跡」タブの各コードをご確認ください。");
+      addChatMessage("seller", "💬 お問い合わせありがとうございます！ご用件を承りました。キャンセルや催促の場合は専用のボタンや追跡番号と一緒にお知らせください。");
     }
   }, 600);
 }
