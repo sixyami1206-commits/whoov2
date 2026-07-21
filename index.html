@@ -70,7 +70,7 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
 .btn-buy:active { opacity: 0.8; }
 .btn-contact { background: #FFF; color: #444; border: 1px solid #D0D0D0; border-radius: 20px; padding: 6px; cursor: pointer; font-weight: 700; font-size: 10px; flex: 1; text-align: center; }
 
-/* 超目立つEC風「注文を確定」ボタン */
+/* EC風決定ボタン */
 .btn-checkout-ultimate {
   background: linear-gradient(135deg, #FF2400 0%, #FF5E00 100%);
   color: #FFFFFF;
@@ -92,16 +92,8 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
   justify-content: center;
   gap: 2px;
 }
-.btn-checkout-ultimate:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 10px rgba(255, 36, 0, 0.3);
-}
-.btn-checkout-sub {
-  font-size: 10px;
-  font-weight: 500;
-  opacity: 0.9;
-  letter-spacing: normal;
-}
+.btn-checkout-ultimate:active { transform: scale(0.97); }
+.btn-checkout-sub { font-size: 10px; font-weight: 500; opacity: 0.9; }
 
 .panel { background: var(--card-bg); border-radius: var(--radius-lg); padding: 14px; margin-top: 12px; border: 1px solid #EBEBEB; box-shadow: var(--shadow-sm); }
 .f-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
@@ -115,6 +107,30 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
 .status-badge { background: #E8F5E9; color: var(--success-green); padding: 4px 10px; border-radius: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; }
 .status-badge.wait { background: #FFF3E0; color: #E65100; }
 .status-badge.busy-badge { background: #FFF8E1; color: #D77F00; border: 1px solid #FFE082; }
+
+.delivery-estimate {
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: #F4F6F8;
+  border-radius: 6px;
+  font-size: 10px;
+  color: #555;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.action-status-memo {
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: #F0F7FF;
+  border-left: 3px solid #0052CC;
+  border-radius: 4px;
+  font-weight: 700;
+  color: #0052CC;
+  font-size: 10px;
+}
 
 .btn-link { background: linear-gradient(135deg, #2B7FFF, #0052CC); color: #FFF; border-radius: 10px; padding: 10px; text-align: center; font-weight: 800; text-decoration: none; display: block; margin-top: 10px; box-shadow: 0 2px 8px rgba(0,82,204,0.25); }
 
@@ -134,7 +150,7 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
 }
 .btn-close-order:active { background: #444; }
 
-/* チャットUI拡張 */
+/* チャットUI */
 .chat-container { display: flex; flex-direction: column; background: var(--card-bg); border-radius: var(--radius-lg); height: 500px; border: 1px solid #EBEBEB; overflow: hidden; box-shadow: var(--shadow-sm); }
 .chat-header { background: var(--ali-black); color: #FFF; padding: 12px 14px; font-weight: 800; font-size: 12px; display: flex; align-items: center; justify-content: space-between; }
 .chat-body { flex: 1; padding: 12px; overflow-y: auto; background: #F4F5F8; display: flex; flex-direction: column; gap: 10px; }
@@ -143,13 +159,10 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
 .msg.user { background: linear-gradient(135deg, #FF6B00, #FF3300); color: #FFF; align-self: flex-end; border-bottom-right-radius: 2px; font-weight: 600; }
 .chat-footer { padding: 10px; background: #FFF; border-top: 1px solid #EEE; display: flex; flex-direction: column; gap: 8px; }
 .quick-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; white-space: nowrap; }
-.chip { background: #F0F2F5; color: #444; padding: 6px 12px; border-radius: 14px; cursor: pointer; font-size: 10px; font-weight: 700; border: 1px solid #E4E6EA; transition: background 0.2s; }
-.chip:active { background: #E4E6EA; }
-.chat-input-row { display: flex; gap: 6px; }
-.chat-input { flex: 1; padding: 8px 14px; border: 1px solid #DDD; border-radius: 20px; outline: none; font-size: 11px; }
+.chip { background: #F0F2F5; color: #444; padding: 6px 12px; border-radius: 14px; cursor: pointer; font-size: 10px; font-weight: 700; border: 1px solid #E4E6EA; }
 
 /* ボトムナビ */
-.bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 440px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-top: 1px solid #EAEAEA; display: flex; justify-content: space-around; padding: 8px 0 10px; z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.03); }
+.bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 440px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-top: 1px solid #EAEAEA; display: flex; justify-content: space-around; padding: 8px 0 10px; z-index: 100; }
 .nav-btn { background: none; border: none; color: #888; font-weight: 700; cursor: pointer; font-size: 10px; display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .nav-btn.active { color: var(--ali-red); }
 .nav-btn-icon { font-size: 18px; }
@@ -182,9 +195,7 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
     <div id="p-grid" class="p-grid" style="display:none;"></div>
 
     <div id="cart-section" class="panel">
-      <h4 style="font-weight:900;margin-bottom:10px;color:var(--ali-red);font-size:13px;display:flex;align-items:center;gap:4px;">
-        🛒 ご注文・決済手続き
-      </h4>
+      <h4 style="font-weight:900;margin-bottom:10px;color:var(--ali-red);font-size:13px;">🛒 ご注文・決済手続き</h4>
       <div id="cart-list" style="margin-bottom:10px;line-height:1.5;color:#555">カートに商品が入っていません。</div>
       <div style="font-weight:900;font-size:14px;border-top:1px dashed #DDD;padding-top:8px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
         <span>お支払い合計金額</span>
@@ -197,7 +208,7 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
           <input type="text" id="cust-name" required placeholder="例: 山田 太郎">
         </div>
         <div class="f-group">
-          <label>メールアドレス（通知受信用）</label>
+          <label>メールアドレス</label>
           <input type="email" id="cust-email" required placeholder="example@mail.com">
         </div>
         <div class="f-group">
@@ -233,17 +244,16 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
         <span style="font-size:9px;background:#00A854;padding:2px 6px;border-radius:10px;">通常稼働中</span>
       </div>
       <div id="chat-box" class="chat-body">
-        <div class="msg seller">こんにちは！安全产品カスタマーサポートです✨<br>お探しの追跡番号の入力、または下部のボタンからお気軽にご質問・ご要望をお伝えください！対応いたします。</div>
+        <div class="msg seller">こんにちは！安全产品カスタマーサポートです✨<br>ご質問やお急ぎの催促・キャンセル申請などがございましたら下記より選択してください。</div>
       </div>
       <div class="chat-footer">
         <div class="quick-chips">
           <div class="chip" onclick="clickQuickChip('🚀 発送の手配を至急お願いします')">🚀 発送を急ぐ（催促）</div>
-          <div class="chip" onclick="clickQuickChip('🛑 この注文をキャンセルしたいです（追跡番号あり）')">🛑 キャンセル申請</div>
+          <div class="chip" onclick="clickQuickChip('🛑 この注文をキャンセルしたいです')">🛑 キャンセル申請</div>
           <div class="chip" onclick="clickQuickChip('📍 お届け先住所を変更したいです')">📍 住所変更</div>
-          <div class="chip" onclick="clickQuickChip('❓ 荷物が届かない場合の確認方法')">❓ 届かない時</div>
         </div>
-        <div class="chat-input-row">
-          <input type="text" id="chat-input-field" class="chat-input" placeholder="メッセージまたは追跡コードを入力...">
+        <div class="chat-input-row" style="display:flex;gap:6px;">
+          <input type="text" id="chat-input-field" class="chat-input" style="flex:1;padding:8px 14px;border:1px solid #DDD;border-radius:20px;outline:none;" placeholder="メッセージまたは追跡コードを入力...">
           <button class="btn-buy" style="width:auto;padding:0 14px;margin:0;" onclick="sendChatMessage()">送信</button>
         </div>
       </div>
@@ -252,15 +262,9 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
 </div>
 
 <div class="bottom-nav">
-  <button id="nav-shop" class="nav-btn active" onclick="switchTab('shop')">
-    <span class="nav-btn-icon">🏠</span>ホーム
-  </button>
-  <button id="nav-my" class="nav-btn" onclick="switchTab('my')">
-    <span class="nav-btn-icon">📦</span>注文・追跡
-  </button>
-  <button id="nav-chat" class="nav-btn" onclick="switchTab('chat')">
-    <span class="nav-btn-icon">💬</span>サポート
-  </button>
+  <button id="nav-shop" class="nav-btn active" onclick="switchTab('shop')"><span class="nav-btn-icon">🏠</span>ホーム</button>
+  <button id="nav-my" class="nav-btn" onclick="switchTab('my')"><span class="nav-btn-icon">📦</span>注文・追跡</button>
+  <button id="nav-chat" class="nav-btn" onclick="switchTab('chat')"><span class="nav-btn-icon">💬</span>サポート</button>
 </div>
 
 <script>
@@ -271,8 +275,8 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/152898395321244070
 
 let products = { CHINA: [], JAPAN: [] }, cart = [], orders = [], currentWH = "CHINA";
 
-if (localStorage.getItem('ali_orders_v7')) {
-  try { orders = JSON.parse(localStorage.getItem('ali_orders_v7')); } catch(e) { orders = []; }
+if (localStorage.getItem('ali_orders_v8')) {
+  try { orders = JSON.parse(localStorage.getItem('ali_orders_v8')); } catch(e) { orders = []; }
 }
 
 function parseCSVRow(text) {
@@ -309,7 +313,7 @@ async function loadData() {
     document.getElementById('p-grid').style.display = 'grid';
     renderProducts();
   } catch (err) {
-    document.getElementById('live-loading').innerText = "データの読み込みに失敗しました。再読み込みしてください。";
+    document.getElementById('live-loading').innerText = "データの読み込みに失敗しました。";
   }
 }
 
@@ -375,7 +379,11 @@ function updateCart(){
 
   if(!cart.length) { el.innerHTML = "カートに商品が入っていません。"; document.getElementById('cart-total').innerText = "0円"; return; }
 
-  el.innerHTML = cart.map((item, i) => {
+  // 中国発送アイテムの小計計算（1,500円未満なら送料280円）
+  let chinaSubtotal = cart.filter(i => i.origin === "CHINA").reduce((s, i) => s + i.price, 0);
+  let shippingFee = (chinaSubtotal > 0 && chinaSubtotal < 1500) ? 280 : 0;
+
+  let itemsHTML = cart.map((item, i) => {
     let iconShow = item.icon.startsWith('http') ? '🖼️' : item.icon;
     return `
     <div style="display:flex;justify-content:space-between;margin-bottom:6px;align-items:center;background:#F9FAFB;padding:6px 10px;border-radius:8px;">
@@ -384,7 +392,18 @@ function updateCart(){
     </div>
   `}).join('');
 
-  let total = cart.reduce((s,i)=>s+i.price, 0);
+  if (shippingFee > 0) {
+    itemsHTML += `
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;align-items:center;background:#FFF3E0;padding:6px 10px;border-radius:8px;border:1px solid #FFE082;">
+        <span style="color:#E65100;font-weight:700;">🚚 送料 (中国発送・1,500円未満)</span>
+        <span style="color:#E65100;font-weight:800;">￥280</span>
+      </div>
+    `;
+  }
+
+  el.innerHTML = itemsHTML;
+
+  let total = cart.reduce((s,i)=>s+i.price, 0) + shippingFee;
   document.getElementById('cart-total').innerText = `￥${total.toLocaleString()}`;
 }
 
@@ -406,18 +425,13 @@ async function fetchAvailableTrackCode(hasJapan, hasChina) {
 
       if (bVal === "" && aCode !== "" && aCode.startsWith(prefix)) {
         let isUsedInApp = orders.some(o => o.trackCode === aCode && !o.isCancelled);
-        if (!isUsedInApp) {
-          return aCode;
-        }
+        if (!isUsedInApp) return aCode;
       }
     }
-  } catch (e) {
-    console.error("追跡スプレッドシート通信エラー", e);
-  }
+  } catch (e) {}
   return null;
 }
 
-// 🌟 Discord通知汎用関数
 async function sendDiscordNotification(title, color, fields) {
   try {
     const payload = {
@@ -433,9 +447,7 @@ async function sendDiscordNotification(title, color, fields) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-  } catch (err) {
-    console.error("Discord通知失敗", err);
-  }
+  } catch (err) {}
 }
 
 async function handleOrder(e){
@@ -465,13 +477,13 @@ async function handleOrder(e){
     items: itemsStr, total: total,
     trackCode: assignedCode,
     hasJapan: hasJapan, hasChina: hasChina,
-    isApproved: false, isCancelled: false
+    isApproved: false, isCancelled: false,
+    actionMemo: ""
   };
 
   orders.push(newOrder);
-  localStorage.setItem('ali_orders_v7', JSON.stringify(orders));
+  localStorage.setItem('ali_orders_v8', JSON.stringify(orders));
 
-  // 新規注文通知
   await sendDiscordNotification("🚨 【新規注文が入りました！】", 16723783, [
     { name: "👤 注文者名", value: name, inline: true },
     { name: "💳 支払方法", value: pay, inline: true },
@@ -480,7 +492,6 @@ async function handleOrder(e){
     { name: "🚚 割り当て追跡コード", value: assignedCode || "割り当て遅延中", inline: true }
   ]);
 
-  // もし最初からコードが割り当てられたら通知
   if(assignedCode) {
     await sendDiscordNotification("📦 【追跡コード割り当て通知】", 3066993, [
       { name: "👤 注文者名", value: name, inline: true },
@@ -493,8 +504,21 @@ async function handleOrder(e){
   btn.disabled = false;
   btn.innerHTML = `🔒 注文を確定する（安全決済へ進む）<span class="btn-checkout-sub">256bit暗号化通信対応・即時コード発行</span>`;
 
-  alert("🎉 ご注文が完了しました！マイページより追跡コードおよび発送ステータスをご確認いただけます。");
+  alert("🎉 ご注文が完了しました！マイページより追跡コードをご確認いただけます。");
   switchTab('my');
+}
+
+// 📅 日付のフォーマット関数（注文日から1週間後〜3週間後）
+function getDeliveryEstimateStr(orderTimestamp) {
+  let baseDate = new Date(orderTimestamp || Date.now());
+  
+  let dateMin = new Date(baseDate.getTime() + 7 * 24 * 60 * 60 * 1000); // 1週間後
+  let dateMax = new Date(baseDate.getTime() + 21 * 24 * 60 * 60 * 1000); // 3週間後
+
+  let minStr = `${dateMin.getMonth() + 1}月${dateMin.getDate()}日`;
+  let maxStr = `${dateMax.getMonth() + 1}月${dateMax.getDate()}日`;
+
+  return `${minStr} 〜 ${maxStr}`;
 }
 
 async function checkAndRenderTrackers(){
@@ -502,6 +526,7 @@ async function checkAndRenderTrackers(){
   if(!orders.length){ container.innerHTML = `<div style="text-align:center;padding:50px;color:#999;font-weight:bold;">ご注文履歴がありません</div>`; return; }
 
   let cStatusMap = {};
+  let bProgressMap = {};
   let emptyACodesWithPrefix = { JP: [], LP: [], CJ: [] };
 
   try {
@@ -518,6 +543,7 @@ async function checkAndRenderTrackers(){
 
       if(aCode) {
         cStatusMap[aCode] = cVal;
+        bProgressMap[aCode] = bVal;
         if(bVal === "") {
           if(aCode.startsWith("JP")) emptyACodesWithPrefix.JP.push(aCode);
           else if(aCode.startsWith("LP")) emptyACodesWithPrefix.LP.push(aCode);
@@ -539,7 +565,6 @@ async function checkAndRenderTrackers(){
       let freeCode = emptyACodesWithPrefix[prefix].find(code => !orders.some(o => o.trackCode === code && !o.isCancelled));
       if (freeCode) {
         ord.trackCode = freeCode;
-        // 追跡コード割り当て時Discord通知
         await sendDiscordNotification("📦 【追跡コード割り当て通知】", 3066993, [
           { name: "👤 注文者名", value: ord.name, inline: true },
           { name: "🚚 追跡コード", value: freeCode, inline: true },
@@ -550,10 +575,12 @@ async function checkAndRenderTrackers(){
 
     if (ord.trackCode && cStatusMap[ord.trackCode]) {
       let cVal = cStatusMap[ord.trackCode];
-      if (cVal === "キャンセル済み") {
-        ord.isCancelled = true;
-      } else if (cVal !== "" && cVal !== "未" && cVal !== "保留") {
+      
+      // C欄が「承諾済み」の時のみ承諾完了！
+      if (cVal === "承諾済み") {
         ord.isApproved = true;
+      } else if (cVal === "キャンセル成功" || cVal === "キャンセル済み") {
+        ord.isCancelled = true;
       }
     }
 
@@ -572,48 +599,62 @@ async function checkAndRenderTrackers(){
         </div>`;
     }
 
+    let estimateDateStr = getDeliveryEstimateStr(ord.date);
+
     if (!ord.trackCode) {
       return `
         <div class="track-card busy">
           <div style="font-weight:800;font-size:13px;margin-bottom:4px;">📦 ご注文商品: ${ord.items}</div>
           <div style="color:#666;margin-bottom:6px;">お支払い金額: ${ord.total} (${ord.pay})</div>
           <div class="status-badge busy-badge">⚠️ 物流混雑のため発行遅延中</div>
+          <div class="delivery-estimate">📅 配達予定日：${estimateDateStr}</div>
           <div style="margin:8px 0;line-height:1.5;color:#D77F00;font-weight:700;background:#FFF;padding:8px;border-radius:8px;border:1px solid #FFE082;">
             ただいま空き追跡番号を確保中です。しばらくお待ちください。
           </div>
         </div>`;
     }
 
+    // B欄＝18 の時だけクローズボタン表示
+    let isDelivered18 = (bProgressMap[ord.trackCode] === "18");
+
     let statusHTML = ord.isApproved ? `
       <div class="status-badge">✅ 注文承諾完了・出荷済み</div>
       <div style="margin-top:8px;font-size:11px;color:#333;line-height:1.5;">
         追跡コード：<b style="color:var(--cainiao-blue);font-size:12px;">${ord.trackCode}</b>
       </div>
+      <div class="delivery-estimate">📅 配達予定日：${estimateDateStr}</div>
       <a href="${TRACK_BASE_URL}" target="_blank" class="btn-link">🚚 配送追跡システムで荷物を追跡</a>
-      <button class="btn-close-order" onclick="closeOrder('${ord.id}')">
-        📦 配達済みなったら注文はクローズします（注文を消去）
-      </button>
+      
+      ${isDelivered18 ? `
+        <button class="btn-close-order" onclick="closeOrder('${ord.id}')">
+          📦 配達完了（注文をクローズして削除）
+        </button>
+      ` : ''}
     ` : `
       <div class="status-badge wait">注文データ送信済み（承諾待ち）</div>
       <div style="margin-top:6px;color:#444;font-size:11px;">割り当てコード: <b>${ord.trackCode}</b></div>
+      <div class="delivery-estimate">📅 配達予定日：${estimateDateStr}</div>
     `;
+
+    let memoHTML = ord.actionMemo ? `<div class="action-status-memo">${ord.actionMemo}</div>` : '';
 
     return `
       <div class="track-card">
         <div style="font-weight:800;font-size:13px;margin-bottom:4px;">📦 ご注文商品: ${ord.items}</div>
         <div style="color:#666;margin-bottom:6px;">お支払い金額: ${ord.total} (${ord.pay})</div>
         ${statusHTML}
-        <button class="btn-contact" style="margin-top:10px;width:100%;border-radius:10px;padding:8px;" onclick="openChatWithCode('${ord.trackCode}')">💬 この追跡番号について問い合わせる</button>
+        ${memoHTML}
+        <button class="btn-contact" style="margin-top:10px;width:100%;border-radius:10px;padding:8px;" onclick="openChatWithCode('${ord.trackCode}')">💬 サポートに問い合わせる</button>
       </div>`;
   }).join('');
 
-  localStorage.setItem('ali_orders_v7', JSON.stringify(orders));
+  localStorage.setItem('ali_orders_v8', JSON.stringify(orders));
 }
 
 function closeOrder(orderId) {
   if (confirm("配達が完了しましたか？\nこの注文データをクローズして削除します。")) {
     orders = orders.filter(o => o.id !== orderId);
-    localStorage.setItem('ali_orders_v7', JSON.stringify(orders));
+    localStorage.setItem('ali_orders_v8', JSON.stringify(orders));
     alert("注文をクローズしました。");
     checkAndRenderTrackers();
   }
@@ -621,7 +662,7 @@ function closeOrder(orderId) {
 
 function openChatForProd(prodName) {
   switchTab('chat');
-  addChatMessage("seller", `【${prodName}】についてですね！ご質問や気になる点を何でも教えてください✨`);
+  addChatMessage("seller", `【${prodName}】についてですね！ご質問をどうぞ✨`);
 }
 
 function openChatWithCode(code) {
@@ -652,25 +693,43 @@ async function sendChatMessage() {
   input.value = "";
 
   setTimeout(async () => {
-    let matched = orders.find(o => o.trackCode === txt || txt.includes(o.trackCode));
-    let codeStr = matched ? matched.trackCode : "未指定/不明";
+    let matched = orders.find(o => o.trackCode && (o.trackCode === txt || txt.includes(o.trackCode)));
+    let latestUnassigned = orders.find(o => !o.trackCode && !o.isCancelled);
 
-    if(txt.includes("発送") || txt.includes("急ぐ") || txt.includes("手配")) {
-      addChatMessage("seller", "🚀 倉庫に発送催促済み");
-      await sendDiscordNotification("🚀 【発送催促の連絡】", 15105570, [
-        { name: "👤 顧客からの要求", value: "発送の催促が行われました。" },
-        { name: "📦 対象追跡番号", value: codeStr }
-      ]);
-    } else if(txt.includes("キャンセル") || txt.includes("取り消し")) {
-      addChatMessage("seller", "🛑 出品者にキャンセル申請しました。キャンセル成功した場合手続きに入ります。");
-      await sendDiscordNotification("🛑 【キャンセル申請の連絡】", 10038562, [
-        { name: "👤 顧客からの要求", value: "キャンセル申請が行われました。スプレッドシートの「C」欄を確認してください。" },
-        { name: "📦 対象追跡番号", value: codeStr }
-      ]);
-    } else if(matched) {
-      addChatMessage("seller", `🔍 <b>【追跡照合】</b><br>• 追跡番号: <b>${matched.trackCode}</b><br>• ステータス: ${matched.isApproved ? "✅ 出荷済み" : "⏳ 承諾待ち"}`);
+    if (txt.includes("発送") || txt.includes("急ぐ") || txt.includes("催促")) {
+      if (!matched && latestUnassigned) {
+        addChatMessage("seller", "⚠️ 追跡番号がまだ確定・割り当てされていません。番号が発行されるまで発送催促はお待ちください。");
+      } else {
+        let codeStr = matched ? matched.trackCode : "番号未特定";
+        if (matched) {
+          matched.actionMemo = "🚀 倉庫に発送催促済み";
+          localStorage.setItem('ali_orders_v8', JSON.stringify(orders));
+        }
+        addChatMessage("seller", "🚀 倉庫に発送催促済み");
+        await sendDiscordNotification("🚀 【発送催促の連絡】", 15105570, [
+          { name: "👤 顧客からの要求", value: "発送催促が入りました。" },
+          { name: "📦 対象追跡番号", value: codeStr }
+        ]);
+      }
+    } else if (txt.includes("キャンセル")) {
+      if (!matched && latestUnassigned) {
+        addChatMessage("seller", "⚠️ 追跡番号がまだ確定していません。番号が割り当てられてからキャンセル申請をお願いいたします。");
+      } else {
+        let codeStr = matched ? matched.trackCode : "番号未特定";
+        if (matched) {
+          matched.actionMemo = "🛑 出品者にキャンセル申請済み";
+          localStorage.setItem('ali_orders_v8', JSON.stringify(orders));
+        }
+        addChatMessage("seller", "🛑 出品者にキャンセル申請しました。キャンセル成功した場合手続きに入ります。");
+        await sendDiscordNotification("🛑 【キャンセル申請の連絡】", 10038562, [
+          { name: "👤 顧客からの要求", value: "キャンセル申請が入りました。C欄の変更（キャンセル成功/キャンセル不可）をお願いします。" },
+          { name: "📦 対象追跡番号", value: codeStr }
+        ]);
+      }
+    } else if (matched) {
+      addChatMessage("seller", `🔍 <b>【追跡照合】</b><br>• 追跡番号: <b>${matched.trackCode}</b><br>• ステータス: ${matched.isApproved ? "✅ 出荷済み（承諾済み）" : "⏳ 承諾待ち"}`);
     } else {
-      addChatMessage("seller", "💬 お問い合わせありがとうございます！ご用件を承りました。キャンセルや催促の場合は専用のボタンや追跡番号と一緒にお知らせください。");
+      addChatMessage("seller", "💬 お問い合わせありがとうございます！ご用件のボタンを押すか、追跡番号を入力してお問い合わせください。");
     }
   }, 600);
 }
