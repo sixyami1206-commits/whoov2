@@ -53,8 +53,9 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
 .p-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .p-card { background: var(--card-bg); border-radius: var(--radius-lg); overflow: hidden; padding: 10px; border: 1px solid #EBEBEB; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.15s; }
 .p-card:active { transform: scale(0.98); }
-.img-box { background: linear-gradient(135deg, #F9F9FB, #EDEFEF); height: 110px; border-radius: var(--radius-sm); display: flex; justify-content: center; align-items: center; font-size: 46px; position: relative; }
-.tag-discount { position: absolute; top: 6px; left: 6px; background: var(--ali-red); color: #FFF; font-weight: 800; font-size: 9px; padding: 2px 6px; border-radius: 4px; }
+.img-box { background: linear-gradient(135deg, #F9F9FB, #EDEFEF); height: 110px; border-radius: var(--radius-sm); display: flex; justify-content: center; align-items: center; font-size: 46px; position: relative; overflow: hidden; }
+.img-box img { width: 100%; height: 100%; object-fit: cover; }
+.tag-discount { position: absolute; top: 6px; left: 6px; background: var(--ali-red); color: #FFF; font-weight: 800; font-size: 9px; padding: 2px 6px; border-radius: 4px; z-index: 2; }
 
 .p-title { font-weight: 700; font-size: 12px; margin-top: 8px; line-height: 1.3; color: var(--ali-black); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .p-rating { display: flex; align-items: center; gap: 2px; margin: 4px 0; color: var(--accent-gold); font-size: 10px; font-weight: bold; }
@@ -116,6 +117,22 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
 .status-badge.busy-badge { background: #FFF8E1; color: #D77F00; border: 1px solid #FFE082; }
 
 .btn-link { background: linear-gradient(135deg, #2B7FFF, #0052CC); color: #FFF; border-radius: 10px; padding: 10px; text-align: center; font-weight: 800; text-decoration: none; display: block; margin-top: 10px; box-shadow: 0 2px 8px rgba(0,82,204,0.25); }
+
+/* クローズ（削除）ボタン */
+.btn-close-order {
+  background: #222;
+  color: #FFF;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-weight: 800;
+  font-size: 10px;
+  cursor: pointer;
+  margin-top: 8px;
+  width: 100%;
+  transition: background 0.2s;
+}
+.btn-close-order:active { background: #444; }
 
 /* チャットUI拡張 */
 .chat-container { display: flex; flex-direction: column; background: var(--card-bg); border-radius: var(--radius-lg); height: 500px; border: 1px solid #EBEBEB; overflow: hidden; box-shadow: var(--shadow-sm); }
@@ -196,7 +213,7 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
           </select>
         </div>
         <!-- 超目立つEC風確定ボタン -->
-        <button type="submit" class="btn-checkout-ultimate">
+        <button type="submit" id="submit-btn" class="btn-checkout-ultimate">
           🔒 注文を確定する（安全決済へ進む）
           <span class="btn-checkout-sub">256bit暗号化通信対応・即時コード発行</span>
         </button>
@@ -252,6 +269,7 @@ header { background: #FFFFFF; padding: 10px 14px; position: sticky; top: 0; z-in
 const SHEET_PROD_URL = "https://docs.google.com/spreadsheets/d/1LK09yYcLi63EW9-xhXIENfszwyFLC4Jmz_-tO69ab94/export?format=csv&gid=0";
 const SHEET_TRACK_URL = "https://docs.google.com/spreadsheets/d/178-dcD4xd0fUdEORnoC9haQrKmfGiKTaY0OxiOKBRrQ/export?format=csv&gid=0"; 
 const TRACK_BASE_URL = "https://sixyami1206-commits.github.io/rabbitwj/";
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1528983953212440707/rltwDTDqykTcg_tx7zEIgkZIIMDK1dDwBdiE7bed36ipcYels7EPRtEQoBVv4VwUpUCr";
 
 let products = { CHINA: [], JAPAN: [] }, cart = [], orders = [], currentWH = "CHINA";
 
@@ -325,11 +343,17 @@ function renderProducts(){
   let grid = document.getElementById('p-grid');
   if(!list.length) { grid.innerHTML = `<div style="grid-column:1/3;text-align:center;color:#999;padding:30px;">該当する商品が見つかりません</div>`; return; }
 
-  grid.innerHTML = list.map(p=>`
+  grid.innerHTML = list.map(p => {
+    // 画像URLか絵文字かを判定
+    let imageHTML = p.icon.startsWith('http') 
+      ? `<img src="${p.icon}" alt="${p.name}">` 
+      : p.icon;
+
+    return `
     <div class="p-card">
       <div>
         <div class="img-box">
-          ${p.icon}
+          ${imageHTML}
           <div class="tag-discount">HOT</div>
         </div>
         <div class="p-title">${p.name}</div>
@@ -343,7 +367,8 @@ function renderProducts(){
           <button class="btn-contact" onclick="openChatForProd('${p.name}')">💬 相談</button>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function addToCart(id){
@@ -359,12 +384,14 @@ function updateCart(){
 
   if(!cart.length) { el.innerHTML = "カートに商品が入っていません。"; document.getElementById('cart-total').innerText = "0円"; return; }
 
-  el.innerHTML = cart.map((item, i) => `
+  el.innerHTML = cart.map((item, i) => {
+    let iconShow = item.icon.startsWith('http') ? '🖼️' : item.icon;
+    return `
     <div style="display:flex;justify-content:space-between;margin-bottom:6px;align-items:center;background:#F9FAFB;padding:6px 10px;border-radius:8px;">
-      <span>${item.icon} <b>${item.name}</b> <br><small style="color:#777">${item.chosenOpt} [${item.origin==='JAPAN'?'JP':'CN'}]</small></span>
+      <span>${iconShow} <b>${item.name}</b> <br><small style="color:#777">${item.chosenOpt} [${item.origin==='JAPAN'?'JP':'CN'}]</small></span>
       <span><b style="color:var(--ali-red)">￥${item.price.toLocaleString()}</b> <a href="#" onclick="cart.splice(${i},1);updateCart();return false;" style="color:#999;margin-left:8px;text-decoration:none;font-weight:bold;">✕</a></span>
     </div>
-  `).join('');
+  `}).join('');
 
   let total = cart.reduce((s,i)=>s+i.price, 0);
   document.getElementById('cart-total').innerText = `￥${total.toLocaleString()}`;
@@ -399,9 +426,43 @@ async function fetchAvailableTrackCode(hasJapan, hasChina) {
   return null;
 }
 
+// 🌟 Discordに注文通知を送る関数
+async function sendDiscordNotification(order) {
+  try {
+    const payload = {
+      embeds: [{
+        title: "🚨 【新規注文が入りました！】",
+        color: 16723783, // アリレッド (#FF4747)
+        fields: [
+          { name: "👤 注文者名", value: order.name, inline: true },
+          { name: "📧 メール", value: order.email, inline: true },
+          { name: "💳 支払方法", value: order.pay, inline: true },
+          { name: "📍 配送先住所", value: order.addr },
+          { name: "📦 注文商品", value: order.items },
+          { name: "💰 合計金額", value: order.total, inline: true },
+          { name: "🚚 割り当て追跡コード", value: order.trackCode || "割り当て遅延中/無し", inline: true }
+        ],
+        timestamp: new Date().toISOString()
+      }]
+    };
+
+    await fetch(DISCORD_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) {
+    console.error("Discord通知失敗", err);
+  }
+}
+
 async function handleOrder(e){
   e.preventDefault();
   if(!cart.length) { alert("カートに商品を追加してください。"); return; }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.innerText = "⏳ 処理中...";
 
   let name = document.getElementById('cust-name').value;
   let email = document.getElementById('cust-email').value;
@@ -428,9 +489,14 @@ async function handleOrder(e){
   orders.push(newOrder);
   localStorage.setItem('ali_orders_v6', JSON.stringify(orders));
 
+  // Discordへ通知送信！
+  await sendDiscordNotification(newOrder);
+
   cart = []; updateCart();
+  btn.disabled = false;
+  btn.innerHTML = `🔒 注文を確定する（安全決済へ進む）<span class="btn-checkout-sub">256bit暗号化通信対応・即時コード発行</span>`;
+
   alert("🎉 ご注文が完了しました！マイページより追跡コードおよび発送ステータスをご確認いただけます。");
-  
   switchTab('my');
 }
 
@@ -520,6 +586,11 @@ async function checkAndRenderTrackers(){
         追跡コード：<b style="color:var(--cainiao-blue);font-size:12px;">${ord.trackCode}</b>
       </div>
       <a href="${TRACK_BASE_URL}" target="_blank" class="btn-link">🚚 配送追跡システムで荷物を追跡</a>
+      
+      <!-- 🌟 配達完了で注文をクローズ（消去）するボタン -->
+      <button class="btn-close-order" onclick="closeOrder('${ord.id}')">
+        📦 配達済みなったら注文はクローズします（注文を消去）
+      </button>
     ` : `
       <div class="status-badge wait">注文データ送信済み（承諾待ち）</div>
       <div style="margin-top:6px;color:#444;font-size:11px;">割り当てコード: <b>${ord.trackCode}</b></div>
@@ -536,6 +607,16 @@ async function checkAndRenderTrackers(){
   }).join('');
 
   localStorage.setItem('ali_orders_v6', JSON.stringify(orders));
+}
+
+// 🌟 注文クローズ処理
+function closeOrder(orderId) {
+  if (confirm("配達が完了しましたか？\nこの注文データをクローズして削除します。")) {
+    orders = orders.filter(o => o.id !== orderId);
+    localStorage.setItem('ali_orders_v6', JSON.stringify(orders));
+    alert("注文をクローズしました。");
+    checkAndRenderTrackers();
+  }
 }
 
 /* サポートチャット拡張AI */
