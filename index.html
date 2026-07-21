@@ -589,7 +589,7 @@ async function checkAndRenderTrackers(){
     let isDelivered18 = (bProgressMap[ord.trackCode] === "18");
 
     let statusHTML = `
-      <div class="status-badge">🚚 配送追跡中（出荷完了）</div>
+      <div class="status-badge">🚚 配送追跡（下のサイトから）</div>
       <div style="margin-top:8px;font-size:11px;color:#333;line-height:1.5;">
         追跡コード：<b style="color:var(--cainiao-blue);font-size:12px;">${ord.trackCode}</b>
       </div>
@@ -598,7 +598,7 @@ async function checkAndRenderTrackers(){
       
       ${isDelivered18 ? `
         <button class="btn-close-order" onclick="closeOrder('${ord.id}')">
-          📦 配達完了（注文をクローズして削除）
+          📦 配達完了（注文をクローズ）
         </button>
       ` : ''}
     `;
